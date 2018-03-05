@@ -1,0 +1,60 @@
+\documentclass[titlepage]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{csquotes}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{comment}
+\usepackage[
+backend=biber,
+stype=alphabetic,
+sorting=ynt]{biblatex}
+
+\addbibresource{bibliography.bib}
+\title{Doble factor de autenticación independiente de SO}
+\author{Roselló Morell, Sergio\\
+\texttt{sergio-rosello@hotmail.com}}
+
+\begin{comment}
+
+DBUS (Desktop bus)
+------------------------------------------------------------
+- Inter-process communication mechanism
+- Fast and lightweight (Unified middleware UNDERNEATH free OS)
+- Non-transactional, statefull, connection-based
+- Supports both one-to-one and publish/subscribe communication (similar to TCP and UDP)
+- Two major components
+	- point-to-point communication dbus library
+	- dbus daemon
+		- A kind of street that messages are transported over.
+		- Any number of processes may be connected at a given time.
+- PROCESSES CONNECT TO THE DAEMON USING THE LIBRARY (only use for the library)
+- Normally two buses are running in the system
+	- System (Miscellaneous system-wide communication (eg: new piece of hardware hooked up))
+	- Session bus (carries traffic (Normally) under a singlel user identity)
+- Addresses
+	- Every bus has an address describing how to connect to it
+- Connections
+	- Every connection can be addressed to that bus under one or more names. (Connection bus names)
+	- Bus names consist of a series of identifiers separated by dots. (com.acme.foo)
+- Objects
+	- An object is created by a client process and exists within the context of that client's connection to the bus
+	- Object is a way for the client process to offer it's services on the bus but one client may create any number of objects
+	- Bus imposes an object-centric view of communications (3 types)
+		- Requests sent to objects by client processes
+		- Replies to requests (Going from an object back to a requesting process)
+		- One way messages emanating from objects, broadcast to any connected clients that have registered an interest in them. (Two forms of communication: "1:1 request-reply" going to an object and "1:n publish:subscribe" coming from an object)
+
+\end{comment}
+\begin{document}
+
+\maketitle
+\tableofcontents
+\clearpage
+
+\section{Investigación}
+\cite{codecoffee}
+\cite{DBus}
+Para poder afrontar este desafío, antes necesito averiguar exactamente como funciona Linux a bajo nivel. Una de las formas de averiguar eso es 
+\printbibliography[heading=bibintoc,title={Bibliografía}]
+\end{document}
