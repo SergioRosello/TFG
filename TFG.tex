@@ -7,16 +7,16 @@
 \usepackage{comment}
 \usepackage[
 backend=biber,
-stype=alphabetic,
+style=alphabetic,
 sorting=ynt]{biblatex}
- 
+
 \usepackage[nonumberlist,acronymlists={gloss}]{glossaries}
 \input{glossary.tex}
 
 \addbibresource{bibliography.bib}
 \title{Doble factor de autenticación independiente de SO}
 \author{Roselló Morell, Sergio\\
-\texttt{sergio-rosello@hotmail.com}}
+\texttt{sergio.rosello@live.u-tad.com}}
 
 \begin{document}
 
@@ -24,16 +24,32 @@ sorting=ynt]{biblatex}
 \tableofcontents
 
 \begin{abstract}
-El \Gls{latex} siguiente documento contiene el desarrollo de mi Trabajo de fin de grado el cual se centra en proporcionar una forma de bloquear o desbloquear un ordenador con arquitectura basada en Linux sin necesidad de contraseña. Para conseguir esto, voy a usar un demonio que reside entre el sistema operativo y el kernel. Al ser de tan bajo nivel, este programa, en principio debería ser independiente de sistema operativo. El único requisito es que el ordenador utilice dbus \cite{dbus}. 
+El siguiente documento contiene el desarrollo de mi Trabajo de fin de grado el cual se centra en proporcionar una forma de bloquear o desbloquear un ordenador con arquitectura basada en Linux sin necesidad de contraseña. Para conseguir esto, voy a usar un demonio que reside entre el sistema operativo y el kernel. Al ser de tan bajo nivel, este programa, en principio debería ser independiente de sistema operativo. El único requisito es que el ordenador utilice dbus \cite{dbus}.
 \end{abstract}
 \section{Investigación}
 %\cite{codecoffee}
-Para \Gls{kv} poder afrontar este desafío, antes necesito averiguar exactamente como funciona Linux a bajo nivel. Una de las formas de averiguar eso es prueba de que compila...
+Para \Gls{latex} poder afrontar este desafío, antes necesito averiguar exactamente como funciona Linux a bajo nivel. Una de las formas de averiguar eso es prueba de que compila...
 \clearpage
 \printglossaries
 \clearpage
 \printbibliography[heading=bibintoc,title={Bibliografía}]
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -68,3 +84,4 @@ DBUS (Desktop bus)
 		- One way messages emanating from objects, broadcast to any connected clients that have registered an interest in them. (Two forms of communication: "1:1 request-reply" going to an object and "1:n publish:subscribe" coming from an object)
 
 \end{comment}
+
