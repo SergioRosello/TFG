@@ -24,7 +24,7 @@ sorting=ynt]{biblatex}
 \tableofcontents
 
 \begin{abstract}
-	El siguiente documento contiene el desarrollo de mi Trabajo de fin de grado el cual se centra en proporcionar una forma de bloquear o desbloquear un ordenador con arquitectura basada en \Gls{GNU}/\Gls{Linux} sin necesidad de contraseña. Para conseguir esto, voy a usar un demonio que reside entre el sistema operativo y el kernel. Al ser de tan bajo nivel, este programa, en principio debería ser independiente de sistema operativo. El único requisito es que el ordenador utilice \Gls{dbus} \cite{dbus}. 
+	El siguiente documento contiene el desarrollo de mi Trabajo de fin de grado el cual se centra en proporcionar una forma de bloquear o desbloquear un ordenador con arquitectura basada en \Gls{GNU}/\Gls{Linux} sin necesidad de contraseña. Para conseguir esto, voy a usar un demonio que reside entre el sistema operativo y el \Gls{kernel}. Al ser de tan bajo nivel, este programa, en principio debería ser independiente de sistema operativo. El único requisito es que el ordenador utilice \Gls{dbus} \cite{dbus}. 
 \end{abstract}
 \section{Motivación}
 Durante el transcurso del grado me he visto cada vez más interesado en la arquitectura \Gls{GNU/Linux}. A pesar de que no he impartido asignaturas orientadas a estos sistemas, mi propio interés y la base proporcionada por la carrera me han incitado a entrar en el mundo de GNU/Linux. Durante el transcurso de la carrera, he pasado de Ubuntu hasta Arch, profundizando poco a poco en el funcionamiento de estos sistemas GNU/Linux. Este trabajo representa la comprensión y desempeño que he adquirido a lo largo de la carrera.\\Lo que quiero conseguir es implementar un \Gls{DFA} en mi ordenador de forma que pueda bloquearlo si extraigo un USB específico. Una vez conseguido esto, haré la operación inversa. Conseguir desbloquear mi ordenador insertando un USB específico.\\Para finalizar, proporcionar una interfaz para decidir que quiere habilitar o deshabilitar el usuario del programa. La herramienta en la que me voy a enfocar para hacer esto bien va a ser dbus, una aplicación que crea un protocolo de comunicación que pueden usar los programas del ordenador para comunicarse entre ellos.
@@ -34,7 +34,11 @@ He encontrado varios métodos de desbloquear/bloquear el ordenador, los he catal
 Estos dispositivos sirven para asegurar que el usuario es realmente quien tiene que ser. Existen varias marcas que ofrecen el mismo servicio, pero \href{https://www.yubico.com/why-yubico/for-individuals/}{yubico} es la original.
 
 \subsection{software}
-He buscado programas que hagan algo parecido a lo que quiero hacer en GitHub. He encontrado algunos con funcionalidad bastante parecida, pero no me sirven porque implementan programas y métodos deprecados. Ambos usan un objeto del dbus llamado \Gls{HAL} \cite{HAL}, que ha sido reemplazado por \Gls{udev} \cite{udev}.
+Para buscar proyectos parecidos a lo que quiero hacer, he buscado en \href{https://github.com/}{GitHub}. Muchos de los proyectos no cumplen con las especificaciones que quiero implementar en mi proyecto. 
+\subsubsection{Usblock \cite{usblock}}
+Este proyecto consigue lo que yo quiero hacer, el problema es que no ha sido actualizado y por tanto ha quedado deprecado. El hecho de que use la capa \textit{\Gls{HAL}} hace que la mayoría de sistemas nuevos, por no decir todos van a ser incompatibles con este programa. Esta capa ha sido reemplazada por \Gls{udev} \cite{udev}.
+\subsection{\textit{\Gls{PAM}}}
+Este proyecto es un adaptador entre los nuevos protocolos de inicio de sesión y los programas que los utilizan. De esta forma, el desarrollador del programa no tiene que actualizar el software que ya ha escrito para dar soporte al nuevo método de autenticación, simplemente implementa \textit{\Gls{PAM}}. La \href{http://www.linux-pam.org/Linux-PAM-html/}{documentación} incluye guías para administradores de sistemas y programadores.
 \clearpage
 \printglossaries
 \clearpage
