@@ -9,9 +9,9 @@
 backend=biber,
 style=alphabetic,
 sorting=ynt]{biblatex}
-
-\usepackage{glossaries}
-\input{/home/sergio/Documents/Universidad/TFG/glossary.tex}
+ 
+\usepackage[nonumberlist,acronymlists={gloss}]{glossaries}
+\input{glossary.tex}
 
 \addbibresource{bibliography.bib}
 \title{Doble factor de autenticación independiente de SO}
@@ -24,7 +24,7 @@ sorting=ynt]{biblatex}
 \tableofcontents
 
 \begin{abstract}
-El siguiente documento contiene el desarrollo de mi Trabajo de fin de grado el cual se centra en proporcionar una forma de bloquear o desbloquear un ordenador con arquitectura basada en Linux sin necesidad de contraseña. Para conseguir esto, voy a usar un demonio que reside entre el sistema operativo y el kernel. Al ser de tan bajo nivel, este programa, en principio debería ser independiente de sistema operativo. El único requisito es que el ordenador utilice dbus \cite{dbus}.
+El siguiente documento contiene el desarrollo de mi Trabajo de fin de grado el cual se centra en proporcionar una forma de bloquear o desbloquear un ordenador con arquitectura basada en Linux sin necesidad de contraseña. Para conseguir esto, voy a usar un demonio que reside entre el sistema operativo y el kernel. Al ser de tan bajo nivel, este programa, en principio debería ser independiente de sistema operativo. El único requisito es que el ordenador utilice \Gls{dbus} \cite{dbus}. 
 \end{abstract}
 \section{Investigación}
 %\cite{codecoffee}
@@ -34,10 +34,6 @@ Para \Gls{latex} poder afrontar este desafío, antes necesito averiguar exactame
 \clearpage
 \printbibliography[heading=bibintoc,title={Bibliografía}]
 \end{document}
-
-
-
-
 
 
 
