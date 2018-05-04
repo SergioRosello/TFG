@@ -32,6 +32,7 @@ Durante el transcurso del grado me he visto cada vez más interesado en la arqui
 He encontrado varios métodos de desbloquear/bloquear el ordenador, los he catalogado en Hardware y Software.
 \subsection{Hardware}
 Estos dispositivos sirven para asegurar que el usuario es realmente quien tiene que ser. Existen varias marcas que ofrecen el mismo servicio, pero \href{https://www.yubico.com/why-yubico/for-individuals/}{yubico} es la original.
+Esta llave USB integra varias tecnologías. Existe la opción de usar un \textit{\Gls{OTP}}, \textit{\Gls{OATH}}, \textit{\Gls{OpenPGP}} y otras tecnologías de inicio de sesión.
 
 \subsection{software}
 Para buscar proyectos parecidos a lo que quiero hacer, he buscado en \href{https://github.com/}{GitHub}. Muchos de los proyectos no cumplen con las especificaciones que quiero implementar en mi proyecto. 
@@ -39,6 +40,17 @@ Para buscar proyectos parecidos a lo que quiero hacer, he buscado en \href{https
 Este proyecto consigue lo que yo quiero hacer, el problema es que no ha sido actualizado y por tanto ha quedado deprecado. El hecho de que use la capa \textit{\Gls{HAL}} hace que la mayoría de sistemas nuevos, por no decir todos van a ser incompatibles con este programa. Esta capa ha sido reemplazada por \Gls{udev} \cite{udev}.
 \subsection{\textit{\Gls{PAM}}}
 Este proyecto es un adaptador entre los nuevos protocolos de inicio de sesión y los programas que los utilizan. De esta forma, el desarrollador del programa no tiene que actualizar el software que ya ha escrito para dar soporte al nuevo método de autenticación, simplemente implementa \textit{\Gls{PAM}}. La \href{http://www.linux-pam.org/Linux-PAM-html/}{documentación} incluye guías para administradores de sistemas y programadores.
+\section{Propuesta}
+Los proyectos vistos anteriormente, aunque interesantes, no cumplen con todas las características que quiero integrar en mi proyecto.\\Metas:
+\begin{itemize}
+	\item Inicio de sesión con USB al sistema
+	\item Inicio de sesión con USB y contraseña al sistema (Doble factor de autenticación)
+	\item Interfaz centralizada que gestione y facilite la tarea al usuario
+	\item Ampliar la herramienta para que integre múltiples formas de autenticar al usuario
+\end{itemize}
+\section{Investigación inicial para realizar la herramienta}
+Los sistemas \Gls{GNU/Linux} tienen un gestor de contraseñas llamado \textit{\Gls{PAM}}. Este gestor unifica las distintas formas de autenticar a un usuario en un sistema o aplicación. La mayor parte de sistemas/aplicaciones usan este módulo para autenticar a sus usuarios. Existe también un módulo que integra el motor \textit{\Gls{PAM}} para autenticar mediante USB a los usuarios. Se llama \textit{\Gls{PAMUSB}}. Es un módulo bastante extendido y usado, además la \href{http://www.pamusb.org/#hotplug}{documentación} es buena.
+
 \clearpage
 \printglossaries
 \clearpage
