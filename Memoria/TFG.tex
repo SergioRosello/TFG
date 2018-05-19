@@ -38,7 +38,7 @@ Esta llave USB integra varias tecnologías. Existe la opción de usar un \textit
 Para buscar proyectos parecidos a lo que quiero hacer, he buscado en \href{https://github.com/}{GitHub}. Muchos de los proyectos no cumplen con las especificaciones que quiero implementar en mi proyecto. 
 \subsubsection{Usblock \cite{usblock}}
 Este proyecto consigue lo que yo quiero hacer, el problema es que no ha sido actualizado y por tanto ha quedado deprecado. El hecho de que use la capa \textit{\Gls{HAL}} hace que la mayoría de sistemas nuevos, por no decir todos van a ser incompatibles con este programa. Esta capa ha sido reemplazada por \Gls{udev} \cite{udev}.
-\subsection{\textit{\Gls{PAM}}}
+\subsubsection{\textit{\Gls{PAM}}}
 Este proyecto es un adaptador entre los nuevos protocolos de inicio de sesión y los programas que los utilizan. De esta forma, el desarrollador del programa no tiene que actualizar el software que ya ha escrito para dar soporte al nuevo método de autenticación, simplemente implementa \textit{\Gls{PAM}}. La \href{http://www.linux-pam.org/Linux-PAM-html/}{documentación} incluye guías para administradores de sistemas y programadores.
 \section{Propuesta}
 Los proyectos vistos anteriormente, aunque interesantes, no cumplen con todas las características que quiero integrar en mi proyecto.\\Metas:
@@ -50,7 +50,12 @@ Los proyectos vistos anteriormente, aunque interesantes, no cumplen con todas la
 \end{itemize}
 \section{Investigación inicial para realizar la herramienta}
 Los sistemas \Gls{GNU/Linux} tienen un gestor de contraseñas llamado \textit{\Gls{PAM}}. Este gestor unifica las distintas formas de autenticar a un usuario en un sistema o aplicación. La mayor parte de sistemas/aplicaciones usan este módulo para autenticar a sus usuarios. Existe también un módulo que integra el motor \textit{\Gls{PAM}} para autenticar mediante USB a los usuarios. Se llama \textit{\Gls{PAMUSB}}. Es un módulo bastante extendido y usado, además la \href{http://www.pamusb.org/#hotplug}{documentación} es buena.
-
+\section{Puesta a punto}
+Para hacer este proyecto, necesito una serie de programas/demonios sobre los que poder trabajar. A continuación explico porque y como llego a elegir los que uso. 
+\subsection{Dependencias básicas}
+Para iniciar el proyecto, asumo que no tenemos nada de lo que necesitamos para llevarlo a cabo, aunque la mayoría de distribuciones de \Gls{GNU/Linux} vienen con un gestor de USB ya preinstalado, no debemos obviarlo como dependencia del proyecto ya que aunque insertemos el USB en la ranura USB de nuestro ordenador, si no lo montamos en nuestro sistema, no va a aparecer disponible en nuestro módulo \textit{\Gls{PAMUSB}}.
+\subsubsection{UDisks}
+Dado que una de las dependencias básicas del proyecto es un gestor de USBs para montar el almacenamiento en el sistema, procedo a investigar el gestor más adecuado para el proyecto. Para facilitar la tarea de montar el USB en el sistema, usamos \textit{\Gls{udevil}} \cite{udevil}
 \clearpage
 \printglossaries
 \clearpage
