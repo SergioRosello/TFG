@@ -1,0 +1,31 @@
+Archivo rlogin (Remote login) en /etc/pam.d/rlogin
+
+Como funciona?
+Para poder autenticar a un usuario a través de PAM:
+Se hace uso del módulo auth.
+Antes de autenticar a un usuario en el sistema, PAM realiza una serie de comprobaciones.
+en orden descendiente:
+1. asegura que el archivo nologin no está en el sistema
+2. asegura que la conexión con el ordenador remoto con el que está intentando aitenticar el usuario está cifrada y es segura
+3. asegura que se pueden cargar las variables de entorno
+4. hace una autenticación mediante rhosts, que si resulta satisfactorio, es suficiente para autenticar al usuario en el sistema.
+5. Si el usuario no se encuentra en rhosts, se comprueba la contraseña mediante la autenticación del sistema estandar.
+
+La segunda columna contiene las "Control flags"
+Estas indican la importancia de la verificación satisfactoria de ese módulo en particular al acceder al servicio.
+
+Como no se proporciona una ruta absoluta al módulo, se asume que los módulos están en la ruta por defecto (/lib/security/)
+
+#%PAM-1.0
+# For root login to succeed here with pam_securetty, "rlogin" must be
+# listed in /etc/securetty.
+auth       required     pam_nologin.so
+auth       required     pam_securetty.so
+auth       required     pam_env.so
+auth       sufficient   pam_rhosts.so
+auth       include      system-auth
+account    include      system-auth
+password   include      system-auth
+session	   optional     pam_keyinit.so    force revoke
+session    required     pam_loginuid.so
+session    include      system-auth
