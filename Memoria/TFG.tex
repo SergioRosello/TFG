@@ -116,8 +116,18 @@ Las distintas formas de autenticarse a un servidor con este protocolo son:
 	\item{\textbf{SECURID: }}Usa una clave de un dispositivo hardware para autenticar a los usuarios. Buena velocidad, difícil de implementar pero buena seguridad.
 \end{itemize}
 Este protocolo ofrece una ventaja muy significativa. Proporciona a los desarrolladores la posibilidad de implementar su propio mecanismo para que utilice SASL.
-
+\subsubsection{Kerberos}
+Kerberos es un protocolo de autenticación de red diseñado para proporcionar un alto nivel de seguridad en la forma en la que el cliente y el servidor se autentican. Para conseguir esto, usa criptografía de llave secreta.\cite{mit-kerberos}\\El protocolo parte con la base de que internet no es un sitio seguro. Muchos protocolos ni siquiera usan algún tipo de seguridad. Existen herramientas con intención maliciosa para sacar las contraseñas de la red, por tanto, transferir credenciales descifradas a través de la red, es una práctica muy insegura. Algunas páginas usan \Gls{firewalls} para solucionar sus problemas de seguridad, pero los \Gls{firewalls} suponen que el problema está en el exterior cuando deberían asumir que se pueden vulnerar desde dentro también. Los firewalls, además los inconvenientes de los firewalls son inaceptables porque restringen la forma que tienen los usuarios de acceder a internet.\\Kerberos es la solución para este tipo de problemas de seguridad. El protocolo de kerberos usa una criptografía muy fuerte para que tanto el servidor como el cliente puedan comunicarse a través de una red insegura. Tras haberse autenticado mediante \Gls{kerberos} pueden cifrar la comunicación entre ellos.
+\subsubsection{\Gls{NIS/NIS+}}
+Proporciona información a los sistemas que tiene que tener para que cualquier usuario pueda autenticarse en cualquier sistema de esa misma red. Por tanto, debe mantener sincronizados y actualizados datos como:
+\begin{itemize}
+	\item Nombres de usuario, contraseñas y directorios principales de cada usuario (/etc/passwd)
+	\item Información de grupos (/etc/group)
+	\item Nombres de sistemas y direcciones IP (/etc/hosts)
 \end{itemize}
+Esta información la administra el servidor central. Dependiendo del tamaño de la red, el administrador de sistemas puede decidir replicarla en más ordenadores (esclavos) que se mantienen actualizados siempre con el servidor maestro (Cada vez que este se actualiza) Una de las ventajas de esto es que al estar los datos distribuidos, si se cae el servidor maestro, los usuarios de la red no sufren ningún percance, ya que la información está reflejada en los esclavos. Otra de las ventajas de mantener la información distribuida es que los esclavos también pueden responder a peticiones de clientes, por tanto, si un esclavo tarda menos en responder que el servidor, este puede facilitar la información al cliente.\\La diferencia entre NIS y NIS+ es que el último implementa muchas mejoras, incluida entre ellas, la posibilidad de tener dominios jerárquicos.\\Sin embargo, la mayor parte de administradores de sistemas recomendarían usar NIS, ya que es bastante más sencillo de administrar.
+\subsubsection{\Gls{SSH}}
+Una de las formas que han tenido los usuarios de conectarse de forma remota con un sistema ha sido el \Gls{telnet}. Esta opción, aunque válida, es poco segura porque la comunicación entre la máquina y el usuario se envía sin cifrar a través de la red.\\Se desarrolló SSH para evitar esto.
 
 \subsubsection{\Gls{PAM}}
 
