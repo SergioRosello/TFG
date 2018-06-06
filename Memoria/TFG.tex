@@ -70,8 +70,10 @@ Para iniciar el proyecto, asumo que no tenemos nada de lo que necesitamos para l
 Dado que una de las dependencias básicas del proyecto es un gestor de USBs para montar el almacenamiento en el sistema, procedo a investigar el gestor más adecuado para el proyecto. Para facilitar la tarea de montar el USB en el sistema, usamos \textit{\Gls{udevil}} \cite{udevil}
 \end{comment}
 \section{Estado del arte}
+En esta sección, describiré las distintas tecnologías de autenticación existentes, los problemas actuales de esas tecnologías, defenderé la necesidad de una seguridad más agresiva, tanto para los usuarios normales como para las grandes empresas y desglosaré las distintas formas de conseguir esta seguridad actualmente.
+\subsection{Tecnologías y protocolos}
 La forma en la que se autentica la identidad de los usuarios de sistemas ha ido evolucionando desde que se vio que era necesaria.
-\subsection{Inicios de la gestión de permisos}
+\subsubsection{Inicios de la gestión de permisos}
 Cada objeto tiene asociada una tabla de 9 bits, los tres primeros indican los privilegios de lectura, escritura y ejecución del usuario que posee el objeto. Los tres siguientes son para la lectura, escritura y ejecución de los usuarios pertenecientes al grupo que posee el objeto y los tres últimos son de lectura, escritura y ejecución de los usuarios que no pertenecen a ninguno de las dos primeras categorías. Esta categoría se llama \textit{others}. Además de estos 9 bits, también pueden incluir el \Gls{SetUid}, \Gls{SetGid} y el \Gls{StickyBit}. A pesar de ser un sistema muy simple de gestionar privilegios, cumple la mayoría de escenarios posibles en sistemas UNIX e incluso a día de hoy, se sigue usando en todos los sistemas \Gls{GNU/Linux} ya que proporciona una forma sencilla y eficiente de visualizar los privilegios de los objetos y modificarlos. Esta forma de gestionar los privilegios de los objetos se puede denominar \Gls{ACL}.
 \begin{figure}[H]
     \centering
@@ -79,7 +81,7 @@ Cada objeto tiene asociada una tabla de 9 bits, los tres primeros indican los pr
     \caption{\Gls{ACL}}
     \label{fig:ACL}
 \end{figure}
-\subsection{\Gls{RBAC}}
+\subsubsection{\Gls{RBAC}}
 Este esquema de seguridad está diseñado para organizaciones o sistemas en los que van a interactuar distintos usuarios con una gran cantidad de datos. El sistema defiende que, en lugar de tener una tabla por cada objeto, definiendo la forma que tienen los usuarios de interactuar con él, se deberían establecer una serie de transacciones, que dependiendo del rol serán distintas. Estas transacciones, una vez definidas cambian poco porque un usuario específico va a usar unos documentos específicos, dependiendo de la responsabilidad que tenga en la organización. En la imagen \ref{fig:RBAC} se puede ver claramente como dependiendo del rol vas a poder acceder a ciertos objetos.
 \begin{figure}[H]
     \centering
@@ -88,7 +90,36 @@ Este esquema de seguridad está diseñado para organizaciones o sistemas en los 
     \label{fig:RBAC}
 \end{figure}
 Dos de las ventajas de este sistema son que cumplir el principio de de menor privilegio es relativamente sencillo, ya que se puede conseguir no proporcionándole  al usuario más transacciones de las que debe tener. Otra de las ventajas, innata, de \Gls{RBAC} es la separación de deberes. Esto es: En el caso de tener que realizar un transferencia bancaria, nunca se debería de poder proporcionar al mismo individuo el control de todo el flujo, ya que se le está dando la oportunidad de cometer algún tipo de irregularidad. Con RBAC puedes asignar dos transacciones, una que permita a un usuario solicitar una transferencia y otra que permita a un usuario validar la transferencia.
-\subsection{\Gls{PAM}}
+\subsubsection{\Gls{LDAP}}
+Este protocolo está diseñado para permitir acceso a directorios complacientes con el estándar \Gls{X500} \textit{Directory Access Protocol} a sus usuarios. Uno de varios protocolos que tiene una aplicación para autenticarse con el fin de acceder al directorio \Gls{X500}\cite{LDAP}. La forma de acceder a los datos cambia según el protocolo de acceso a \Gls{X500}. Por ejemplo, en esta implementación, la forma de acceder a los datos sería:
+\begin{verbatim}
+	cn=Rosanna Lee, ou=People, o=Sun, c=us
+\end{verbatim}
+mientras que la implementación de Microsoft sería:
+\begin{verbatim}
+	/c=us/o=Sun/ou=People/cn=Rosanna Lee
+\end{verbatim}
+Cada uno de estos protocolos define una forma de "buscar" en \Gls{X500} información. Podemos ver que la implementación de \Gls{LDAP} está ordenada de derecha a izquierda, separada por el carácter (",") mientras que la implementación de Microsoft, \Gls{MAD} está ordenada de izquierda a derecha y separada con el carácter ("/").
+Aunque no sea un método de autenticación que sucede en el mismo sistema, me parece que es lo suficientemente interesante como para incluirlo ya que es un ejemplo de autenticación en red.
+\subsubsection{\Gls{SASL}}
+Es un protocolo que proporciona métodos de añadir autenticación a protocolos de red mediante identificación y autenticación de los usuarios conectados al servidor. Además, gestiona el nivel de seguridad que se desea establecer para las futuras interacciones entre el servidor y el usuario conectado. Si se llega a la conclusión de que si que se requiere una capa de seguridad, esta se añade entre el propio protocolo y la conexión.\cite{rfc2222} 
+Las distintas formas de autenticarse a un servidor con este protocolo son:
+\begin{itemize}
+	\item{\textbf{Anonymous: }}Usado para autenticar a clientes a servicios anónimos. El cliente envía un token (Correo electrónico) para permanecer identificado con el servidor. Es una forma sencilla y rápida de implementar, pero no es segura.
+	\item{\textbf{CRAM-MD5: }}Usa el nombre de usuario y una contraseña para autenticar a los usuarios, pero solamente se transfiere la contraseña hasheada. Esto implica que no se pueden usar métodos de autenticación normal como \Gls{PAM}, que no soporta extracción de contraseñas. Es una forma simple y segura de autenticarse con el servidor.
+	\item{\textbf{KERBEROS\_V4: }}Forma de autenticación fiable. Rápida, pero complicada de implementar. Muy segura.
+	\item{\textbf{por defecto (autenticación y autorización): }}Usa el nombre de usuario y la contraseña para autenticar a los usuarios. La forma más rápida y sencilla pero poco segura.
+	\item{\textbf{SCRAM-MD5: }}Deprecada.
+	\item{\textbf{DIGEST-MD5: }}Basada en CRAM-MD5 pero da soporte a más características. Solo se transfieren las contraseñas hasheadas, por tanto no se puede usar \Gls{PAM} como backend. Es simple y seguro.
+	\item{\textbf{LOGIN: }}Usa nombre de usuario y contraseña para autenticar a los usuarios. Rápida, simple de implementar pero nada segura.
+	\item{\textbf{OTP: }}One Time Password
+	\item{\textbf{SECURID: }}Usa una clave de un dispositivo hardware para autenticar a los usuarios. Buena velocidad, difícil de implementar pero buena seguridad.
+\end{itemize}
+Este protocolo ofrece una ventaja muy significativa. Proporciona a los desarrolladores la posibilidad de implementar su propio mecanismo para que utilice SASL.
+
+\end{itemize}
+
+\subsubsection{\Gls{PAM}}
 
 \clearpage
 \printbibliography[heading=bibintoc,title={Bibliografía}]
