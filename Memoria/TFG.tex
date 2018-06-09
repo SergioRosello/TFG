@@ -37,7 +37,6 @@ Este documento explica al lector la experiencia que he tenido durante el periodo
 \printglossary[title={Abreviaciones y tecnicismos}]
 \clearpage
 \begin{comment}
-	hola
 \section{Motivación}
 Durante el transcurso del grado me he visto cada vez más interesado en la arquitectura \Gls{GNU/Linux}. A pesar de que no he impartido asignaturas orientadas a estos sistemas, mi propio interés y la base proporcionada por la carrera me han incitado a entrar en el mundo de GNU/Linux. Durante el transcurso de la carrera, he pasado de Ubuntu hasta Arch, profundizando poco a poco en el funcionamiento de estos sistemas GNU/Linux. Este trabajo representa la comprensión y desempeño que he adquirido a lo largo de la carrera.\\Lo que quiero conseguir es implementar un \Gls{DFA} en mi ordenador de forma que pueda bloquearlo si extraigo un USB específico. Una vez conseguido esto, haré la operación inversa. Conseguir desbloquear mi ordenador insertando un USB específico.\\Para finalizar, proporcionar una interfaz para decidir que quiere habilitar o deshabilitar el usuario del programa. La herramienta en la que me voy a enfocar para hacer esto bien va a ser dbus, una aplicación que crea un protocolo de comunicación que pueden usar los programas del ordenador para comunicarse entre ellos.\\Durante el desarrollo del trabajo he descubierto un módulo llamado \textit{\Gls{PAM}}. Este módulo ofrece a los administradores de sistemas una forma centralizada de autenticación que pueden usar la gran mayoría de aplicaciones. Ofrece también a los desarrolladores control y flexibilidad sin tener que esforzarse en implementar un esquema de autenticación y simplemente centrarse en su proyecto.
 \section{Estado del arte}
@@ -70,6 +69,17 @@ Para iniciar el proyecto, asumo que no tenemos nada de lo que necesitamos para l
 Dado que una de las dependencias básicas del proyecto es un gestor de USBs para montar el almacenamiento en el sistema, procedo a investigar el gestor más adecuado para el proyecto. Para facilitar la tarea de montar el USB en el sistema, usamos \textit{\Gls{udevil}} \cite{udevil}
 \end{comment}
 \section{Estado del arte}
+Desde que se popularizaron los sistemas informáticos, ha existido una necesidad innegable de proteger las cuentas personales con credenciales. Lógicamente, cada usuario quiere que sus archivos personales y documentos permanezcan seguros. La forma de solucionar el problema es mediante un programa, que al iniciar el sistema averigüe que usuario está iniciando sesión y le pregunte por su contraseña. Cuando se verifica la contraseña, se inicia sesión en el sistema, con los archivos de ese usuario.\\Existen varios problemas con este enfoque. Si la contraseña con la que se inicia sesión se filtra, el sistema no tiene forma de diferenciar entre el usuario real y el impostor, además, el usuario real no tiene forma de saber si su contraseña se ha filtrado porque el sistema no detecta la diferencia.\\Esto es un problema, especialmente en oficinas, en las que los empleados dejan sus contraseñas de acceso al sistema pegadas al monitor o impresas y guardadas por alguna zona de su espacio de trabajo. Se puede concienciar a los empleados sobre la importancia de mantener en secreto las credenciales de acceso al sistema, pero no es la forma más efectiva que existe.\\Una de las formas en las que se podría aumentar la seguridad, tanto en empresas como en sistemas personales es mediante el doble factor de autenticación. Esta medida de seguridad añade una capa más de seguridad a los inicios de sesión convencionales. El usuario tiene que introducir la contraseña y posteriormente o anteriormente, según se quiera, autenticar que efectivamente es él quien intenta acceder al sistema.\\Existen varios tipos de dobles factores de autenticación. Desde llaves USB hasta sensores de retina, dada uno con sus ventajas e inconvenientes. Algunos ejemplos son:
+\begin{itemize}
+	\item Llaves USB
+	\item App generadora de códigos (Google Authenticator)
+	\item Sensor de huella dactilar
+	\item Sensor de retina
+\end{itemize}
+\section{Introducción}
+\section{Objetivos}
+\section{Métodos de trabajo}
+\section{Investigación y resultados}
 En esta sección, describiré las distintas tecnologías de autenticación existentes, los problemas actuales de esas tecnologías, defenderé la necesidad de una seguridad más agresiva, tanto para los usuarios normales como para las grandes empresas y desglosaré las distintas formas de conseguir esta seguridad actualmente.
 \subsection{Tecnologías y protocolos}
 La forma en la que se autentica la identidad de los usuarios de sistemas ha ido evolucionando desde que se vio que era necesaria.
@@ -130,7 +140,7 @@ Esta información la administra el servidor central. Dependiendo del tamaño de 
 Una de las formas que han tenido los usuarios de conectarse de forma remota con un sistema ha sido el \Gls{telnet}. Esta opción, aunque válida, es poco segura porque la comunicación entre la máquina y el usuario se envía sin cifrar a través de la red.\\Se desarrolló SSH para evitar esto.
 
 \subsubsection{\Gls{PAM}}
-
+\section{conclusiones}
 \clearpage
 \printbibliography[heading=bibintoc,title={Bibliografía}]
 \end{document}
