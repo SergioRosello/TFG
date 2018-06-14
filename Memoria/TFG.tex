@@ -1,15 +1,25 @@
-\documentclass[titlepage]{article}
+\documentclass[titlepage, 12pt, a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
 \usepackage{csquotes}
 \usepackage{listings}
 \usepackage{float}
 \usepackage{graphicx}
+\usepackage{mathptmx}
 \usepackage{comment}
 \usepackage[
 backend=biber,
 style=alphabetic,
 sorting=ynt]{biblatex}
+\usepackage{anysize}
+
+% color in page
+\usepackage{afterpage}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+
+% Margin sizes for page
+\marginsize{3cm}{3cm}{2.5cm}{2.5cm}
  
 \usepackage[nonumberlist,acronymlists={gloss}]{glossaries}
 \input{glossary.tex}
@@ -21,6 +31,8 @@ sorting=ynt]{biblatex}
 
 \begin{document}
 
+\newpagecolor{blue}
+\afterpage{\restorepagecolor}
 \maketitle
 \tableofcontents
 \clearpage
@@ -34,42 +46,20 @@ Este documento explica al lector la experiencia que he tenido durante el periodo
 	This document reports my experience as I work on creating a USB-centric authentication method for \Gls{GNU/Linux}. During the research phase, I came across several elegant implementations, all of them worked with \Gls{dbus}. During the final stages of this period, I discovered \Gls{PAM} which changed my whole perspective on this project. Most of \Gls{GNU/Linux} systems use this module to enable authentication for their users.\\At the start of this project I would've expected to code a lot more, but now I realise that without a solid foundation, I may have been able to do what I had proposed, but I would not have the understanding on how the \Gls{PAM} fits into the whole equation and the many benefits it provides. This, I think is the point of this work.
 \end{abstract}
 \clearpage
+\listoffigures
+\clearpage
 \printglossary[title={Abreviaciones y tecnicismos}]
 \clearpage
-\begin{comment}
-\section{Motivación}
-Durante el transcurso del grado me he visto cada vez más interesado en la arquitectura \Gls{GNU/Linux}. A pesar de que no he impartido asignaturas orientadas a estos sistemas, mi propio interés y la base proporcionada por la carrera me han incitado a entrar en el mundo de GNU/Linux. Durante el transcurso de la carrera, he pasado de Ubuntu hasta Arch, profundizando poco a poco en el funcionamiento de estos sistemas GNU/Linux. Este trabajo representa la comprensión y desempeño que he adquirido a lo largo de la carrera.\\Lo que quiero conseguir es implementar un \Gls{DFA} en mi ordenador de forma que pueda bloquearlo si extraigo un USB específico. Una vez conseguido esto, haré la operación inversa. Conseguir desbloquear mi ordenador insertando un USB específico.\\Para finalizar, proporcionar una interfaz para decidir que quiere habilitar o deshabilitar el usuario del programa. La herramienta en la que me voy a enfocar para hacer esto bien va a ser dbus, una aplicación que crea un protocolo de comunicación que pueden usar los programas del ordenador para comunicarse entre ellos.\\Durante el desarrollo del trabajo he descubierto un módulo llamado \textit{\Gls{PAM}}. Este módulo ofrece a los administradores de sistemas una forma centralizada de autenticación que pueden usar la gran mayoría de aplicaciones. Ofrece también a los desarrolladores control y flexibilidad sin tener que esforzarse en implementar un esquema de autenticación y simplemente centrarse en su proyecto.
-\section{Estado del arte}
-He encontrado varios métodos de desbloquear/bloquear el ordenador, los he catalogado en Hardware y Software.
-\subsection{Hardware}
-Estos dispositivos sirven para asegurar que el usuario es realmente quien tiene que ser. Existen varias marcas que ofrecen el mismo servicio, pero \href{https://www.yubico.com/why-yubico/for-individuals/}{yubico} es la original.
-Esta llave USB integra varias tecnologías. Existe la opción de usar un \textit{\Gls{OTP}}, \textit{\Gls{OATH}}, \textit{\Gls{OpenPGP}} y otras tecnologías de inicio de sesión.
 
-\subsection{software}
-Para buscar proyectos parecidos a lo que quiero hacer, he buscado en \href{https://github.com/}{GitHub}. Muchos de los proyectos no cumplen con las especificaciones que quiero implementar en mi proyecto. 
-\subsubsection{Usblock \cite{usblock}}
-Este proyecto consigue lo que yo quiero hacer, el problema es que no ha sido actualizado y por tanto ha quedado deprecado. El hecho de que use la capa \textit{\Gls{HAL}} hace que la mayoría de sistemas nuevos, por no decir todos van a ser incompatibles con este programa. Esta capa ha sido reemplazada por \Gls{udev} \cite{udev}.
-\subsubsection{\textit{\Gls{PAM}}}
-Este proyecto es un adaptador entre los nuevos protocolos de inicio de sesión y los programas que los utilizan. De esta forma, el desarrollador del programa no tiene que actualizar el software que ya ha escrito para dar soporte al nuevo método de autenticación, simplemente implementa \textit{\Gls{PAM}}. La \href{http://www.linux-pam.org/Linux-PAM-html/}{documentación} incluye guías para administradores de sistemas y programadores.
-\section{Propuesta}
-Los proyectos vistos anteriormente, aunque interesantes, no cumplen con todas las características que quiero integrar en mi proyecto.\\Metas:
-\begin{itemize}
-	\item Inicio de sesión con USB al sistema
-	\item Inicio de sesión con USB y contraseña al sistema (Doble factor de autenticación)
-	\item Interfaz centralizada que gestione y facilite la tarea al usuario
-	\item Ampliar la herramienta para que integre múltiples formas de autenticar al usuario
-\end{itemize}
-\section{Investigación inicial para realizar la herramienta}
-Los sistemas \Gls{GNU/Linux} tienen un gestor de contraseñas llamado \textit{\Gls{PAM}}. Este gestor unifica las distintas formas de autenticar a un usuario en un sistema o aplicación. La mayor parte de sistemas/aplicaciones usan este módulo para autenticar a sus usuarios. Existe también un módulo que integra el motor \textit{\Gls{PAM}} para autenticar mediante USB a los usuarios. Se llama \textit{\Gls{PAMUSB}}. Es un módulo bastante extendido y usado, además la \href{http://www.pamusb.org/#hotplug}{documentación} es buena.
-\section{Puesta a punto}
-Para hacer este proyecto, necesito una serie de programas/demonios sobre los que poder trabajar. A continuación explico porque y como llego a elegir los que uso. 
-\subsection{Dependencias básicas}
-Para iniciar el proyecto, asumo que no tenemos nada de lo que necesitamos para llevarlo a cabo, aunque la mayoría de distribuciones de \Gls{GNU/Linux} vienen con un gestor de USB ya preinstalado, no debemos obviarlo como dependencia del proyecto ya que aunque insertemos el USB en la ranura USB de nuestro ordenador, si no lo montamos en nuestro sistema, no va a aparecer disponible en nuestro módulo \textit{\Gls{PAMUSB}}.
-\subsubsection{UDisks}
-Dado que una de las dependencias básicas del proyecto es un gestor de USBs para montar el almacenamiento en el sistema, procedo a investigar el gestor más adecuado para el proyecto. Para facilitar la tarea de montar el USB en el sistema, usamos \textit{\Gls{udevil}} \cite{udevil}
-\end{comment}
 \section{Estado del arte}
-Desde que se popularizaron los sistemas informáticos, ha existido una necesidad innegable de proteger las cuentas personales con credenciales. Lógicamente, cada usuario quiere que sus archivos personales y documentos permanezcan seguros. La forma de solucionar el problema es mediante un programa, que al iniciar el sistema averigüe que usuario está iniciando sesión y le pregunte por su contraseña. Cuando se verifica la contraseña, se inicia sesión en el sistema, con los archivos de ese usuario.\\Existen varios problemas con este enfoque. Si la contraseña con la que se inicia sesión se filtra, el sistema no tiene forma de diferenciar entre el usuario real y el impostor, además, el usuario real no tiene forma de saber si su contraseña se ha filtrado porque el sistema no detecta la diferencia.\\Esto es un problema, especialmente en oficinas, en las que los empleados dejan sus contraseñas de acceso al sistema pegadas al monitor o impresas y guardadas por alguna zona de su espacio de trabajo. Se puede concienciar a los empleados sobre la importancia de mantener en secreto las credenciales de acceso al sistema, pero no es la forma más efectiva que existe.\\Una de las formas en las que se podría aumentar la seguridad, tanto en empresas como en sistemas personales es mediante el doble factor de autenticación. Esta medida de seguridad añade una capa más de seguridad a los inicios de sesión convencionales. El usuario tiene que introducir la contraseña y posteriormente o anteriormente, según se quiera, autenticar que efectivamente es él quien intenta acceder al sistema.\\Existen varios tipos de dobles factores de autenticación. Desde llaves USB hasta sensores de retina, dada uno con sus ventajas e inconvenientes. Algunos ejemplos son:
+\subsection{Evolución de las tecnologías}
+El primer ordenador 
+Desde que se popularizaron los sistemas informáticos, ha existido una necesidad innegable de proteger las cuentas personales con credenciales. Lógicamente, cada usuario quiere que sus archivos personales y documentos permanezcan seguros. La forma de solucionar el problema es mediante un programa, que al iniciar el sistema averigüe que usuario está iniciando sesión y le pregunte por su contraseña. Cuando se verifica la contraseña, se inicia sesión en el sistema, con los archivos de ese usuario.
+\\Existen varios problemas con este enfoque. Si la contraseña con la que se inicia sesión se filtra, el sistema no tiene forma de diferenciar entre el usuario real y el impostor, además, el usuario real no tiene forma de saber si su contraseña se ha filtrado porque el sistema no detecta la diferencia.
+\\Esto es un problema, especialmente en oficinas, en las que los empleados dejan sus contraseñas de acceso al sistema pegadas al monitor o impresas y guardadas por alguna zona de su espacio de trabajo. Se puede concienciar a los empleados sobre la importancia de mantener en secreto las credenciales de acceso al sistema, pero no es la forma más efectiva que existe.
+\\Una de las formas en las que se podría aumentar la seguridad, tanto en empresas como en sistemas personales es mediante el doble factor de autenticación. Esta medida de seguridad añade una capa más de seguridad a los inicios de sesión convencionales. El usuario tiene que introducir la contraseña y posteriormente o anteriormente, según se quiera, autenticar que efectivamente es él quien intenta acceder al sistema.
+\\Existen varios tipos de dobles factores de autenticación. Desde llaves USB hasta sensores de retina, dada uno con sus ventajas e inconvenientes. Algunos ejemplos son:
+
 \begin{itemize}
 	\item Llaves USB
 	\item App generadora de códigos (Google Authenticator)
