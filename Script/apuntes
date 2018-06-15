@@ -1,0 +1,12 @@
+Cosas que quiero que haga el programa:
+1. Tiene que ser un programa interactivo, para que sea mas sencillo para el usuario.
+2. Se tiene que ejecutar con sudo (porque va a escribir en un archivo protegido)
+
+Opciones:
+	1. Mostrar la funcionalidad del programa y como usarlo
+	2. Mostrar los archivos de configuracion disponibles
+		1.1. Permitir ver los archivos antes de introducir el modulo pam_usbkey
+		1.2. Anadir pam_usbkey.o a un archivo de configuracion
+		1.3. Quitar pam_usbkey.o de un archivo de configuracion
+		1.4. Salir del programa
+	3. Salir del programa
