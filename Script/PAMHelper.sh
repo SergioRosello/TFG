@@ -7,6 +7,8 @@ FILE="common-auth"
 # Estas dos variables tienen que ser arrays de USB's
 USBSERIALS=()
 USBPRODUCTS=()
+USERSELECTEDUSBDRIVESERIAL=""
+USERSELECTEDUSBDRIVEPRODUCT=""
 
 # Prints the script settings, to check with user that data is correct
 printScriptSettings () {
@@ -16,6 +18,21 @@ printScriptSettings () {
   echo PAM Configuration file: "${FILE}"
   echo "----------------Script settings----------------"
   echo
+}
+# Select a USB drive to use with this script
+selectUSBDrive () {
+  listUSBDevices
+  read -p "Select the USB device you want to use: " -n 1 -r
+  echo
+  # If the value introduced is a number, assign the values
+  # if not, exit with exit code 1
+  # TODO: Check if value entered is in range
+  if [[ ! -n "${REPLY//[0-9]/}" ]]; then
+    USERSELECTEDUSBDRIVESERIAL="${USBSERIALS["${REPLY}"]}"
+    USERSELECTEDUSBDRIVEPRODUCT="${USBPRODUCTS["${REPLY}"]}"
+    else echo "Non-numeric value, Exiting..."; exit 1
+  fi
+    
 }
 # Lists USB devices
 listUSBDevices () {
@@ -105,7 +122,10 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then # Main program
   COMPLETEFILE="${DIRECTORY}${FILE}"
   read -p "Enter your USB stick now. Press RETURN when it's done."
   getUSBInfo
-  listUSBDevices
+  selectUSBDrive
+
+  echo $USERSELECTEDUSBDRIVESERIAL
+  echo $USERSELECTEDUSBDRIVEPRODUCT
 #  echo " USB devices ->  "${USBSERIAL}" "${USBPRODUCT}""
 #  read -p "You are going to view the contents of "${COMPLETEFILE}"
 #  Press (q) to exit view (Press RETURN to continue)"
