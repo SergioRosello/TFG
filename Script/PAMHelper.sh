@@ -9,6 +9,8 @@ USBSERIALS=()
 USBPRODUCTS=()
 USERSELECTEDUSBDRIVESERIAL=""
 USERSELECTEDUSBDRIVEPRODUCT=""
+AUTHRULE=""
+CONTROL=""
 
 # Prints the script settings, to check with user that data is correct
 printScriptSettings () {
@@ -16,9 +18,45 @@ printScriptSettings () {
   echo "----------------Script settings----------------"
   echo PAM Configuration directoy: "${DIRECTORY}"
   echo PAM Configuration file: "${FILE}"
+  echo "         USB-related configuration:"
+  echo USB serial number: $USERSELECTEDUSBDRIVESERIAL
+  echo USB drive product: $USERSELECTEDUSBDRIVEPRODUCT
   echo "----------------Script settings----------------"
   echo
 }
+
+# Compose rule out of the information we have
+makeAuthRule () {
+  AUTHRULE="auth "${CONTROL}" pam_usbkey.so user=* tty=* key=${USERSELECTEDUSBDRIVESERIAL}"
+}
+
+# Asks user which type of control he wants.
+getControl () {
+  echo "Now, you have to select the control of your config."
+  echo "There are two main types you can use, required and sufficient"
+  echo "0) required"
+  echo "     failure of such a PAM will ultimately lead to the PAM-API"
+  echo "     returning failure but only after the remaining stacked modules" 
+  echo "     (for this service and type) have been invoked."
+  echo "1) sufficient"
+  echo "     If such module succeeds and no prior required module has failed"
+  echo "     the PAM framework returns success to the application or the" 
+  echo "     superior PAM stack immediatley without calling any further modules" 
+  echo "     in the stack. A failure of a sufficient module is ignored and"
+  echo "     processing of the PAM module stack continues unaffected."
+  
+  read -p "What control do you want?" -n 1 -r
+  echo
+  if [ ! -n "${REPLY//[0-9]/}" ]; then
+    if [ "${REPLY}" == "0" ]; then
+      CONTROL="required"
+      elif [ "${REPLY}" == "1" ]; then
+        CONTROL="sufficient"
+    fi
+   else echo "Control sentence not recognised, Exiting..."; exit 1
+  fi
+}
+
 # Select a USB drive to use with this script
 selectUSBDrive () {
   listUSBDevices
@@ -123,10 +161,10 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then # Main program
   read -p "Enter your USB stick now. Press RETURN when it's done."
   getUSBInfo
   selectUSBDrive
-
-  echo $USERSELECTEDUSBDRIVESERIAL
-  echo $USERSELECTEDUSBDRIVEPRODUCT
-#  echo " USB devices ->  "${USBSERIAL}" "${USBPRODUCT}""
+  printScriptSettings
+  getControl
+  makeAuthRule
+  echo "${AUTHRULE}"
 #  read -p "You are going to view the contents of "${COMPLETEFILE}"
 #  Press (q) to exit view (Press RETURN to continue)"
 #  less $COMPLETEFILE
