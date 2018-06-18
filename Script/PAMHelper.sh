@@ -188,5 +188,10 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then # Main program
   makeAuthRule
   printAuthRule
   printConfigFile
-  writeConfigToFile
+  printScriptSettings
+  read -p "Do you want to continue? [Yy]" -n 1 -r
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]; then # Write line to file
+    writeConfigToFile
+  fi
 fi
