@@ -31,6 +31,27 @@ makeAuthRule () {
   AUTHRULE="auth "${CONTROL}" pam_usbkey.so user=* tty=* key=${USERSELECTEDUSBDRIVESERIAL}"
 }
 
+# Prints important lines on config file
+printConfigFile () {
+# Print every line and it's line number not commented (#)
+  grep -n "^[^#]" "${COMPLETEFILE}"
+  read -p "What line do you want to add the PAM rule to?"
+  echo
+  if [ ! -n "${REPLY//[0-9]/}" ]; then
+    CONFIGFILELINENUMBER="${REPLY}"
+    else echo "Non-numerical value introduced. Exiting..."; exit 1
+  fi
+}
+
+# Writes auth rule to config file
+writeConfigToFile () {
+  sed -i "${CONFIGFILELINENUMBER}i\ ${AUTHRULE}" "${COMPLETEFILE}" 
+}
+
+# Print auth rule
+printAuthRule () {
+  echo "${AUTHRULE}"
+}
 # Asks user which type of control he wants.
 getControl () {
   echo "Now, you have to select the control of your config."
@@ -54,7 +75,7 @@ getControl () {
       elif [ "${REPLY}" == "1" ]; then
         CONTROL="sufficient"
     fi
-   else echo "Control sentence not recognised, Exiting..."; exit 1
+    else echo "Control sentence not recognised, Exiting..."; exit 1
   fi
 }
 
@@ -165,16 +186,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then # Main program
   printScriptSettings
   getControl
   makeAuthRule
-
-  echo "${AUTHRULE}"
-
-# Con este comando imprimo las lineas del archivo de configuracion importantes
-# Todas las lineas del archivo que no empiezan por #
-  grep -n "^[^#]" "${COMPLETEFILE}"
-  read -p "What line do you want to add the PAM rule to?"
-  echo
-  CONFIGFILELINENUMBER="${REPLY}"
-# Este comando introduce la linea de configuracion en el archivo
-  sed -i "${CONFIGFILELINENUMBER}a\ ${AUTHRULE}" "${COMPLETEFILE}" 
-
+  printAuthRule
+  printConfigFile
+  writeConfigToFile
 fi
