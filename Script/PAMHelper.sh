@@ -11,6 +11,7 @@ USERSELECTEDUSBDRIVESERIAL=""
 USERSELECTEDUSBDRIVEPRODUCT=""
 AUTHRULE=""
 CONTROL=""
+CONFIGFILELINENUMBER=""
 
 # Prints the script settings, to check with user that data is correct
 printScriptSettings () {
@@ -154,7 +155,7 @@ set -- "${POSITIONAL[@]}" # restore positional parameters
 printDisclaimer
 printScriptSettings
 # Ask user if he wants to continue
-read -p "Do you want to continue? " -n 1 -r
+read -p "Do you want to continue? [Yy]" -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then # Main program
   COMPLETEFILE="${DIRECTORY}${FILE}"
@@ -164,9 +165,16 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then # Main program
   printScriptSettings
   getControl
   makeAuthRule
+
   echo "${AUTHRULE}"
-#  read -p "You are going to view the contents of "${COMPLETEFILE}"
-#  Press (q) to exit view (Press RETURN to continue)"
-#  less $COMPLETEFILE
+
+# Con este comando imprimo las lineas del archivo de configuracion importantes
+# Todas las lineas del archivo que no empiezan por #
+  grep -n "^[^#]" "${COMPLETEFILE}"
+  read -p "What line do you want to add the PAM rule to?"
+  echo
+  CONFIGFILELINENUMBER="${REPLY}"
+# Este comando introduce la linea de configuracion en el archivo
+  sed -i "${CONFIGFILELINENUMBER}a\ ${AUTHRULE}" "${COMPLETEFILE}" 
 
 fi
