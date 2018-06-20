@@ -40,16 +40,15 @@ sorting=ynt]{biblatex}
 \newpagecolor{u-blue}
 \afterpage{\restorepagecolor}
 \maketitle
-\tableofcontents
-\clearpage
-\section{Agradecimientos}
+\section*{Agradecimientos}
 Debo agradecer a Eduardo Ariols, mi tutor del trabajo todo el apoyo y consejos dados. Estoy seguro de que sin su ayuda, este trabajo no hubiese llegado a su nivel actual. Durante el proceso de elección del trabajo, me ayudó a darme cuenta de lo que quería hacer exactamente y desde ese momento, no ha parado de inspirarme con distintas formas de ver las cosas. De eso, le estoy muy agradecido.\par También quiero agradecer a la universidad el buen trabajo a la hora de escoger al personal docente de mi grado, puesto que en todo momento han demostrado más que profesionalidad y compañerismo hacia mi y mis compañeros de carrera.
 \clearpage
-\section{Resumen}
+\section*{Resumen}
 Este documento explica al lector la experiencia que he tenido durante el periodo de realización del trabajo de final de grado. Este trabajo trata sobre la autenticación de un usuario a un sistema \Gls{GNU/Linux}, en concreto, mediante una llave \Gls{USB}.\par Durante la fase de investigación de las tecnologías existentes, encontré algunas que ofrecían usa solución elegante, mediante \Gls{dbus} pero acabando la fase de investigación encontré un proyecto llamado \Gls{PAM} que redefinió la forma en la que planteaba el trabajo. Ésta es la forma por defecto de autenticar a los usuarios que tienen la mayoría de sistemas \Gls{GNU/Linux}.\par Este trabajo, al principio con enfoque mucho más práctico ha acabado teniendo un enfoque investigativo puesto que para implementar el módulo de autenticación, he tenido que construir una base fuerte sobre la que sentirme cómodo. Esta base es la que he tenido que esforzarme a entender puesto a que sin ella, el trabajo realizado, aunque funcionalmente completo, no me hubiese sido ni la mitad de estimulante e interesante.
 \begin{abstract}
 This document reports my experience as I work on creating a USB-centric authentication method for \Gls{GNU/Linux}. During the research phase, I came across several elegant implementations, all of them worked with \Gls{dbus}. During the final stages of this period, I discovered \Gls{PAM} which changed my whole perspective on this project. Most of \Gls{GNU/Linux} systems use this module to enable authentication for their users.\par At the start of this project I would've expected to code a lot more, but now I realise that without a solid foundation, I may have been able to do what I had proposed, but I would not have the understanding on how the \Gls{PAM} fits into the whole equation and the many benefits it provides. This, I think is the point of this work.
 \end{abstract}
+\tableofcontents
 \clearpage
 \listoffigures
 \clearpage
@@ -93,16 +92,27 @@ un dispositivo \Gls{USB} encontré en \Gls{GitHub} un proyecto que hacía exacta
 El \Gls{script} que he creado ayuda al usuario a seleccionar el \Gls{USB} que quiera usar, le explica las diferencias entre las distintas formas que hay de configurar el Módulo y le deja decidir donde quiere introducir la línea de configuración ya que al ejecutar las órdenes de forma secuencial, dependiendo de la posición en la que se coloque la línea, el módulo hará una cosa o otra. \par
 Previo a mi \Gls{script}, para configurar el módulo \Gls{USB}, el usuario debía leer la documentación oficial de PAM para averiguar que archivo es el que debe configurar y como lo debe hacer. Lo que consigo con mi \Gls{script} es reducir la curva de aprendizaje necesaria para configurar un método de autenticación más seguro que el de la contraseña por defecto. Esto hará que más usuarios tengan acceso a mejor autenticación en sus ordenadores sin que pierdan conveniencia y comodidad.
 \subsection{Competencias adquiridas}
-Durante el desarrollo del proyecto, he desarrollado tanto aptitudes como actitudes.
-\subsubsection{Aptitudes}
+Durante el desarrollo del proyecto, he desarrollado tanto aptitudes como actitudes. A continuación describiré tanto las situaciones en las que he demostrado una actitud como las aptitudes que he desarrollado y reforzado.
+\subsubsection{Aptitudes adquiridas o reforzadas}
 \begin{itemize}
-	\item{ }
+	\item{\textbf{\Gls{bash}}}\par Decidí usar este lenguaje de progrmamación para hacer el script porque sabía que no me iba a encontrar con complicaciones a la hora de asegurar que funcione en cualquier equipo ya que todos los programas usados en el script vienen instalados de forma predeterminada en la gran mayoría de sistemas.
+	\item{\textbf{\Gls{C}}}\par El \Gls{PAM} está escrito en \Gls{C} y he tenido que leer y entender como funciona el submódulo USB para ver como se comunican ambos módulos.
+	\item{\textbf{\Gls{Python}}}\par En la primera implementación que hice, usé este lenguaje de programación para bloquear la pantalla del ordenador mediante \Gls{dbus}.
+	\item{\textbf{\Gls{Linux}}}\par Durante el transcurso del proyecto he estado investigando el funcionamiento de \Gls{Linux} aunque más detalladamente en los mecanismos de autenticación de usuarios que tiene.
 \end{itemize}
-\subsubsection{Actitudes}
+\subsubsection{Actitudes adquiridas o reforzadas}
 \begin{itemize}
-	\item{\textbf{Dar un paso atrás}}\par Durante la primera iteración de investigación/implementación, encontré una forma de desbloquear el equipo mediante \Gls{Dbus}. Esta forma, aunque funcional, no es elegante. Es más parecido a un ``hack" que a una solución elegante y segura. Si no hubiese ``dado un paso atrás", no hubiese continuado investigando/implementando otras soluciones. \par Cuando encontré PAM\_USB, me obcequé en hacer que funcionase, ya que si no funcionaba, no podía avanzar en el trabajo. De nuevo, tuve que dar un paso atrás para buscar otras implementaciones para el módulo \Gls{PAM} con \Gls{USB}.
+	\item{\textbf{Resolutivo}}\par Durante la primera iteración de investigación/implementación, encontré una forma de desbloquear el equipo mediante \Gls{dbus}. Esta forma, aunque funcional, no es elegante. Es más parecido a un ``hack" que a una solución elegante y segura. Si no hubiese ``dado un paso atrás", no hubiese continuado investigando/implementando otras soluciones. \par Cuando encontré PAM\_USB, me obcequé en hacer que funcionase, ya que si no funcionaba, no podía avanzar en el trabajo. De nuevo, tuve que dar un paso atrás para buscar otras implementaciones para el módulo \Gls{PAM} con \Gls{USB}.
+	\item{\textbf{Persistencia}}\par Guarda una relación directa con la forma en la que he enfocado el trabajo.
+	\item{\textbf{Adaptabilidad}}\par Durante toda mi vida de estudiante, mi forma de retener la información y por consiguiente aprender, ha sido escuchando al profesor. Leer los apuntes a mi me sirve como refuerzo a la explicación del profesor. Durante este proyecto, no he seguido esa misma dinámica, ya que no he tenido un profesor a quien escuchar, he tenido que investigar y formarme a base de la lectura de las páginas de documentación y los comentarios informativos en el código.
 \end{itemize}
+\subsection{Estructura del documento}
+Ahora mismo no se que poner ;) ***
 \section{Objetivos}
+Desde el inicio, el principal objetivo de este trabajo ha sido expandir mi conocimiento sobre \Gls{GNU/Linux}. Además de ser un sistema operativo versátil y fehaciente, es una prueba viviente de que se puede hacer código libre en comunidad y de calidad. Al hablar con mi tutor mi idea sobre el trabajo, concluimos en que tendríamos que hilar más fino, entonces, me sugirió centrarnos en la seguridad. \par
+Una vez reducido el ámbito de investigación, debía encontrar un proyecto que me interesase. Tuve la suerte de que mi tutor me parara el enlace de un vídeo en el que se describía como se generaba una puerta trasera en el sistema, mediante herramientas poco monitorizadas por los administradores de sistema debido a la cantidad de tráfico que generan. Este proyecto me interesó y decidí centrar mi investigación en el análisis y la automatización de doble factor de autenticación en sistemas \Gls{GNU/Linux}. \par 
+Mi objetivo inicial en este trabajo era crear un sistema que permitiese al usuario bloquear y desbloquear el ordenador con un \Gls{USB}. Cuando empecé a investigar como podía hacer eso, me centré en \Gls{dbus}. Tras el primer ciclo de investigación/implementación conseguí bloquear el sistema al enviar un comando mediante \Gls{dbus} al programa que se encarga de bloquear el sistema pero debido a varios factores que se explicarán más adelante, no era una solución buena. \par 
+Buscando alternativas, encontré \Gls{PAM}. Cuando averigüé que era la forma por defecto de autenticación de usuarios en la mayoría de sistemas \Gls{GNU/Linux} y vi que ya estaba diseñada para permitir múltiples factores de autenticación, supe que usar PAM era el camino que debía seguir.
 \section{Métodos de trabajo}
 \section{Investigación y resultados}
 En esta sección, describiré las distintas tecnologías de autenticación existentes, los problemas actuales de esas tecnologías, defenderé la necesidad de una seguridad más agresiva, tanto para los usuarios normales como para las grandes empresas y desglosaré las distintas formas de conseguir esta seguridad actualmente.
