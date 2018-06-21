@@ -119,7 +119,23 @@ Buscando alternativas, encontré \Gls{PAM}. Cuando averigüé que era la forma p
 Para avanzar, ahora debía entender como funcionaba PAM y como crear un módulo de autenticación por \Gls{USB} que lo implementara. Este fue mi siguiente objetivo. \par
 Al ver que ya existía un módulo que hacía justamente eso, me centré en facilitar la adopción de este módulo a los usuarios, de forma que más gente no técnica pueda acceder a mejor autenticación.
 \section{Métodos de trabajo}
-
+Al empezar el trabajo tenía claro que quería seguir una metodología de desarrollo ágil, ya que a mi parecer, es la evolución del desarrollo en cascada y aporta muchas ventajas al flujo de trabajo. \par
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Media/agile.png}
+    \caption{Representación estándar de una metodología ágil}
+    \label{fig:Metodología ágil}
+\end{figure}
+Esta metodología se basa en una serie de ideas que quedan bien plasmadas en su manifiesto. Esto es, aunque valoramos los elementos de la derecha, valoramos más los de la izquierda.\cite{agile} 
+\begin{itemize}
+	\item{\textbf{Individuos e interacciones} sobre procesos y herramientas}
+	\item{\textbf{Software funcionando} sobre documentación extensiva}
+	\item{\textbf{Colaboración con el cliente} sobre negociación contractual}
+	\item{\textbf{Respuesta ante el cambio} sobre seguir un plan}
+\end{itemize}\par
+Las ventajas de este estilo de desarrollo frente a estilos más conservadores como el de cascada son, entre otras que el cliente trabaja con el equipo de desarrollo constantemente para adaptar el producto a las características deseadas, el flujo de trabajo se basa en la repetición de actividades (análisis de requisitos, diseño, implementación, testeo y producción) de forma iterativa hasta conseguir un producto acabado.\par
+Diría que he seguido bastante de cerca el estilo de desarrollo propuesto por esta metodología. Durante el periodo de desarrollo del trabajo, he mantenido una relación cercana con mi tutor, manteniéndole siempre al día sobre los progresos del proyecto, cada semana aproximadamente nos reuníamos para ver el estado del proyecto, en la que le describía los progresos prácticos conseguidos. Cuando decidimos que \Gls{dbus} no era una buena solución, supe responder al cambio y adaptar el proyecto a nuevas y mejores soluciones. \par
+A medida que avanzaba el proyecto, el área de investigación se volvía más pequeña y enfocada. Durante las primeras semanas, me centré en investigar el transcurso de los métodos de autenticación. Una vez analizadas las distintas formas de autenticación, profundicé en \Gls{dbus}, implementé un programa que enviaba un mensaje mediante este bus al programa encargado de bloquear y desbloquear el sistema y conseguí bloquear el sistema. Cuando vi las limitaciones de esta técnica, descritas aquí ***, decidí dar un paso atrás e investigar PAM. Durante esta fase, procuré ser más cauteloso y dediqué más tiempo a la investigación porque no quería repetir el resultado anterior.
 \section{Investigación y resultados}
 En esta sección, describiré las distintas tecnologías de autenticación existentes, los problemas actuales de esas tecnologías, defenderé la necesidad de una seguridad más agresiva, tanto para los usuarios normales como para las grandes empresas y desglosaré las distintas formas de conseguir esta seguridad actualmente.
 \subsection{Tecnologías y protocolos}
