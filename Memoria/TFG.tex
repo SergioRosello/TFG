@@ -119,12 +119,12 @@ Buscando alternativas, encontré \Gls{PAM}. Cuando averigüé que era la forma p
 Para avanzar, ahora debía entender como funcionaba PAM y como crear un módulo de autenticación por \Gls{USB} que lo implementara. Este fue mi siguiente objetivo. \par
 Al ver que ya existía un módulo que hacía justamente eso, me centré en facilitar la adopción de este módulo a los usuarios, de forma que más gente no técnica pueda acceder a mejor autenticación.
 \section{Métodos de trabajo}
-Al empezar el trabajo tenía claro que quería seguir una metodología de desarrollo ágil, ya que a mi parecer, es la evolución del desarrollo en cascada y aporta muchas ventajas al flujo de trabajo. \par
+Al empezar el trabajo tenía claro que quería seguir una metodología de desarrollo ágil, ya que a mi parecer, es la evolución del desarrollo en cascada y aporta muchas ventajas al flujo de trabajo.
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{Media/agile.png}
-    \caption{Representación estándar de una metodología ágil}
-    \label{fig:Metodología ágil}
+    \caption{Diagrama explicativo de una Metodología ágil}
+    \label{fig:agileMethodology}
 \end{figure}
 Esta metodología se basa en una serie de ideas que quedan bien plasmadas en su manifiesto. Esto es, aunque valoramos los elementos de la derecha, valoramos más los de la izquierda.\cite{agile} 
 \begin{itemize}
@@ -133,9 +133,10 @@ Esta metodología se basa en una serie de ideas que quedan bien plasmadas en su 
 	\item{\textbf{Colaboración con el cliente} sobre negociación contractual}
 	\item{\textbf{Respuesta ante el cambio} sobre seguir un plan}
 \end{itemize}\par
-Las ventajas de este estilo de desarrollo frente a estilos más conservadores como el de cascada son, entre otras que el cliente trabaja con el equipo de desarrollo constantemente para adaptar el producto a las características deseadas, el flujo de trabajo se basa en la repetición de actividades (análisis de requisitos, diseño, implementación, testeo y producción) de forma iterativa hasta conseguir un producto acabado.\par
+Las ventajas de este estilo de desarrollo frente a estilos más conservadores como el de cascada son, entre otras que el cliente trabaja con el equipo de desarrollo constantemente para adaptar el producto a las características deseadas, el flujo de trabajo se basa en la repetición de actividades como análisis de requisitos, diseño, implementación, testeo y producción de forma iterativa hasta conseguir un producto acabado.\par
 Diría que he seguido bastante de cerca el estilo de desarrollo propuesto por esta metodología. Durante el periodo de desarrollo del trabajo, he mantenido una relación cercana con mi tutor, manteniéndole siempre al día sobre los progresos del proyecto, cada semana aproximadamente nos reuníamos para ver el estado del proyecto, en la que le describía los progresos prácticos conseguidos. Cuando decidimos que \Gls{dbus} no era una buena solución, supe responder al cambio y adaptar el proyecto a nuevas y mejores soluciones. \par
-A medida que avanzaba el proyecto, el área de investigación se volvía más pequeña y enfocada. Durante las primeras semanas, me centré en investigar el transcurso de los métodos de autenticación. Una vez analizadas las distintas formas de autenticación, profundicé en \Gls{dbus}, implementé un programa que enviaba un mensaje mediante este bus al programa encargado de bloquear y desbloquear el sistema y conseguí bloquear el sistema. Cuando vi las limitaciones de esta técnica, descritas aquí ***, decidí dar un paso atrás e investigar PAM. Durante esta fase, procuré ser más cauteloso y dediqué más tiempo a la investigación porque no quería repetir el resultado anterior.
+A medida que avanzaba el proyecto, el área de investigación se volvía más pequeña y enfocada. Durante las primeras semanas, me centré en investigar el transcurso de los métodos de autenticación. Una vez analizadas las distintas formas de autenticación, profundicé en \Gls{dbus}, implementé un programa que enviaba un mensaje mediante este bus al programa encargado de bloquear y desbloquear el sistema y conseguí bloquear el sistema. Esto me servía como prueba de concepto pues si había logrado bloquear, solo faltaba añadir una capa de abstracción más que enviase el comando de bloqueo si las acciones del usuario cumplían con el comportamiento esperado. \par
+Cuando alguien piensa en \textit{\Gls{dfa}}, lo más común es pensar en las aplicaciones como Google Authenticator. Lo siguiente que viene a la mente es usar una llave \Gls{USB} como segundo factor de autenticación, pero la realidad es que se pueden usar dispositivos como unos auriculares comprobando que se complete un patrón como por ejemplo insertar y extraer el jack de audio dos veces seguidas, la recepción de una red \textit{\Gls{wifi}} comprobando  el \textit{\Gls{finterprint}} de los dispositivos que emiten una señal \textit{\Gls{wifi}} con una lista de \textit{\Gls{fingerprint}s} acaptados y la proximidad de dispositivos, comprobando el \textit{\Gls{fingerprint}} contra una lista de \textit{\Gls{fingerprint}s} aceptados. Solamente es necesario que el sistema operativo lo reconozca. Llegué a esta conclusión mientras buscaba posibles dispositivos hardware para realizar la autenticación. 
 \section{Investigación y resultados}
 En esta sección, describiré las distintas tecnologías de autenticación existentes, los problemas actuales de esas tecnologías, defenderé la necesidad de una seguridad más agresiva, tanto para los usuarios normales como para las grandes empresas y desglosaré las distintas formas de conseguir esta seguridad actualmente.
 \subsection{Tecnologías y protocolos}
@@ -166,7 +167,7 @@ mientras que la implementación de Microsoft sería:
 \begin{verbatim}
 	/c=us/o=Sun/ou=People/cn=Rosanna Lee
 \end{verbatim}
-Cada uno de estos protocolos define una forma de "buscar" en \Gls{X500} información. Podemos ver que la implementación de \Gls{LDAP} está ordenada de derecha a izquierda, separada por el carácter (",") mientras que la implementación de Microsoft, \Gls{MAD} está ordenada de izquierda a derecha y separada con el carácter ("/").
+Cada uno de estos protocolos define una forma de buscar en \Gls{X500} información. Podemos ver que la implementación de \textit{\Gls{LDAP}} está ordenada de derecha a izquierda, separada por el carácter (",") mientras que la implementación de Microsoft, \Gls{MAD} está ordenada de izquierda a derecha y separada con el carácter ("/").
 Aunque no sea un método de autenticación que sucede en el mismo sistema, me parece que es lo suficientemente interesante como para incluirlo ya que es un ejemplo de autenticación en red.
 \subsubsection{\Gls{SASL}}
 Es un protocolo que proporciona métodos de añadir autenticación a protocolos de red mediante identificación y autenticación de los usuarios conectados al servidor. Además, gestiona el nivel de seguridad que se desea establecer para las futuras interacciones entre el servidor y el usuario conectado. Si se llega a la conclusión de que si que se requiere una capa de seguridad, esta se añade entre el propio protocolo y la conexión.\cite{rfc2222} 
