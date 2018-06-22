@@ -45,9 +45,10 @@ Debo agradecer a Eduardo Ariols, mi tutor del trabajo todo el apoyo y consejos d
 \clearpage
 \section*{Resumen}
 Este documento explica al lector la experiencia que he tenido durante el periodo de realización del trabajo de final de grado. Este trabajo trata sobre la autenticación de un usuario a un sistema \Gls{GNU/Linux}, en concreto, mediante una llave \Gls{USB}.\par Durante la fase de investigación de las tecnologías existentes, encontré algunas que ofrecían usa solución elegante, mediante \Gls{dbus} pero acabando la fase de investigación encontré un proyecto llamado \Gls{PAM} que redefinió la forma en la que planteaba el trabajo. Ésta es la forma por defecto de autenticar a los usuarios que tienen la mayoría de sistemas \Gls{GNU/Linux}.\par Este trabajo, al principio con enfoque mucho más práctico ha acabado teniendo un enfoque investigativo puesto que para implementar el módulo de autenticación, he tenido que construir una base fuerte sobre la que sentirme cómodo. Esta base es la que he tenido que esforzarme a entender puesto a que sin ella, el trabajo realizado, aunque funcionalmente completo, no me hubiese sido ni la mitad de estimulante e interesante.
-\begin{abstract}
+\clearpage
+\section*{Abstract}
 This document reports my experience as I work on creating a USB-centric authentication method for \Gls{GNU/Linux}. During the research phase, I came across several elegant implementations, all of them worked with \Gls{dbus}. During the final stages of this period, I discovered \Gls{PAM} which changed my whole perspective on this project. Most of \Gls{GNU/Linux} systems use this module to enable authentication for their users.\par At the start of this project I would've expected to code a lot more, but now I realise that without a solid foundation, I may have been able to do what I had proposed, but I would not have the understanding on how the \Gls{PAM} fits into the whole equation and the many benefits it provides. This, I think is the point of this work.
-\end{abstract}
+\clearpage
 \tableofcontents
 \clearpage
 \listoffigures
@@ -71,7 +72,7 @@ Durante el periodo de evolución de la informática, se pueden diferenciar cinco
 	\item{\textbf{Tercera generación: }}Se implementaron por primera vez los circuitos integrados, que contenían muchos transistores en chips semiconductores. Las ventajas de esta aportación fueron velocidad de cálculo, que aumentó mucho, el tamaño se redujo considerablemente y se continuaron abaratando los precios. En vez de "Lenguaje máquina", ahora los programadores usan monitores y teclados para comunicarse con el ordenador. Hasta esta generación, los ordenadores no estaban destinados para un uso personal. Solo las grandes empresas podían permitirse tener un ordenador.\par Esta generación tuvo lugar entre los años 1964 y 1971.
 	\item{\textbf{Cuarta generación: }}Es la generación con más impacto en la sociedad. La tecnología avanzó hasta tal punto que los fabricantes podían poner miles de transistores en un único circuito integrado. EN esta época se puso a la venta el Intel 4004, el primer microprocesador en venderse de forma masiva. Este desarrollo inició la industria de los ordenadores personales.\par A mediados de los 70, salieron al mercado ordenadores como el Altair 8800 que venían a piezas y su usuario tenía que construir para usar. A finales de los 70, inicios de los 80, salieron al mercado ordenadores construidos de fábrica, como el Comodore pet, Apple II y el primer ordenador IBM. Al inicio de los 90, los ordenadores personales y la capacidad de crear una red de comunicación entre ellos dio paso a la creación de Internet. Se mejoró también la capacidad de almacenamiento de los discos además de la velocidad en general. Aparecieron lor primeros ordenadores portátiles, que presentaban una \Gls{GUI} para facilitar la interacción entre el usuario y la máquina.\par Los usuarios de los ordenadores ya no tenían que ser gente técnica ni debía realizar un curso de formación para saber usarlos. Esto avivó la tasa de adopción de esta tecnología enormemente.\par Esta generación tuvo lugar entre los años 1971 y 2010.
 	\item{\textbf{Quinta generación: }}Actualmente nos encontramos en esta generación. Algunos dicen que la adopción de los ordenadores cuánticos es el próximo gran paso, pero desde mi punto de vista, aún queda bastante para que eso ocurra.\par Creo que la quinta generación se caracterizará por el cambio de mentalidad de los usuarios de ordenadores. Hoy en día, tener la información guardada en un ordenador ya no es un privilegio, ni una ventaja competitiva. La verdadera ventaja es la disponibilidad de la información en cualquier ordenador al que te conectes, proporcionando al usuario una forma de acceso a información revolucionaria. Nunca antes ha sido posible acceder desde cualquier sitio a la información de un usuario.\\Esta generación empezó en 2010.
-\end{itemize}
+\end{itemize} \par
 Ha sido a partir de la cuarta generación cuando los desarrolladores de aplicaciones han tenido que preocuparse de verificar que las credenciales que usan sus usuarios son correctas. Originariamente, \Gls{GNU/Linux} no tenía un método de autenticación definido. Esto significa que cada desarrollador gestionaba la autenticación del usuario de una forma distinta. Para los desarrolladores, esto significaba más tiempo perdido implementando medidas de seguridad que no guardan relación con el contenido de sus aplicaciones y para los administradores de sistemas significaba que tenían que mantener diversos métodos de autenticación (uno para cada aplicación) actualizados para seguir cumpliendo los estándares de seguridad deseados. \par
 Existían dos mentalidades para realizar la autenticación del usuario, la primera consiste en buscar los nombres y hashes de los usuarios en los archivos /etc/passwd y /etc/shadow y compararlo con lo que había introducido el usuario. La segunda mentalidad directamente gestionaban la autenticación de la forma que querían. \par
 Como era de esperar, al no haber ni estándar ni protocolo, urgía una solución rápido. En 1995, \Gls{Sun} propuso un mecanismo llamado \Gls{PAM}. Este mecanismo proporcionaba a los desarrolladores de aplicaciones una \Gls{API} que se ocupaba de manejar la lógica de autenticación y beneficiaba al administrador de sistemas porque unificaba el control de autenticación en un solo sitio, que además, permitía implementar distintos esquemas de autenticación.
@@ -119,7 +120,8 @@ Buscando alternativas, encontré \Gls{PAM}. Cuando averigüé que era la forma p
 Para avanzar, ahora debía entender como funcionaba PAM y como crear un módulo de autenticación por \Gls{USB} que lo implementara. Este fue mi siguiente objetivo. \par
 Al ver que ya existía un módulo que hacía justamente eso, me centré en facilitar la adopción de este módulo a los usuarios, de forma que más gente no técnica pueda acceder a mejor autenticación.
 \section{Métodos de trabajo}
-Al empezar el trabajo tenía claro que quería seguir una metodología de desarrollo ágil, ya que a mi parecer, es la evolución del desarrollo en cascada y aporta muchas ventajas al flujo de trabajo.
+Durante el desarrollo del proyecto, he seguido una metodología de desarrollo ágil, ya que a mi parecer, es la forma más eficiente de trabajar en un proyecto. Comparada con el desarrollo en cascada, aporta muchas ventajas al flujo de trabajo. \par
+En esencia, las metodologías ágiles son una evolución de la conocida implementación en cascada ya que generalmente se consiguen mejores proyectos, mayor satisfacción del cliente y mayor unión entre los miembros del equipo de desarrollo y el cliente.
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{Media/agile.png}
@@ -136,11 +138,11 @@ Esta metodología se basa en una serie de ideas que quedan bien plasmadas en su 
 Las ventajas de este estilo de desarrollo frente a estilos más conservadores como el de cascada son, entre otras que el cliente trabaja con el equipo de desarrollo constantemente para adaptar el producto a las características deseadas, el flujo de trabajo se basa en la repetición de actividades como análisis de requisitos, diseño, implementación, testeo y producción de forma iterativa hasta conseguir un producto acabado.\par
 Diría que he seguido bastante de cerca el estilo de desarrollo propuesto por esta metodología. Durante el periodo de desarrollo del trabajo, he mantenido una relación cercana con mi tutor, manteniéndole siempre al día sobre los progresos del proyecto, cada semana aproximadamente nos reuníamos para ver el estado del proyecto, en la que le describía los progresos prácticos conseguidos. Cuando decidimos que \Gls{dbus} no era una buena solución, supe responder al cambio y adaptar el proyecto a nuevas y mejores soluciones. \par
 A medida que avanzaba el proyecto, el área de investigación se volvía más pequeña y enfocada. Durante las primeras semanas, me centré en investigar el transcurso de los métodos de autenticación. Una vez analizadas las distintas formas de autenticación, profundicé en \Gls{dbus}, implementé un programa que enviaba un mensaje mediante este bus al programa encargado de bloquear y desbloquear el sistema y conseguí bloquear el sistema. Esto me servía como prueba de concepto pues si había logrado bloquear, solo faltaba añadir una capa de abstracción más que enviase el comando de bloqueo si las acciones del usuario cumplían con el comportamiento esperado. \par
-Durante el periodo de investigación de dispositivos con los que podía realizar un \Gls{dfa} llegué a la conclusión de que en realidad cualquier dispositivo hardware es válido. Cuando alguien piensa en \textit{\Gls{dfa}}, lo más común es pensar en las aplicaciones como Google Authenticator. Lo siguiente que viene a la mente es usar una llave \Gls{USB} como segundo factor de autenticación, pero la realidad es que se pueden usar todo tipo de dispositivos, algunos ejemplos son: auriculares (comprobando que se complete un patrón como por ejemplo insertar y extraer el jack de audio dos veces seguidas), una tarjeta de red \textit{\Gls{wifi}} (comprobando  el \textit{\Gls{finterprint}} de los dispositivos que emiten una señal \textit{\Gls{wifi}} con una lista de \textit{\Gls{fingerprint}s} aceptados) o cualquier módulo \Gls{bluetooth} (comprobando el \textit{\Gls{fingerprint}} contra una lista de \textit{\Gls{fingerprint}s} aceptados). Solamente es necesario que el sistema operativo lo reconozca. \par
-Finalmente, tras investigar las ventajas e inconvenientes de varios dispositivos hardware, me decanté por el \Gls{USB} como segundo método de autenticación. Aunque otros dispositivos como auriculares pasan desapercibidos, el sistema de verificación no puede interactuar con ellos y aunque no sea una necesidad, el hecho de poder interactuar con el \Gls{USB}, me proporciona más formas de verificar al usuario.
+Durante el periodo de investigación de dispositivos con los que podía realizar un \Gls{dfa} llegué a la conclusión de que en realidad cualquier dispositivo hardware es válido. Cuando alguien piensa en \textit{\Gls{dfa}}, lo más común es pensar en las aplicaciones como Google Authenticator. Lo siguiente que viene a la mente es usar una llave \Gls{USB} como segundo factor de autenticación, pero la realidad es que se pueden usar todo tipo de dispositivos, algunos ejemplos son: auriculares (comprobando que se complete un patrón como por ejemplo insertar y extraer el jack de audio dos veces seguidas), una tarjeta de red \textit{\Gls{wifi}} (comprobando  el \textit{\Gls{fingerprint}} de los dispositivos que emiten una señal \textit{\Gls{wifi}} con una lista de \textit{\Gls{fingerprint}s} aceptados) o cualquier módulo \Gls{bluetooth} (comprobando el \textit{\Gls{fingerprint}} contra una lista de \textit{\Gls{fingerprint}s} aceptados). Solamente es necesario que el sistema operativo lo reconozca. \par
+Finalmente, tras investigar las ventajas e inconvenientes de varios dispositivos hardware, me decanté por el \Gls{USB} como segundo método de autenticación. Aunque otros dispositivos como auriculares pasan desapercibidos, el sistema de verificación no puede interactuar con ellos y aunque no sea un requisito, el hecho de poder interactuar con el \Gls{USB}, me proporciona más formas de verificar al usuario.
 \section{Investigación y resultados}
-En esta sección, describiré las distintas tecnologías de autenticación existentes, los problemas actuales de esas tecnologías, defenderé la necesidad de una seguridad más agresiva, tanto para los usuarios normales como para las grandes empresas y desglosaré las distintas formas de conseguir esta seguridad actualmente.
-\subsection{Tecnologías y protocolos}
+En esta sección, describiré las distintas tecnologías de autenticación existentes, los problemas actuales de esas tecnologías, defenderé la necesidad de una seguridad más agresiva, tanto para los usuarios normales como para las grandes empresas y desglosaré las distintas formas de conseguir esta seguridad actualmente. Además describiré en detalle como funciona PAM, desde el punto de vista del administrador de sistemas y desde el punto de vista del desarrollador de módulos. Describiré las distintas formas de autenticación implementadas, sus ventajas e inconvenientes.
+\subsection{Análisis de sistemas de autenticación en sistemas \Gls{GNU/Linux}}
 La forma en la que se autentica la identidad de los usuarios de sistemas ha ido evolucionando desde que se vio que era necesaria.
 \subsubsection{Inicios de la gestión de permisos}
 Cada objeto tiene asociada una tabla de 9 bits, los tres primeros indican los privilegios de lectura, escritura y ejecución del usuario que posee el objeto. Los tres siguientes son para la lectura, escritura y ejecución de los usuarios pertenecientes al grupo que posee el objeto y los tres últimos son de lectura, escritura y ejecución de los usuarios que no pertenecen a ninguno de las dos primeras categorías. Esta categoría se llama \textit{others}. Además de estos 9 bits, también pueden incluir el \Gls{SetUid}, \Gls{SetGid} y el \Gls{StickyBit}. A pesar de ser un sistema muy simple de gestionar privilegios, cumple la mayoría de escenarios posibles en sistemas UNIX e incluso a día de hoy, se sigue usando en todos los sistemas \Gls{GNU/Linux} ya que proporciona una forma sencilla y eficiente de visualizar los privilegios de los objetos y modificarlos. Esta forma de gestionar los privilegios de los objetos se puede denominar \Gls{ACL}.
@@ -168,7 +170,7 @@ mientras que la implementación de Microsoft sería:
 \begin{verbatim}
 	/c=us/o=Sun/ou=People/cn=Rosanna Lee
 \end{verbatim}
-Cada uno de estos protocolos define una forma de buscar en \Gls{X500} información. Podemos ver que la implementación de \textit{\Gls{LDAP}} está ordenada de derecha a izquierda, separada por el carácter (",") mientras que la implementación de Microsoft, \Gls{MAD} está ordenada de izquierda a derecha y separada con el carácter ("/").
+Cada uno de estos protocolos define una forma de buscar en \Gls{X500} información. Podemos ver que la implementación de \textit{\Gls{LDAP}} está ordenada de derecha a izquierda, separada por el carácter (,) mientras que la implementación de Microsoft, \Gls{MAD} está ordenada de izquierda a derecha y separada con el carácter (/).
 Aunque no sea un método de autenticación que sucede en el mismo sistema, me parece que es lo suficientemente interesante como para incluirlo ya que es un ejemplo de autenticación en red.
 \subsubsection{\Gls{SASL}}
 Es un protocolo que proporciona métodos de añadir autenticación a protocolos de red mediante identificación y autenticación de los usuarios conectados al servidor. Además, gestiona el nivel de seguridad que se desea establecer para las futuras interacciones entre el servidor y el usuario conectado. Si se llega a la conclusión de que si que se requiere una capa de seguridad, esta se añade entre el propio protocolo y la conexión.\cite{rfc2222} 
@@ -197,8 +199,62 @@ Proporciona información a los sistemas que tiene que tener para que cualquier u
 Esta información la administra el servidor central. Dependiendo del tamaño de la red, el administrador de sistemas puede decidir replicarla en más ordenadores (esclavos) que se mantienen actualizados siempre con el servidor maestro (Cada vez que este se actualiza) Una de las ventajas de esto es que al estar los datos distribuidos, si se cae el servidor maestro, los usuarios de la red no sufren ningún percance, ya que la información está reflejada en los esclavos. Otra de las ventajas de mantener la información distribuida es que los esclavos también pueden responder a peticiones de clientes, por tanto, si un esclavo tarda menos en responder que el servidor, este puede facilitar la información al cliente.\par La diferencia entre NIS y NIS+ es que el último implementa muchas mejoras, incluida entre ellas, la posibilidad de tener dominios jerárquicos.\par Sin embargo, la mayor parte de administradores de sistemas recomendarían usar NIS, ya que es bastante más sencillo de administrar.
 \subsubsection{\Gls{SSH}}
 Una de las formas que han tenido los usuarios de conectarse de forma remota con un sistema ha sido el \Gls{telnet}. Esta opción, aunque válida, es poco segura porque la comunicación entre la máquina y el usuario se envía sin cifrar a través de la red.\par Se desarrolló SSH para evitar esto.
+\subsection{Análisis de \Gls{PAM}}
+\subsubsection{PAM, una visión de conjunto}
+En 1995 \Gls{Sun} introdujo \Gls{PAM}. Dado que en ese momento, no existía un protocolo o diseño específico para realizar la autenticación, su uso se implementó en la mayoría de sistemas. Estos incluyen:
+RedHat 5.0,
+SUSE 6.2,
+Debian 2.2,
+Mandrake 5.2,
+Caldera 1.3,
+TurboLinux 3.6,
+Solaris,
+AIX,
+HP-UX y
+Mac OS X.
+Finalmente se volvió un estándar y ahora la mayoría de distribuciones \Gls{GNU/Linux} lo implementan \cite{IBMPAM}. \par
+Hay cuatro módulos distintos definidos por el estándar PAM. Cada uno cumple una función específica pero indispensable para gestionar las cuentas de usuario en sistemas\cite{redPAM}.
+\begin{itemize}
+	\item \textit{auth} \par Se encargan de la autenticación del usuario
+	\item \textit{account} \par Encargados de asegurar que la autenticación es válida
+	\item \textit{password} \par Se usan para establecer contraseñas
+	\item \textit{session} \par Entran en juego una vez el usuario ha iniciado sesión en la cuenta.
+\end{itemize} \par
+Cada programa que usa PAM define su propio \textit{service} de forma que el programa que gestiona el login, define un servicio llamado \textit{login}. 
+Por defecto, la configuración de las aplicaciones PAM tiene lugar en el directorio /etc/pam.d. Cada servicio tiene su propio archivo de configuración. 
+Su diseño permite que se verifiquen varios módulos secuencialmente creando así el primer sistema de múltiple factor de autenticación conocido. \par \noindent
+\subsubsection{Arquitectura de PAM}
+Los componentes clave del framework PAM son la librería de autenticación, en forma de \Gls{API} (\Gls{front-end}) y los módulos de autenticación en forma de \Gls{SPI} (\Gls{back-end}). Las aplicaciones usan la \Gls{API} mientras que los sistemas de autenticación usan la \Gls{SPI}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Media/PAMFramework.png}
+    \caption{Arquitectura PAM}
+    \label{fig:arquitecturaPAM}
+\end{figure}
+La imagen \ref{fig:arquitecturaPAM} ilustra la relación entre las aplicaciones, la librería PAM y los modulos de autenticación. Cuando una aplicación llama a la API de PAM, ésta carga el módulo de autenticación correspondiente (definido en el archivo de configuración del servicio). La petición inicial se envía al módulo cargado para que realiza la operación deseada. Una vez realizada la operación, la capa PAM devuelve la respuesta del módulo de autenticación a la aplicación\cite{PAM}.
+\subsubsection{Archivos de configuración}
+Por defecto, el framework lee los archivos de configuración de /etc/pam.d/. Si no se encuentra el directorio, se usará el archivo /etc/pam.conf aunque este método está deprecado. Cada servicio tiene su propio archivo. Aunque varias aplicaciones puedan usar el mismo servicio, por ejemplo varias aplicaciones de bloqueo de pantalla pueden usar el servicio \textit{screenLock}, lo estándar es que cada aplicación cree un servicio propio. Estas aplicaciones se deben encargar de crear el servicio y colocarlo en el directorio.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Media/PAMConfigFile.png}
+    \caption{Archivo de configuración de un servicio de ejemplo}
+    \label{fig:archivoServicio}
+\end{figure}
+Estos archivos siguen la siguiente estructura:
+\begin{verbatim}
+	interfaz_módulo	control	nombre_módulo	argumentos_módulo
+\end{verbatim}
+El campo \textit{interfaz\_módulo} puede tener cuatro tipos, cada uno de estos pertenece a un tipo de proceso de autorización distinto.
+\begin{itemize}
+	\item{\textit{auth: }}Este módulo autentica a los usuarios. Por ejemplo: Pide y verifica la contraseña del usuario.
+	\item{\textit{account: }}Verifica que se permita el acceso. Por ejemplo: Comprueba si se permite iniciar sesión a un usuario a una hora del día.
+	\item{\textit{password: }}Cambia la contraseña del usuario.
+	\item{\textit{session: }}Configura y gestiona las sesiones de los usuarios. Por ejemplo: Monta la partición del usuario en el directorio \&home.
+\end{itemize}
+\subsection{Módulos \Gls{dfa} para PAM}
+Existen varios módulos que utilizan PAM para realizar el proceso de autorización del usuario.
+\subsubsection{Google Authenticator}
 
-\subsubsection{\Gls{PAM}}
 \section{conclusiones}
 \clearpage
 \printbibliography[heading=bibintoc,title={Bibliografía}]
