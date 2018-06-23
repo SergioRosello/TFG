@@ -26,6 +26,8 @@ sorting=ynt]{biblatex}
 
 % Margin sizes for page
 \marginsize{3cm}{3cm}{2.5cm}{2.5cm}
+\usepackage{setspace}
+\spacing{1.5}
  
 \usepackage[nonumberlist,acronymlists={gloss}]{glossaries}
 \input{glossary.tex}
@@ -58,7 +60,7 @@ This document reports my experience as I work on creating a USB-centric authenti
 \section{Estado del arte}
 \subsection{Evolución de las tecnologías}
 Los ordenadores forman una gran parte de nuestra sociedad desde que fueron inventados. El primer ordenador que se creó fue el Mark I, en 1944. Este ordenador estaba hecho mayoritariamente para realizar cálculos, pesaba cinco toneladas y se sobrecalentaba.
-Desde Mark I, como podemos observar en la imagen \ref{fig:moore}, los ordenadores han ido duplicando el número de transistores en circuitos integrados cada dos años \cite{moore}. Hasta ahora, y seguramente unos años más en adelante, podamos ver que se sigue cumpliendo la ley de Moore.
+Desde Mark I, como podemos observar en la figura \ref{fig:moore}, los ordenadores han ido duplicando el número de transistores en circuitos integrados cada dos años \cite{moore}. Hasta ahora, y seguramente unos años más en adelante, podamos ver que se sigue cumpliendo la ley de Moore.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{Media/moore.jpg}
@@ -153,7 +155,7 @@ Cada objeto tiene asociada una tabla de 9 bits, los tres primeros indican los pr
     \label{fig:ACL}
 \end{figure}
 \subsubsection{\Gls{RBAC}}
-Este esquema de seguridad está diseñado para organizaciones o sistemas en los que van a interactuar distintos usuarios con una gran cantidad de datos. El sistema defiende que, en lugar de tener una tabla por cada objeto, definiendo la forma que tienen los usuarios de interactuar con él, se deberían establecer una serie de transacciones, que dependiendo del rol serán distintas. Estas transacciones, una vez definidas cambian poco porque un usuario específico va a usar unos documentos específicos, dependiendo de la responsabilidad que tenga en la organización. En la imagen \ref{fig:RBAC} se puede ver claramente como dependiendo del rol vas a poder acceder a ciertos objetos.
+Este esquema de seguridad está diseñado para organizaciones o sistemas en los que van a interactuar distintos usuarios con una gran cantidad de datos. El sistema defiende que, en lugar de tener una tabla por cada objeto, definiendo la forma que tienen los usuarios de interactuar con él, se deberían establecer una serie de transacciones, que dependiendo del rol serán distintas. Estas transacciones, una vez definidas cambian poco porque un usuario específico va a usar unos documentos específicos, dependiendo de la responsabilidad que tenga en la organización. En la figura \ref{fig:RBAC} se puede ver claramente como dependiendo del rol vas a poder acceder a ciertos objetos.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{Media/RBAC.PNG}
@@ -214,12 +216,6 @@ HP-UX y
 Mac OS X.
 Finalmente se volvió un estándar y ahora la mayoría de distribuciones \Gls{GNU/Linux} lo implementan \cite{IBMPAM}. \par
 Hay cuatro módulos distintos definidos por el estándar PAM. Cada uno cumple una función específica pero indispensable para gestionar las cuentas de usuario en sistemas\cite{redPAM}.
-\begin{itemize}
-	\item \textit{auth} \par Se encargan de la autenticación del usuario
-	\item \textit{account} \par Encargados de asegurar que la autenticación es válida
-	\item \textit{password} \par Se usan para establecer contraseñas
-	\item \textit{session} \par Entran en juego una vez el usuario ha iniciado sesión en la cuenta.
-\end{itemize} \par
 Cada programa que usa PAM define su propio \textit{service} de forma que el programa que gestiona el login, define un servicio llamado \textit{login}. 
 Por defecto, la configuración de las aplicaciones PAM tiene lugar en el directorio /etc/pam.d. Cada servicio tiene su propio archivo de configuración. 
 Su diseño permite que se verifiquen varios módulos secuencialmente creando así el primer sistema de múltiple factor de autenticación conocido. \par \noindent
@@ -227,30 +223,62 @@ Su diseño permite que se verifiquen varios módulos secuencialmente creando as�
 Los componentes clave del framework PAM son la librería de autenticación, en forma de \Gls{API} (\Gls{front-end}) y los módulos de autenticación en forma de \Gls{SPI} (\Gls{back-end}). Las aplicaciones usan la \Gls{API} mientras que los sistemas de autenticación usan la \Gls{SPI}.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{Media/PAMFramework.png}
+    \includegraphics[width=0.8\textwidth]{Media/PAMFramework.png}
     \caption{Arquitectura PAM}
     \label{fig:arquitecturaPAM}
 \end{figure}
-La imagen \ref{fig:arquitecturaPAM} ilustra la relación entre las aplicaciones, la librería PAM y los modulos de autenticación. Cuando una aplicación llama a la API de PAM, ésta carga el módulo de autenticación correspondiente (definido en el archivo de configuración del servicio). La petición inicial se envía al módulo cargado para que realiza la operación deseada. Una vez realizada la operación, la capa PAM devuelve la respuesta del módulo de autenticación a la aplicación\cite{PAM}.
+La figura \ref{fig:arquitecturaPAM} ilustra la relación entre las aplicaciones, la librería PAM y los modulos de autenticación. Cuando una aplicación llama a la API de PAM, ésta carga el módulo de autenticación correspondiente (definido en el archivo de configuración del servicio). La petición inicial se envía al módulo cargado para que realiza la operación deseada. Una vez realizada la operación, la capa PAM devuelve la respuesta del módulo de autenticación a la aplicación\cite{PAM}.
 \subsubsection{Archivos de configuración}
 Por defecto, el framework lee los archivos de configuración de /etc/pam.d/. Si no se encuentra el directorio, se usará el archivo /etc/pam.conf aunque este método está deprecado. Cada servicio tiene su propio archivo. Aunque varias aplicaciones puedan usar el mismo servicio, por ejemplo varias aplicaciones de bloqueo de pantalla pueden usar el servicio \textit{screenLock}, lo estándar es que cada aplicación cree un servicio propio. Estas aplicaciones se deben encargar de crear el servicio y colocarlo en el directorio.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{Media/PAMConfigFile.png}
-    \caption{Archivo de configuración de un servicio de ejemplo}
-    \label{fig:archivoServicio}
-\end{figure}
 Estos archivos siguen la siguiente estructura:
 \begin{verbatim}
 	interfaz_módulo	control	nombre_módulo	argumentos_módulo
-\end{verbatim}
+\end{verbatim} \par
 El campo \textit{interfaz\_módulo} puede tener cuatro tipos, cada uno de estos pertenece a un tipo de proceso de autorización distinto.
 \begin{itemize}
 	\item{\textit{auth: }}Este módulo autentica a los usuarios. Por ejemplo: Pide y verifica la contraseña del usuario.
 	\item{\textit{account: }}Verifica que se permita el acceso. Por ejemplo: Comprueba si se permite iniciar sesión a un usuario a una hora del día.
 	\item{\textit{password: }}Cambia la contraseña del usuario.
 	\item{\textit{session: }}Configura y gestiona las sesiones de los usuarios. Por ejemplo: Monta la partición del usuario en el directorio \&home.
-\end{itemize}
+\end{itemize} \par
+El siguiente campo, \textit{control} indica a PAM que hacer con el resultado recibido. Hay varios tipos de control:
+\begin{itemize}
+	\item{\textit{required: }}Para que el usuario consiga autenticarse, el módulo debe devolver una respuesta positiva. Si el módulo devuelve una respuesta negativa, no se le notifica al usuario hasta que se acaben de pasar todos los módulos.
+	\item{\textit{requisite: }}Para que el usuario consiga autenticarse, el módulo debe devolver una respuesta positiva. Si el test falla, se avisa al usuario inmediatamente después de la ejecución del módulo.
+	\item{\textit{sufficient: }}Si el módulo devuelve un resultado negativo, éste se ignora. Si ningún módulo previo \textit{required} ha fallado, no son necesarios más módulos para autenticar correctamente al usuario.
+	\item{\textit{optional: }}Se ignora su resultado. Solo se necesita para autenticar al usuario si ningún otro módulo referencia la interfaz.
+	\item{\textit{include: }}Referencia todas las líneas del archivo especificado.
+\end{itemize} \par
+El tercer campo del archivo, \textit{nombre\_módulo}, proporciona a PAM el nombre del módulo que contiene la interfaz del módulo. No es necesario poner una ruta absoluta al archivo si éste está en el directorio por defecto. \par
+El último argumento, \textit{argumentos\_módulo} proporciona al módulo de autenticación los argumentos necesarios para su correcto funcionamiento. \par
+Se muestra un ejemplo de este documento en la figura \ref{fig:archivoServicio}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Media/PAMConfigFile.png}
+    \caption{Archivo de configuración de un servicio de ejemplo}
+    \label{fig:archivoServicio}
+\end{figure}
+La primera línea es un comentario. Cualquier línea que empiece por (\#) es un comentario. Los módulos de autenticación son las líneas 2, 3 y 4. El módulo
+\begin{verbatim}
+	auth required /lib/security/pam_securetty.so
+\end{verbatim}
+asegura que, si un usuario está intentando autenticarse como root, el \gls{tty} desde el cual se está autenticando está en el archivo /etc/securetty. Si no está el \gls{tty} ahí, cualquier intento de inicio de sesión como usuario \gls{root} fallará con un mensaje de login incorrecto. \par
+El módulo 
+\begin{verbatim}
+	account required /lib/security/pam_pwdb.so
+\end{verbatim}
+comprueba la expiración de un usuario. Si la cuenta ha expirado o la contraseña ha expirado y el usuario no introduce la nueva, el módulo fallará. \par
+El módulo 
+\begin{verbatim}
+	password required /lib/security/pam_pwdb.so shadow nullok use_authtok
+\end{verbatim}
+Llama otra vez a \textit{pam\_pwdb} para cambiar la contraseña del usuario en caso de que la haya cambiado. Los argumentos le indican a módulo que escriba las contraseñas en \textit{shadow}, que acepte una contraseña en blanco como válida y que use la nueva contraseña, en caso de que se haya cambiado. \par
+El módulo
+\begin{verbatim}
+	session required /lib/security/pam_pwdb.so
+\end{verbatim}
+se encarga de guardar en el log del sistema el inicio de sesión. Si la operación no se consigue realizar, el usuario no podrá iniciar sesión en el sistema.
+
 \subsection{Módulos \Gls{dfa} para PAM}
 Existen varios módulos que utilizan PAM para realizar el proceso de autorización del usuario.
 \subsubsection{Google Authenticator}
