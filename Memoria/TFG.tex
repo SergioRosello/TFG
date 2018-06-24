@@ -278,6 +278,118 @@ El módulo
 	session required /lib/security/pam_pwdb.so
 \end{verbatim}
 se encarga de guardar en el log del sistema el inicio de sesión. Si la operación no se consigue realizar, el usuario no podrá iniciar sesión en el sistema.
+\subsubsection{PAM-API}
+El proceso de autenticación lo gestiona la librería PAM via una llamada a la función \textit{pam\_authenticate()}. El valor devuelto por esta función determinará si el usuario ha sido autenticado. Si la librería PAM debe preguntarle al usuario por la contraseña o su nombre de usuario, lo hará. Si la librería PAM autentica mediante el uso de un protocolo silencioso, también lo hará. (Un dispositivo hardware por ejemplo)\cite{linux-pam-application} \par
+Las funciones más importantes para nuestra interfaz de módulo (auth) de la API PAM son:
+\begin{verbatim}
+#include <security/pam_appl.h>
+const char* nombre_servicio;
+const char* usuario;
+const struct pam_conv* conversacion_pam;
+pam_handle_t** gestor_pam;
+
+int pam_start(nombre_servicio, usuario, conversation_pam, pamh);
+\end{verbatim}
+La primera función a la que se tiene que llamar es a \textit{pam\_start()}. Esta crea el contexto PAM e inicializa la transacción PAM.\par
+\begin{itemize}
+	\item{\textit{nombre\_servicio}: Especifica el nombre del servicio que usar. Se leerá el contenido del servicio de /etc/pam.d/\textit{nombre\_servicio}}
+	\item{\textit{usuario}: Especifica el nombre de usuario. Si es \textit{null}, el módulo se encarga de solicitarlo si es necesario}
+	\item{\textit{conversacion\_pam}: Apunta a una estructura de tipo \textit{pam\_conv} que describe la función de conversación a usar.}
+	\item{\textit{gestor\_pam}: Dada una respuesta correcta (PAM\_SUCCESS) \textit{gestor\_pam} contiene el contexto necesario para próximas peticiones a funciones PAM.}
+\end{itemize} 
+Esta función devuelve:
+\begin{itemize}
+	\item{PAM\_ABORT: fallo generál}
+	\item{PAM\_BUFF\_ERR: Error en el buffer de memoria}
+	\item{PAM\_SUCCESS: Transacción creada correctamente}
+	\item{PAM\_SYSTEM\_ERR: Error del sistema}
+\end{itemize} \par
+La última función a la que se tiene que llamar es a \textit{pam\_end}. Invalida \textit{gestor\_pam}. A partir de este momento, ya no se podrá usar para interaccionar con la API PAM.
+\begin{verbatim}
+#include <security/pam_appl.h>
+pam_handle_t* gestor_pam;
+int estado_pam;
+
+int pam_end(gestor_pam, estado_pam);
+\end{verbatim}
+\begin{itemize}
+	\item{\textit{gestor\_pam}: Estructura que identifica la operación con la API PAM.}
+	\item{\textit{estado\_pam}: El estado devuelto por el último método PAM. Se le pasa a la función \textit{cleanup()} para que ésta gestione debidamente la liberación de los datos.}
+\end{itemize}
+Esta función devuelve:
+\begin{itemize}
+	\item{PAM\_SUCCESS: Transacción creada correctamente}
+	\item{PAM\_SYSTEM\_ERR: Error del sistema}
+\end{itemize} \par
+PAM también proporciona funciones para acceder y actualizar información PAM. Para esto, hace uso de funciones getter y setter. Estas dos son \textit{pam\_set\_item()} y \textit{pam\_get\_item()}.
+La función setter:
+\begin{verbatim}
+#include <security/pam_modules.h>
+pam_handle_t* gestor_pam;
+int tipo_de_dato;
+const void* dato;
+
+int pam_set_item(gestor_pam, tipo_de_dato, dato);
+\end{verbatim}
+La función getter:
+\begin{verbatim}
+#include <security/pam_modules.h>
+pam_handle_t* gestor_pam;
+int tipo_de_dato;
+const void** dato;
+
+int pam_get_item(gestor_pam, tipo_de_dato, dato);
+\end{verbatim}
+A estas dos funciones se les pasan:
+\begin{itemize}
+	\item{\textit{gestor\_pam}: Estructura que identifica la operación con la API PAM.}
+	\item{\textit{tipo\_de\_dato}: Indica el tipo de dato que va a leer a continuación. Pueden ser: PAM\_SERVICE, PAM\_USER, PAM\_TTY entre otros}
+	\item{\textit{dato}: Dato a cambiar o obtener de PAM}
+\end{itemize}
+\textit{pam\_set\_item()} devuelve:
+\begin{itemize}
+	\item{PAM\_BAD\_ITEM: Se ha intentado asignar un valor inaccesible.}
+	\item{PAM\_BUFF\_ERR: Error en el buffer de memoria}
+	\item{PAM\_SUCCESS: Transacción creada correctamente}
+	\item{PAM\_SYSTEM\_ERR: Error del sistema}
+\end{itemize} 
+\textit{pam\_get\_item()} devuelve:
+\begin{itemize}
+	\item{PAM\_BAD\_ITEM: Se ha intentado obtener un valor inaccesible.}
+	\item{PAM\_BUFF\_ERR: Error en el buffer de memoria}
+	\item{PAM\_PERM\_DENIED: El valor del dato era \textit{null}.}
+	\item{PAM\_SUCCESS: Transacción creada correctamente}
+	\item{PAM\_SYSTEM\_ERR: Error del sistema}
+\end{itemize} 
+\textit{pam\_authenticate()} es la función más importante de la API, ya que todo gira en torno a esta. Al haber preparado todo anteriormente con la función \textit{pam\_start()} esta función es bastante sencilla de entender.
+\begin{verbatim}
+#include <security/pam_appl.h>
+pam_handle_t* gestor_pam;
+int flags;
+
+int pam_authenticate(gestor_pam, flags);
+\end{verbatim}
+A esta función se le pasan los argumentos:
+\begin{itemize}
+	\item{\textit{gestor\_pam}: Estructura que identifica la operación con la API PAM.}
+	\item{\textit{flags:} Pueden ser dos:
+		\begin{itemize}
+			\item PAM\_SILENT: no registra ningún mensaje.
+			\item PAM\_DISALLOW\_NULL\_AUTHTOK: Si el usuario no tiene un token de autenticación registrado, hace que el módulo devuelva PAM\_AUTH\_ERR}
+		\end{itemize} 
+\end{itemize}
+\textit{pam\_authenticate()} devuelve:
+\begin{itemize}
+	\item{PAM\_ABORT: Aplicación deberá salir inmediatamente}
+	\item{PAM\_AUTH\_ERR: Usuario no autenticado}
+	\item{PAM\_CRED\_INSUFFICIENT: Aplicación no tiene suficiente información para autenticar al usuario}
+	\item{PAM\_AUTHINFO\_UNVALID: Módulos han sido incapaces de acceder a la información de autenticación}
+	\item{PAM\_MAXTRIES: Uno o más módulos han llegado al límite de intentos. No volver a intentar}
+	\item{PAM\_SUCCESS: Usuario satisfactoriamente autenticado}
+	\item{PAM\_USER\_UNKNOWN: Usuario no reconocido}
+\end{itemize}
+Existen varias funciones más en la API, que son esenciales para la gestión de las otras interfaces de módulo pero para entender PAM y el módulo \textit{auth} no son necesarias.
+\subsubsection{PAM-SPI}
 
 \subsection{Módulos \Gls{dfa} para PAM}
 Existen varios módulos que utilizan PAM para realizar el proceso de autorización del usuario.
