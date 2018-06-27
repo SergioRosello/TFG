@@ -14,6 +14,12 @@ sorting=ynt]{biblatex}
 \usepackage{anysize}
 \usepackage[spanish]{babel}
 
+%set style of listings
+\lstset{
+	language=C,
+	basicstyle=\footnotesize
+}
+
 %Paragraph format
 \setlength{\parindent}{2em}
 \setlength{\parskip}{1em}
@@ -32,9 +38,9 @@ sorting=ynt]{biblatex}
 \input{glossary.tex}
 
 \addbibresource{bibliography.bib}
-\title{\color{white}Análisis y automatización de doble factor de autenticación en sistemas GNU/Linux}
-\author{\color{white}Roselló Morell, Sergio\\
-\texttt{\color{white}sergio.rosello@live.u-tad.com}}
+\title{Análisis y automatización de doble factor de autenticación en sistemas GNU/Linux}
+\author{Roselló Morell, Sergio\\
+\texttt{sergio.rosello@live.u-tad.com}}
 
 \begin{document}
 
@@ -51,8 +57,6 @@ This document reports my experience as I work on creating a USB-centric authenti
 \tableofcontents
 \clearpage
 \listoffigures
-\clearpage
-\printglossary[title={Abreviaciones y tecnicismos}]
 \clearpage
 \section{Estado del arte}
 \subsection{Evolución de las tecnologías}
@@ -162,13 +166,13 @@ Este esquema de seguridad está diseñado para organizaciones o sistemas en los 
 Dos de las ventajas de este sistema son que cumplir el principio de de menor privilegio es relativamente sencillo, ya que se puede conseguir no proporcionándole  al usuario más transacciones de las que debe tener. Otra de las ventajas, innata, de \Gls{RBAC} es la separación de deberes. Esto es: En el caso de tener que realizar un transferencia bancaria, nunca se debería de poder proporcionar al mismo individuo el control de todo el flujo, ya que se le está dando la oportunidad de cometer algún tipo de irregularidad. Con RBAC puedes asignar dos transacciones, una que permita a un usuario solicitar una transferencia y otra que permita a un usuario validar la transferencia.
 \subsubsection{\Gls{LDAP}}
 Este protocolo está diseñado para permitir acceso a directorios complacientes con el estándar \Gls{X500} \textit{Directory Access Protocol} a sus usuarios. Uno de varios protocolos que tiene una aplicación para autenticarse con el fin de acceder al directorio \Gls{X500}\cite{LDAP}. La forma de acceder a los datos cambia según el protocolo de acceso a \Gls{X500}. Por ejemplo, en esta implementación, la forma de acceder a los datos sería:
-\begin{verbatim}
+\begin{lstlisting}
 	cn=Rosanna Lee, ou=People, o=Sun, c=us
-\end{verbatim}
+\end{lstlisting}
 mientras que la implementación de Microsoft sería:
-\begin{verbatim}
+\begin{lstlisting}
 	/c=us/o=Sun/ou=People/cn=Rosanna Lee
-\end{verbatim}
+\end{lstlisting}
 Cada uno de estos protocolos define una forma de buscar en \Gls{X500} información. Podemos ver que la implementación de \textit{\Gls{LDAP}} está ordenada de derecha a izquierda, separada por el carácter (,) mientras que la implementación de Microsoft, \Gls{MAD} está ordenada de izquierda a derecha y separada con el carácter (/).
 Aunque no sea un método de autenticación que sucede en el mismo sistema, me parece que es lo suficientemente interesante como para incluirlo ya que es un ejemplo de autenticación en red.
 \subsubsection{\Gls{SASL}}
@@ -228,9 +232,9 @@ La figura \ref{fig:arquitecturaPAM} ilustra la relación entre las aplicaciones,
 \subsubsection{Archivos de configuración}
 Por defecto, el framework lee los archivos de configuración de /etc/pam.d/. Si no se encuentra el directorio, se usará el archivo /etc/pam.conf aunque este método está deprecado. Cada servicio tiene su propio archivo. Aunque varias aplicaciones puedan usar el mismo servicio, por ejemplo varias aplicaciones de bloqueo de pantalla pueden usar el servicio \textit{screenLock}, lo estándar es que cada aplicación cree un servicio propio. Estas aplicaciones se deben encargar de crear el servicio y colocarlo en el directorio.
 Estos archivos siguen la siguiente estructura:
-\begin{verbatim}
+\begin{lstlisting}
 	interfaz_módulo	control	nombre_módulo	argumentos_módulo
-\end{verbatim} \par
+\end{lstlisting} \par
 El campo \textit{interfaz\_módulo} puede tener cuatro tipos, cada uno de estos pertenece a un tipo de proceso de autorización distinto.
 \begin{itemize}
 	\item{\textit{auth: }}Este módulo autentica a los usuarios. Por ejemplo: Pide y verifica la contraseña del usuario.
@@ -256,29 +260,29 @@ Se muestra un ejemplo de este documento en la figura \ref{fig:archivoServicio}.
     \label{fig:archivoServicio}
 \end{figure}
 La primera línea es un comentario. Cualquier línea que empiece por (\#) es un comentario. Los módulos de autenticación son las líneas 2, 3 y 4. El módulo
-\begin{verbatim}
+\begin{lstlisting}
 	auth required /lib/security/pam_securetty.so
-\end{verbatim}
+\end{lstlisting}
 asegura que, si un usuario está intentando autenticarse como root, el \gls{tty} desde el cual se está autenticando está en el archivo /etc/securetty. Si no está el \gls{tty} ahí, cualquier intento de inicio de sesión como usuario \gls{root} fallará con un mensaje de login incorrecto. \par
 El módulo 
-\begin{verbatim}
+\begin{lstlisting}
 	account required /lib/security/pam_pwdb.so
-\end{verbatim}
+\end{lstlisting}
 comprueba la expiración de un usuario. Si la cuenta ha expirado o la contraseña ha expirado y el usuario no introduce la nueva, el módulo fallará. \par
 El módulo 
-\begin{verbatim}
+\begin{lstlisting}
 	password required /lib/security/pam_pwdb.so shadow nullok use_authtok
-\end{verbatim}
+\end{lstlisting}
 Llama otra vez a \textit{pam\_pwdb} para cambiar la contraseña del usuario en caso de que la haya cambiado. Los argumentos le indican a módulo que escriba las contraseñas en \textit{shadow}, que acepte una contraseña en blanco como válida y que use la nueva contraseña, en caso de que se haya cambiado. \par
 El módulo
-\begin{verbatim}
+\begin{lstlisting}
 	session required /lib/security/pam_pwdb.so
-\end{verbatim}
+\end{lstlisting}
 se encarga de guardar en el log del sistema el inicio de sesión. Si la operación no se consigue realizar, el usuario no podrá iniciar sesión en el sistema.
 \subsubsection{PAM-API}
 El proceso de autenticación lo gestiona la librería PAM via una llamada a la función \textit{pam\_authenticate()}. El valor devuelto por esta función determinará si el usuario ha sido autenticado. Si la librería PAM debe preguntarle al usuario por la contraseña o su nombre de usuario, lo hará. Si la librería PAM autentica mediante el uso de un protocolo silencioso, también lo hará. (Un dispositivo hardware por ejemplo)\cite{linux-pam-application} \par
 Las funciones más importantes para nuestra interfaz de módulo (auth) de la API PAM son:
-\begin{verbatim}
+\begin{lstlisting}
 #include <security/pam_appl.h>
 const char* nombre_servicio;
 const char* usuario;
@@ -286,7 +290,7 @@ const struct pam_conv* conversacion_pam;
 pam_handle_t** gestor_pam;
 
 int pam_start(nombre_servicio, usuario, conversation_pam, pamh);
-\end{verbatim}
+\end{lstlisting}
 La primera función a la que se tiene que llamar es a \textit{pam\_start()}. Esta crea el contexto PAM e inicializa la transacción PAM.\par
 \begin{itemize}
 	\item{\textit{nombre\_servicio}: Especifica el nombre del servicio que usar. Se leerá el contenido del servicio de /etc/pam.d/\textit{nombre\_servicio}}
@@ -302,13 +306,13 @@ Esta función devuelve:
 	\item{PAM\_SYSTEM\_ERR: Error del sistema}
 \end{itemize} \par
 La última función a la que se tiene que llamar es a \textit{pam\_end}. Invalida \textit{gestor\_pam}. A partir de este momento, ya no se podrá usar para interaccionar con la API PAM.
-\begin{verbatim}
+\begin{lstlisting}
 #include <security/pam_appl.h>
 pam_handle_t* gestor_pam;
 int estado_pam;
 
 int pam_end(gestor_pam, estado_pam);
-\end{verbatim}
+\end{lstlisting}
 \begin{itemize}
 	\item{\textit{gestor\_pam}: Estructura que identifica la operación con la API PAM.}
 	\item{\textit{estado\_pam}: El estado devuelto por el último método PAM. Se le pasa a la función \textit{cleanup()} para que ésta gestione debidamente la liberación de los datos.}
@@ -320,23 +324,23 @@ Esta función devuelve:
 \end{itemize} \par
 PAM también proporciona funciones para acceder y actualizar información PAM. Para esto, hace uso de funciones getter y setter. Estas dos son \textit{pam\_set\_item()} y \textit{pam\_get\_item()}.
 La función setter:
-\begin{verbatim}
+\begin{lstlisting}
 #include <security/pam_modules.h>
 pam_handle_t* gestor_pam;
 int tipo_de_dato;
 const void* dato;
 
 int pam_set_item(gestor_pam, tipo_de_dato, dato);
-\end{verbatim}
+\end{lstlisting}
 La función getter:
-\begin{verbatim}
+\begin{lstlisting}
 #include <security/pam_modules.h>
 pam_handle_t* gestor_pam;
 int tipo_de_dato;
 const void** dato;
 
 int pam_get_item(gestor_pam, tipo_de_dato, dato);
-\end{verbatim}
+\end{lstlisting}
 A estas dos funciones se les pasan:
 \begin{itemize}
 	\item{\textit{gestor\_pam}: Estructura que identifica la operación con la API PAM.}
@@ -359,13 +363,13 @@ A estas dos funciones se les pasan:
 	\item{PAM\_SYSTEM\_ERR: Error del sistema}
 \end{itemize} 
 \textit{pam\_authenticate()} es la función más importante de la API, ya que todo gira en torno a esta. Al haber preparado todo anteriormente con la función \textit{pam\_start()} esta función es bastante sencilla de entender.
-\begin{verbatim}
+\begin{lstlisting}
 #include <security/pam_appl.h>
 pam_handle_t* gestor_pam;
 int flags;
 
 int pam_authenticate(gestor_pam, flags);
-\end{verbatim}
+\end{lstlisting}
 A esta función se le pasan los argumentos:
 \begin{itemize}
 	\item{\textit{gestor\_pam}: Estructura que identifica la operación con la API PAM.}
@@ -388,7 +392,7 @@ A esta función se le pasan los argumentos:
 Existen varias funciones más en la API, que son esenciales para la gestión de las otras interfaces de módulo pero para entender PAM y el módulo \textit{auth} no son necesarias.
 \subsubsection{PAM-SPI}
 Igual que la \gls{API}, la \Gls{SPI} proporciona funciones para poder gestionar los cuatro pilares del módulo PAM (\textit{authentication}, \textit{account}, \textit{session} y \textit{password}) pero nosotros nos vamos a centrar en las funciones necesarias para la parte de \Gls{authentication}. El proceso de verificación se gestiona con la función \textit{pam\_sm\_authenticate()}.
-\begin{verbatim}
+\begin{lstlisting}
 #define PAM_SM_AUTH
 #include <security/pam_modules.h>
 pam_handle_t* gestor_pam;
@@ -397,7 +401,7 @@ int argc;
 const char** argv;
 
 PAM_EXTERN int pam_sm_authenticate(gestor_pam, flags, argc, argv);
-\end{verbatim}
+\end{lstlisting}
 Se usa \textit{PAM\_SM\_AUTH} para asegurar que los prototipos de los módulos estáticos estén bien declarados.
 Los parámetros que se le pasan a \textit{pam\_sm\_authenticate()} son: 
 \begin{itemize} 
@@ -419,14 +423,14 @@ Los parámetros que se le pasan a \textit{pam\_sm\_authenticate()} son:
 	\item{PAM\_USER\_UNKNOWN: Usuario no reconocido}
 \end{itemize}
 Aunque esta sea la única función necesaria para implementar el módulo \textit{authentication}, existen varias funciones que ayudan a la implementación de esta función como \textit{pam\_get\_user()} o \textit{pam\_get\_item()}. La segunda está descrita en la sección superior.
-\begin{verbatim}
+\begin{lstlisting}
 #include <security/pam_modules.h>
 pam_handle_t** gestor_pam;
 const char** usuario;
 const char* avisoUsuario;
 
 int pam_get_user(gestor_pam, user, prompt);
-\end{verbatim} 
+\end{lstlisting} 
 \textit{pam\_get\_uer()} se usa para obtener el usuario que está solicitando la autenticación. Devuelve el nombre del usuario especificado por \textit{pam\_start()}. Si no se especificó ningún usuario, se devuelve el valor de \textit{pam\_get\_item(pamh, PAM\_USER, ...)}. Si este valor es \textit{null}, averigua el usuario mediante \textit{pam\_conv()}.
 \begin{itemize}
 	\item \textit{gestor\_pam}: Estructura que identifica la operación con la API PAM.
@@ -444,6 +448,8 @@ Existen varios módulos que utilizan PAM para realizar el proceso de autorizaci�
 \subsubsection{Google Authenticator}
 
 \section{conclusiones}
+\clearpage
+\printglossary[title={Abreviaciones y tecnicismos}]
 \clearpage
 \printbibliography[heading=bibintoc,title={Bibliografía}]
 \end{document}
