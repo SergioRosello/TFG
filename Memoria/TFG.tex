@@ -22,7 +22,6 @@ sorting=ynt]{biblatex}
 \usepackage{afterpage}
 \usepackage{xcolor}
 \usepackage{pagecolor}
-\definecolor{u-blue}{RGB}{32,2,116}
 
 % Margin sizes for page
 \marginsize{3cm}{3cm}{2.5cm}{2.5cm}
@@ -39,8 +38,6 @@ sorting=ynt]{biblatex}
 
 \begin{document}
 
-\newpagecolor{u-blue}
-\afterpage{\restorepagecolor}
 \maketitle
 \section*{Agradecimientos}
 Debo agradecer a Eduardo Ariols, mi tutor del trabajo todo el apoyo y consejos dados. Estoy seguro de que sin su ayuda, este trabajo no hubiese llegado a su nivel actual. Durante el proceso de elección del trabajo, me ayudó a darme cuenta de lo que quería hacer exactamente y desde ese momento, no ha parado de inspirarme con distintas formas de ver las cosas. De eso, le estoy muy agradecido.\par También quiero agradecer a la universidad el buen trabajo a la hora de escoger al personal docente de mi grado, puesto que en todo momento han demostrado más que profesionalidad y compañerismo hacia mi y mis compañeros de carrera.
@@ -390,7 +387,58 @@ A esta función se le pasan los argumentos:
 \end{itemize}
 Existen varias funciones más en la API, que son esenciales para la gestión de las otras interfaces de módulo pero para entender PAM y el módulo \textit{auth} no son necesarias.
 \subsubsection{PAM-SPI}
+Igual que la \gls{API}, la \Gls{SPI} proporciona funciones para poder gestionar los cuatro pilares del módulo PAM (\textit{authentication}, \textit{account}, \textit{session} y \textit{password}) pero nosotros nos vamos a centrar en las funciones necesarias para la parte de \Gls{authentication}. El proceso de verificación se gestiona con la función \textit{pam\_sm\_authenticate()}.
+\begin{verbatim}
+#define PAM_SM_AUTH
+#include <security/pam_modules.h>
+pam_handle_t* gestor_pam;
+int flags;
+int argc;
+const char** argv;
 
+PAM_EXTERN int pam_sm_authenticate(gestor_pam, flags, argc, argv);
+\end{verbatim}
+Se usa \textit{PAM\_SM\_AUTH} para asegurar que los prototipos de los módulos estáticos estén bien declarados.
+Los parámetros que se le pasan a \textit{pam\_sm\_authenticate()} son: 
+\begin{itemize} 
+	\item \textit{gestor\_pam}: Estructura cue identifica la operación con la API PAM.
+	\item{\textit{flags:} Pueden ser dos:
+		\begin{itemize}
+			\item PAM\_SILENT: no registra ningún mensaje.
+			\item PAM\_DISALLOW\_NULL\_AUTHTOK: Si el usuario no tiene un token de autenticación registrado, hace que el módulo devuelva PAM\_AUTH\_ERR}
+		\end{itemize} 
+	\item{\textit{argc} y \textit{argv}: Funcionan como el paso de parámetros a una función estándar en \Gls{C}.
+\end{itemize}
+\textit{pam\_sm\_authenticate()} devuelve:
+\begin{itemize}
+	\item{PAM\_AUTH\_ERR: Usuario no autenticado}
+	\item{PAM\_CRED\_INSUFFICIENT: Aplicación no tiene suficiente información para autenticar al usuario}
+	\item{PAM\_AUTHINFO\_UNVALID: Módulos han sido incapaces de acceder a la información de autenticación}
+	\item{PAM\_MAXTRIES: Uno o más módulos han llegado al límite de intentos. No volver a intentar}
+	\item{PAM\_SUCCESS: Usuario satisfactoriamente autenticado}
+	\item{PAM\_USER\_UNKNOWN: Usuario no reconocido}
+\end{itemize}
+Aunque esta sea la única función necesaria para implementar el módulo \textit{authentication}, existen varias funciones que ayudan a la implementación de esta función como \textit{pam\_get\_user()} o \textit{pam\_get\_item()}. La segunda está descrita en la sección superior.
+\begin{verbatim}
+#include <security/pam_modules.h>
+pam_handle_t** gestor_pam;
+const char** usuario;
+const char* avisoUsuario;
+
+int pam_get_user(gestor_pam, user, prompt);
+\end{verbatim} 
+\textit{pam\_get\_uer()} se usa para obtener el usuario que está solicitando la autenticación. Devuelve el nombre del usuario especificado por \textit{pam\_start()}. Si no se especificó ningún usuario, se devuelve el valor de \textit{pam\_get\_item(pamh, PAM\_USER, ...)}. Si este valor es \textit{null}, averigua el usuario mediante \textit{pam\_conv()}.
+\begin{itemize}
+	\item \textit{gestor\_pam}: Estructura que identifica la operación con la API PAM.
+	\item \textit{usuario}: Se devuelve un puntero a \textit{user}. El valor del usuario no se debería liberar ni modificar.
+	\item \textit{prompt}: Diálogo que se le presenta al usuario al pedirle la contraseña.
+\end{itemize}
+Los valores de retorno de esta función son:
+\begin{itemize}
+	\item{PAM\_SUCCESS: Nombre de usuario devuelto satisfactoriamente.}
+	\item{PAM\_SYSTEM\_ERROR: Puntero a \textit{null} pasado por parámetros}
+	\item{PAM\_CONV\_ERROR: La función de conversación proporcionada por la aplicación no obtuvo un nombre de usuario.}
+\end{itemize}
 \subsection{Módulos \Gls{dfa} para PAM}
 Existen varios módulos que utilizan PAM para realizar el proceso de autorización del usuario.
 \subsubsection{Google Authenticator}
