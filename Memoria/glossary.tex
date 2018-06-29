@@ -1,15 +1,16 @@
 \makeglossaries
 
 
+\newacronym{acr-usb}{USB}{Universal Serial Bus}
 \newglossaryentry{USB}
 {
 	name=USB,
-	description={Universal Serial Bus: Interfaz que permite la conexión de periféricos a diversos dispositivos}
+	description={Interfaz que permite la conexión de periféricos a diversos dispositivos}
 }
 \newglossaryentry{dbus}
 {
 	name=dbus,
-	description={Desktop bus. Un sistema para habilitar la comunicación entre programas}
+	description={Un sistema para habilitar la comunicación entre programas}
 }
 
 \newglossaryentry{Linux}
@@ -17,9 +18,10 @@
 	name=Linux,
 	description={Kernel creado por Linus Torvalds}
 }
+\newacronym{acr-gnu}{GNU}{Gnu is Not Unix}
 \newglossaryentry{GNU}
 {
-	name=Gnu is Not Unix,
+	name=GNU,
 	description={Proyecto con la finalidad de crear un sistema Unix-like completamente libre: GNU}
 }
 \newglossaryentry{GNU/Linux}
@@ -27,14 +29,10 @@
 	name=GNU/Linux,
 	description={Combinacón del kernel creado por Linus Torvalds y de los programas creados por el proyecto GNU}
 }
-\newglossaryentry{DFA}
-{
-	name=Doble factor de autenticación o DFA,
-	description={Mayormente usado en cuentas online para verificar que realmente es la persona indicada quien accede a su cuenta. Consigue esto haciendo a la persona que se autentica en la cuenta pasar una prueba distinta a la contraseña, como verificación con SMS o por gódigo autogenerado}
-}
+\newacronym{acr-hal}{HAL}{Hardware Abstraction Layer}
 \newglossaryentry{HAL}
 {
-	name=Hardware Abstraction Layer,
+	name=HAL,
 	description={Capa que se encarga de gestionar los nuevos dispositivos encontrados en el sistema para que el usuario no tenga que gestionarlo él mismo. Si no encuentra el driver, pregunta al usuario del sistema}
 }
 \newglossaryentry{udev}
@@ -42,9 +40,10 @@
 	name=udev,
 	description={Proporciona un directorio dinámico de dispositivos en el que elimina o añade nodos según los dispositivos que estén conectados. Generalmente se encuentran en /dev}
 }
+\newacronym{acr-pam}{PAM}{Pluggable Authentication Module}
 \newglossaryentry{PAM}
 {
-	name=Pluggable Authentication Module,
+	name=PAM,
 	description={Módulo que funciona como adaptador entre los programas de verificación nuevos como por USB o llave maestra y los programas que gestionan la autenticación. Si no existiera, cada vez que se crea un nuevo esquema de autenticación, se debería de actualizar todos los programas que usan ese servicio}
 }
 \newglossaryentry{kernel}
@@ -52,9 +51,10 @@
 	name=kernel,
 	description={Intermediario entre el hardware y el software. Se encarga de gestionar la comunicación entre los programas y el hardware, de forma que si un programa quiere bajar el volumen de los altavoces, el programa se lo solicita al kernel y este al hardware mediante drivers}
 }
+\newacronym{acr-otp}{OTP}{One Time Password}
 \newglossaryentry{OTP}
 {
-	name=One Time Password,
+	name=OTP,
 	description={Contraseña que solo es válida para un inicio de sesión o transacción. De esta forma aseguras que si alguien consigue entrar en tu cuenta, no pueda abusar de ella porque la contraseña cambia cada vez que inicias sesión}
 }
 \newglossaryentry{OATH}
@@ -77,6 +77,7 @@
 	name=udevil,
 	description={Monta y desmonta USB y redes en el sistema sin necesidad de contrseña (set SUID). Incluye Devmon, un demonio para montar dispositivos al sistema automaticamente}
 }
+\newacronym{acr-acl}{ACL}{Access Control List}
 \newglossaryentry{ACL}
 {
 	name=Access Control List,
@@ -97,11 +98,13 @@
 	name=StickyBit,
 	description={Solo permite modificar el archivo/directorio por el usuario que lo ha posee}
 }
+\newacronym{acr-rbac}{RBAC}{Role Based Access Control}
 \newglossaryentry{RBAC}
 {
 	name=Role Based Access Control,
 	description={Sistema que trata de gestionar la seguridad de una forma basada en roles y no tan granular como ACL}
 }
+\newacronym{acr-ldap}{LDAP}{Lightweight Directory Access Protocol}
 \newglossaryentry{LDAP}
 {
 	name=Lightweight Directory Access Protocol,
@@ -112,11 +115,13 @@
 	name=X.500,
 	description={Es una base de datos distribuida que ofrece la posibilidad de buscar información por nombre (páginas blancas) y buscar información (Páginas amarillas)}
 }
+\newacronym{acr-mad}{MAD}{Microsoft Active Directory}
 \newglossaryentry{MAD}
 {
 	name=Microsoft Active Directory,
 	description={Protocolo de acceso y búsquedade datos en la base de datos distribuida X.500}
 }
+\newacronym{acr-sasl}{SASL}{Simple Authentication and Security Layer}
 \newglossaryentry{SASL}
 {
 	name=Simple Authentication and Security Layer,
@@ -132,21 +137,25 @@
 	name=kerberos,
 	description={Protocolo de autenticación de red}
 }
+\newacronym{acr-nis}{NIS}{Network Information Service}
 \newglossaryentry{NIS/NIS+}
 {
 	name=Network Information Service,
 	description={Base de datos distribuida en una red, que almacena las credenciales y permisos de los usuarios de la red}
 }
+\newacronym{acr-ssh}{SSH}{Secure SHell}
 \newglossaryentry{SSH}
 {
-	name=Secure SHell,
+	name=SSH,
 	description={Programa que permite conectarse a un sistema mediante una conexión segura}
 }
+\newacronym{acr-telnet}{Telnet}{Telecomunications Network}
 \newglossaryentry{telnet}
 {
 	name=Telecomunication Network,
 	description={Protocolo de red que nos permite aceder a otra máquina para manejarla remotamente como si estuviéramos sentados delante de ella. Tambien es el nombre de uno de los programas informáticos que implementan el protocolo}
 }
+\newacronym{acr-gui}{GUI}{Graphical User Interface}
 \newglossaryentry{GUI}
 {
 	name=Graphical User Interface,
@@ -157,16 +166,19 @@
 	name=bug,
 	description={Un bug, es un fallo en la línea de ejecución de un programa. ya sea lógico o sintáctico.}
 }
+\newacronym{acr-nist}{NIST}{National Institute of Standards and Technology}
 \newglossaryentry{NIST}
 {
 	name=National Institute of Standards and Technology,
 	description={Instituto que forma parte del departamento de comercio de Estados Unidos}
 }
+\newacronym{acr-dfa}{DFA}{Doble Factor de Autenticación}
 \newglossaryentry{dfa}
 {
 	name=Doble Factor de Autenticación,
 	description={Proporciona una capa más de seguridad. Es la combinación de dos de los siguientes factores: Conocimiento (Algo que sabe el usuario) Posesión (Algo que tiene el usuario) y herencia (algo que es el usuario)}
 }
+\newacronym{acr-bbp}{BBP}{Bug Bounty Program}
 \newglossaryentry{bbp}
 {
 	name=Bug Bounty Program,
@@ -192,9 +204,10 @@
 	name=Git,
 	description={Software de control de versiones, creado para facilitar el desarrollo en el kernel de Linux. Ha sido adoptado por toda la comunidad de desarrolladores}
 }
+\newacronym{acr-bash}{BASH}{Bourne Again SHell}
 \newglossaryentry{bash}
 {
-	name=Bourne Again SHell,
+	name=bash,
 	description={Es un programa informático diseñado para interpretar programas de consola. Es un proyecto creado por GNU}
 }
 \newglossaryentry{script}
@@ -222,6 +235,7 @@
 	name=SunSoft,
 	description={Empresa tecnológica que propuso la implementación de PAM}
 }
+\newacronym{acr-api}{API}{Application Programming Interface}
 \newglossaryentry{API}
 {
 	name=Application Programming Interface,
@@ -252,11 +266,7 @@
 	name=Back-end,
 	description={Parte que implementa la lógica del programa. Generalmente, el usuario no interacciona con ella}
 }
-\newglossaryentry{API}
-{
-	name=Application Provider Interface,
-	description={Conjunto de clases, interfaces, métodos, etc... que llamas y usas para conseguir una finalidad}
-}
+\newacronym{acr-spi}{SPI}{Service Provider Interface}
 \newglossaryentry{SPI}
 {
 	name=Service Provider Interface,
