@@ -465,10 +465,20 @@ Los valores de retorno de esta función son:
 	\item{PAM\_SYSTEM\_ERROR: Puntero a \textit{null} pasado por parámetros}
 	\item{PAM\_CONV\_ERROR: La función de conversación proporcionada por la aplicación no obtuvo un nombre de usuario.}
 \end{itemize}
-\subsection{Módulos \gls{acr-dfa} para PAM}
-Existen varios módulos que utilizan PAM para realizar el proceso de autorización del usuario.
+\subsection{Módulos \gls{acr-dfa} para \gls{acr-pam}}
+Existen varios módulos que utilizan PAM para realizar el proceso de autorización del usuario. Cada uno proporciona al usuario distintas cualidades.
 \subsubsection{Google Authenticator}
-hola hey
+Este \footnote{\url{https://github.com/google/google-authenticator-libpam}} módulo usa \gls{acr-otp} como sistema para verificar la autenticidad del usuario.
+\subsubsection{pam\_geoip}
+Este \footnote{\url{http://ankh-morp.org/code/pam_geoip/}} módulo autentica al usuario según la zona geográfica en la que se encuentre el sistema.
+\subsubsection{pam-face-authentication}
+Este \footnote{\url{https://code.google.com/archive/p/pam-face-authentication/}} módulo autentica al usuario mediante un escaneo de sus rasgos faciales.
+\subsection{poldi}
+Este \footnote{\url{http://www.g10code.com/p-poldi.html}} módulo autentica al usuario mediante una tarjeta inteligente.
+\subsection{módulo \gls{acr-usb} para \gls{acr-pam}}
+A pesar de ser más aburrido, se decidió crear un módulo \gls{acr-usb} porque la disponibilidad de tarjetas inteligentes o aplicaciones de autenticación es inferior a la de \gls{acr-usb}s. Además, cualquier persona posee un \gls{acr-usb} hoy en día. Esto acerca más el \gls{acr-dfa} a los usuarios. \par
+Al ya existir un módulo \footnote{\url{https://github.com/ColumPaget/pam_usbkey}} \gls{acr-dfa} por \gls{acr-usb}, se decidió no reinventar la rueda y ayudar de otra forma a la comunidad. Aún así, se explicarán los pasos necesarios para la creación de dicho módulo. \par
+Antes de nada, debemos establecer el papel del \gls{acr-usb} en el módulo. El hecho de que se use un \gls{acr-usb} nos da pié a multitud de opciones. Al ser un dispositivo que el ordenador reconoce sin problemas, podemos interaccionar con el, sin necesidad de descargar e instalar programas que harían la adopción del módulo mucho más nicho.
 \clearpage
 \section{conclusiones}
 \clearpage
