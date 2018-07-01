@@ -58,10 +58,13 @@ This document reports my experience as I work on creating a USB-centric authenti
 during the research phase, i came across several elegant implementations, all of them worked with \gls{dbus}. during the final stages of this period, i discovered \gls{acr-pam} which changed my whole perspective on this project. most of \gls{gnu/linux} systems use this module to enable authentication for their users.\par
 at the start of this project i would've expected to code a lot more, but now i realise that without a solid foundation, i may have been able to do what i had proposed, but i would not have the understanding on how the \gls{acr-pam} fits into the whole equation and the many benefits it provides. this, i think is the point of this work.
 \clearpage
+
+\spacing{0.5}
 \tableofcontents
 \clearpage
 \listoffigures
 \clearpage
+\spacing{1.5}
 \section{Estado del arte}
 Se investigará la evolución de los ordenadores, la implicación que estos tienen en nuestra sociedad actual y las precauciones de seguridad que debemos tener al usarlos.
 \subsection{Evolución de las tecnologías}
@@ -69,7 +72,7 @@ Los ordenadores forman una gran parte de nuestra sociedad desde que fueron inven
 Desde Mark I, como podemos observar en la figura \ref{fig:moore}, los ordenadores han ido duplicando el número de transistores en circuitos integrados cada dos años \cite{moore}. Hasta ahora, y seguramente unos años más en adelante, podamos ver que se sigue cumpliendo la ley de Moore.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{Media/moore.jpg}
+    \includegraphics[width=0.7\textwidth]{Media/moore.jpg}
     \caption{Ley de Moore}
     \label{fig:moore}
 \end{figure}
@@ -101,45 +104,56 @@ A medida que ha ido evolucionando la tecnología, medidas de seguridad previamen
 A cuanto más valor, ya sea económico o emocional, más medidas de seguridad serán implementadas en proteger dicha información.\par En definitiva, es muy complicado tener un entorno seguro en el que poder confiar porque muchas de los vectores de ataque no dependen del usuario final, sino de terceros (Tantos como distintos servicios use el usuario). Es importante tener un buen nivel de seguridad en todos los dispositivos, pero este no debe interponerse entre las tareas que un usuario tiene que hacer en su ordenador ya que de lo contrario, sería un inconveniente, no una ventaja. Cada usuario debe establecer el grado de seguridad de sus cuentas, tanto en Internet como de sistema.\par Creo que existe una relación fuerte entre las medidas de seguridad que implementan los usuarios y el valor de la información que esa información tiene para ellos. Para la mayoría de usuarios, una contraseña, aunque menos segura que un \gls{acr-dfa} será más conveniente porque la naturaleza de la información que tiene que proteger no es tan importante.
 \clearpage
 \section{Introducción}
-
+En esta sección se presenta mi experiencia con la tecnología y como ésta ha derivado en este trabajo. Además, se expone la envergadura de este documento y las competencias adquiridas en la realización del proyecto.
 \subsection{Motivación}
+Desde pequeño, mi interés por los ordenadores era más que evidente. Recuerdo aún la forma en la que miraba el símbolo de sistema de Windows 7 pensando: \textit{Ojalá saber como funciona esto}. Siempre ha existido ese interés por el software en mí. Entender como funciona, desde el programa más básico al más complicado, ha sido siempre la fuerza de atracción hacia este mundo. Al decidir dedicar mi vida profesional a ello, decidí iniciar mi formación con un grado universitario.
 Como todo alumno de primero de carrera, inicié el curso con ganas y Windows.\par
 Durante el transcurso de la carrera, se hacía evidente que Windows no era el mejor sistema operativo para hacer las prácticas. Durante el primer curso usé una máquina virtual con \gls{Ubuntu} para hacer las prácticas. Cuando vi que usaba más la máquina virtual que el sistema operativo sobre la que corría, supe que era hora de dejar atrás Windows. El primer sistema operativo que instalé fue \gls{Ubuntu} y durante unos años dediqué mi tiempo libre a aprender a gestionar el sistema por comandos. Esto me llamaba la atención enormemente. Cuando me sentí lo suficientemente cómodo para cambiar nuevamente de sistema operativo, decidí cambiar a \gls{Arch linux} aunque primero debía pasar por \gls{Manjaro}, una distribución basada en \gls{Arch linux}, más sencilla de utilizar, pero con el mismo sistema por debajo. Cuando finalmente me vi capaz de pasar a \gls{Arch linux} y lo configuré correctamente, sentí que todos los años de aprendizaje habían llevado a buen puerto. \par
 Todo el proceso de aprendizaje que he pasado durante estos años me ha servido para aprender y valorar el sistema operativo. Esta es la razón por la que supe desde el primer momento en que nos dijeron que fuésemos pensando sobre que queríamos hacer el trabajo de fin de grado que quería hacerlo sobre \gls{GNU/Linux}.\par
 Tras toda esta experiencia, he querido ampliar mis conocimientos en \gls{GNU/Linux}. Durante la reunión con mi tutor, vimos algunas opciones de investigación y finalmente, al estar interesados en la seguridad de las aplicaciones y sistemas, decidimos que era buena idea tirar por esa rama.\par
 Durante el transcurso de la carrera, ya sea por requisito de los profesores o por mis proyectos personales, he sido un gran usuario del software de control de versiones, \gls{Git}. Lo he usado desde prácticas en las que era necesario hasta para este mismo documento. Desde que empecé a usarlo, vi que no se trataba simplemente de una herramienta para gestionar mis proyectos, sino de un estilo de vida, una forma de enseñar y compartir los proyectos en los que estás involucrado.\par
 La mayor parte de los programas que uso en mi sistema operativo se desarrollan de forma abierta en los que puedes ver el progreso y interaccionar con los desarrolladores, incluso ayudarles a detectar errores o solicitar un \textit{push request} para arreglar algún fallo.\par
-Espero que el resultado de este proyecto consiga reducir el nivel técnico mínimo necesario para configurar un \gls{dfa}, mucho más segura que cualquier sistema por defecto.
+Espero que el resultado de este proyecto consiga reducir el nivel técnico mínimo necesario para configurar un \gls{dfa}, bastante más seguro que cualquier sistema por defecto.
 \subsection{Descripción del proyecto}
-Durante la búsqueda de documentación sobre \gls{acr-pam} y como debería implementar el módulo que se encarga de autenticar al usuario mediante
-un dispositivo \gls{acr-usb} encontré en \gls{GitHub} un proyecto que hacía exactamente lo que tenía pensado implementar yo. Al ya existir esto, vi que no tenía sentido reinventar la rueda, así que decidí crear un \gls{script} en \gls{acr-bash} que facilitase al usuario no técnico la configuración del módulo \gls{acr-usb} para el \gls{acr-pam}.\par
+Se decidió implementar un \gls{acr-dfa} para demostrar los pasos a seguir en su desarrollo pero se encontró un proyecto \footnote{\url{https://github.com/ColumPaget/pam_usbkey}} en \gls{GitHub} que hacía exactamente lo que tenía pensado implementar. Tras encontrar dicho proyecto se cambió de perspectiva. Se decidió desarrollar un \gls{script} en \gls{acr-bash} que facilitase al usuario no técnico la configuración del módulo \gls{acr-usb} para \gls{acr-pam}.\par
 El \gls{script} que he creado ayuda al usuario a seleccionar el \gls{acr-usb} que quiera usar, le explica las diferencias entre las distintas formas que hay de configurar el Módulo y le deja decidir donde quiere introducir la línea de configuración ya que al ejecutar las órdenes de forma secuencial, dependiendo de la posición en la que se coloque la línea, el módulo hará una cosa o otra. \par
 Previo a mi \gls{script}, para configurar el módulo \gls{acr-usb}, el usuario debía leer la documentación oficial de PAM para averiguar que archivo es el que debe configurar y como lo debe hacer. Lo que consigo con mi \gls{script} es reducir la curva de aprendizaje necesaria para configurar un método de autenticación más seguro que el de la contraseña por defecto. Esto hará que más usuarios tengan acceso a mejor autenticación en sus ordenadores sin que pierdan conveniencia y comodidad.
 \subsection{Competencias adquiridas}
-Durante el desarrollo del proyecto, he desarrollado tanto aptitudes como actitudes. A continuación describiré tanto las situaciones en las que he demostrado una actitud como las aptitudes que he desarrollado y reforzado.
+Al acabar cualquier tarea propuesta en la vida uno siente una sensación de realización fuertemente vinculada con esta. Además de realización, si uno se para a analizar, se da cuenta de las distintas aptitudes y actitudes desarrolladas, de forma involuntaria tras la realización del proyecto. En el caso de este proyecto, siento que he reforzado y desarrollado las siguientes.
 \subsubsection{Aptitudes adquiridas o reforzadas}
+Las aptitudes que he desarrollado y su explicación son:
 \begin{itemize}
 	\item{\textbf{\gls{acr-bash}}}\par Decidí usar este lenguaje de progrmamación para hacer el script porque sabía que no me iba a encontrar con complicaciones a la hora de asegurar que funcione en cualquier equipo ya que todos los programas usados en el script vienen instalados de forma predeterminada en la gran mayoría de sistemas.
 	\item{\textbf{\gls{C}}}\par El \gls{acr-pam} está escrito en \gls{C} y he tenido que leer y entender como funciona el submódulo \gls{acr-usb} para ver como se comunican ambos módulos.
 	\item{\textbf{\gls{Python}}}\par En la primera implementación que hice, usé este lenguaje de programación para bloquear la pantalla del ordenador mediante \gls{dbus}.
 	\item{\textbf{\gls{Linux}}}\par Durante el transcurso del proyecto he estado investigando el funcionamiento de \gls{Linux} aunque más detalladamente en los mecanismos de autenticación de usuarios que tiene.
 \end{itemize}
+Las siguientes dos, aunque de forma indirectamente relacionadas con la realización del proyecto, directamente relacionadas con la realización de este documento.
+\begin{itemize}
+	\item{\textbf{\gls{Vim}}}\par Este documento ha sido escrito completamente en \gls{Vim}. La extensión de este documento ha servido para aprender tanto funciones básicas como funciones avanzadas de \gls{Vim}
+	\item{\textbf{\LaTeX{}}}\par Al igual que en el caso de \gls{Vim}, la complejidad de este documento ha servido para desarrollar un mejor entendimiento de este sistema de composición tipográfica.
+\end{itemize}
 \subsubsection{Actitudes adquiridas o reforzadas}
+La mayor parte de estas actitudes las he desarrollado en otros proyectos y ya sabía que era capaz de demostrarlas. La última, sin embargo me ha sorprendido reconocer que la poseo.
 \begin{itemize}
 	\item{\textbf{Resolutivo}}\par Durante la primera iteración de investigación/implementación, encontré una forma de desbloquear el equipo mediante \gls{dbus}. Esta forma, aunque funcional, no es elegante. Es más parecido a un ``hack" que a una solución elegante y segura. Si no hubiese ``dado un paso atrás", no hubiese continuado investigando/implementando otras soluciones. \par Cuando encontré PAM\_USB, me obcequé en hacer que funcionase, ya que si no funcionaba, no podía avanzar en el trabajo. De nuevo, tuve que dar un paso atrás para buscar otras implementaciones para el módulo \gls{acr-pam} con \gls{acr-usb}.
 	\item{\textbf{Persistencia}}\par Guarda una relación directa con la forma en la que he enfocado el trabajo.
 	\item{\textbf{Adaptabilidad}}\par Durante toda mi vida de estudiante, mi forma de retener la información y por consiguiente aprender, ha sido escuchando al profesor. Leer los apuntes a mi me sirve como refuerzo a la explicación del profesor. Durante este proyecto, no he seguido esa misma dinámica, ya que no he tenido un profesor a quien escuchar, he tenido que investigar y formarme a base de la lectura de las páginas de documentación y los comentarios informativos en el código.
 \end{itemize}
 \subsection{Estructura del documento}
-Ahora mismo no se que poner ;) ***
+Este documento está compuesto por varias secciones.
 \clearpage
 \section{Objetivos}
 Desde el inicio, el principal objetivo de este trabajo ha sido expandir mi conocimiento sobre \gls{GNU/Linux}. Además de ser un sistema operativo versátil y fehaciente, es una prueba viviente de que se puede hacer código libre en comunidad y de calidad. Aunque la idea general estaba clara, también lo estaba que se debía especificar más el área de investigación. Tras hablar con el tutor, se decidió que la investigación debía continuar en el campo de la seguridad en sistemas. \par
 Se me facilitó un enlace a un vídeo por parte de mi tutor en el que se presentaba un mecanismo para evitar la fase de autenticación en un sistema operativo basado en \gls{GNU/Linux}. La clave estaba en el uso de una herramienta pre-instalada para enviar mensajes a las aplicaciones encargadas de autenticar la identidad de los usuarios informándolas de que el usuario ya estaba autenticado. Estas herramientas no estaban monitorizadas por los administradores de sistemas debido al gran volumen de información que pasa a través de ellas. Este proyecto me interesó y decidí centrar mi investigación en el análisis y la automatización de \gls{dfa} en sistemas \gls{GNU/Linux}. \par 
 El objetivo inicial en este trabajo era crear un sistema que permitiese al usuario bloquear y desbloquear el ordenador con un \gls{acr-usb}. Cuando se empezó a investigar las distintas formas de hacer esto, primer paso lógico era centrarse en \gls{dbus} ya que existían proyectos que conseguían este objetivo. Tras el primer ciclo de investigación/implementación conseguí bloquear el sistema al enviar un comando mediante \gls{dbus} al programa que se encarga de bloquear el sistema pero debido a varios factores que se explicarán más adelante, no era una solución buena. \par 
 Buscando alternativas, se encontró \gls{acr-pam}. Tras una investigación inicial, se descubrió que esta librería es la forma por defecto de autenticación de usuarios en la mayoría de sistemas \gls{GNU/Linux}. Además, su diseño contemplaba la posibilidad de utilizar múltiples factores de autenticación. Esta era la ruta que debía tomar.\par
-Para avanzar, ahora debía entender como funcionaba PAM y como crear un módulo de autenticación por \gls{acr-usb} que lo implementara. Este fue mi siguiente objetivo. \par
-Al ver que ya existía un módulo que hacía justamente eso, el cauce de este proyecto se centró en facilitar la adopción de este módulo a los usuarios, de forma que más gente no técnica pueda acceder a mejor autenticación. Esto se consigue creando un \gls{script} que al ejecutarlo se encargue de la parte más complicada del proceso de instalación de un \gls{dfa}, la configuración, ya que si se configura erróneamente, existe la posibilidad de que el usuario se queda bloqueado fuera de su ordenador.
+El hecho de investigar sobre \gls{acr-pam} en plataformas como \gls{GitHub} y encontrar un proyecto que use \gls{acr-pam} con \gls{acr-usb} también en esta plataforma, me incitó a querer contribuir con los resultados de este trabajo a la comunidad de desarrolladores españoles. La información respecto a \gls{acr-pam} en esta comunidad es escasa y creo que esta seria una buena forma de contribuir a ella.\par
+Para avanzar, ahora debía entender como funcionaba \gls{acr-pam} y como crear un módulo de autenticación por \gls{acr-usb} que lo implementara. Este fue mi siguiente objetivo. Específicamente, debía investigar la parte \gls{acr-spi} de \gls{acr-pam}. \par
+Al ver que ya existía un módulo que hacía justamente eso, el cauce de este proyecto se centró en facilitar la adopción de este módulo a los usuarios, de forma que más gente no técnica pueda acceder a mejor autenticación. Esto se consigue creando un \gls{script} que al ejecutarlo se encargue de la parte más complicada del proceso de instalación de un \gls{dfa}, la configuración, ya que si se configura erróneamente, existe la posibilidad de que el usuario se queda bloqueado fuera de su ordenador.\par
+El siguiente objetivo fue la elección del lenguaje. Al elegir lenguaje de programación para el \gls{script} tuve en cuenta varios factores. Conocimiento actual del lenguaje, complejidad de implementación en dicho lenguaje, disponibilidad de dicho lenguaje en los posibles sistemas donde se use \gls{acr-pam} y en caso de no haber usado el lenguaje previamente, curva de aprendizaje del mismo. Finalmente, el lenguaje de programación usado ha sido \gls{acr-bash} debido a que su integración con \gls{GNU/Linux} es excelente, la curva de aprendizaje no era exagerada y la disponibilidad del mismo en los sistemas que se aprovechen del módulo.
+Una vez escogí \gls{acr-bash} debía averiguar como usarlo para encontrar los dispositivos \gls{acr-usb} en el sistema.\par
+
 \clearpage
 \section{Métodos de trabajo}
 Durante el desarrollo del proyecto, he seguido una metodología de desarrollo ágil, ya que a mi parecer, es la forma más eficiente de trabajar en un proyecto. Comparada con el desarrollo en cascada, aporta muchas ventajas al flujo de trabajo. \par
@@ -164,8 +178,9 @@ Durante el periodo de investigación de dispositivos con los que podía realizar
 Finalmente, tras investigar las ventajas e inconvenientes de varios dispositivos hardware, me decanté por el \gls{acr-usb} como segundo método de autenticación. Aunque otros dispositivos como auriculares pasan desapercibidos, el sistema de verificación no puede interactuar con ellos y aunque no sea un requisito, el hecho de poder interactuar con el \gls{acr-usb}, me proporciona más formas de verificar al usuario.
 \clearpage
 \section{Investigación y resultados}
-En esta sección, se describen las distintas tecnologías de autenticación existentes, los problemas actuales de esas tecnologías, se defenderá la necesidad de una seguridad más agresiva, tanto para los usuarios normales como para las grandes empresas y se desglosarán las distintas formas de conseguir esta seguridad actualmente. Además se describirá en detalle como funciona \gls{acr-pam}, desde el punto de vista del desarrollador de aplicaciones, del administrador de sistemas y del desarrollador de módulos. Se describirán las distintas formas de autenticación implementadas, sus ventajas e inconvenientes.
+En esta sección, se describen las distintas tecnologías de autenticación existentes, los problemas actuales de esas tecnologías, se defenderá la necesidad de una seguridad más agresiva, tanto para los usuarios normales como para las grandes empresas y se desglosarán las distintas formas de conseguir esta seguridad actualmente. Además se describirá en detalle como funciona \gls{acr-pam}, desde el punto de vista del desarrollador de aplicaciones, del administrador de sistemas y del desarrollador de módulos. Se describirán las distintas formas de autenticación probadas, desde el uso del jack de audio hasta el uso de \gls{acr-pam} con \gls{act-usb}, sus ventajas e inconvenientes.
 \subsection{Análisis de sistemas de autenticación en sistemas \gls{GNU/Linux}}
+La parte de análisis es fundamental para conocer los métodos existentes actualmente para autenticar a usuarios. Sin este análisis inicial, hubiese sido mucho más complicado realizar el proyecto debido a que el desconocimiento de las distintas formas de autenticación no me hubiese llevado a poner a \gls{acr-pam} en perspectiva. \par
 La forma en la que se autentica la identidad de los usuarios de sistemas ha ido evolucionando desde que se vio que era necesaria. A continuación se exponen las formas más populares de gestión de usuarios y credenciales, tanto en el ámbito empresarial, como en el ámbito personal.
 \subsubsection{Inicios de la gestión de permisos}
 Cada objeto tiene asociada una tabla de 9 bits, los tres primeros indican los privilegios de lectura, escritura y ejecución del usuario que posee el objeto. Los tres siguientes son para la lectura, escritura y ejecución de los usuarios pertenecientes al grupo que posee el objeto y los tres últimos son de lectura, escritura y ejecución de los usuarios que no pertenecen a ninguno de las dos primeras categorías. Esta categoría se llama \textit{others}. Además de estos 9 bits, también pueden incluir el \gls{SetUid}, \gls{SetGid} y el \gls{StickyBit}. A pesar de ser un sistema muy simple de gestionar privilegios, cumple la mayoría de escenarios posibles en sistemas UNIX e incluso a día de hoy, se sigue usando en todos los sistemas \gls{GNU/Linux} ya que proporciona una forma sencilla y eficiente de visualizar los privilegios de los objetos y modificarlos. Esta forma de gestionar los privilegios de los objetos se puede denominar \gls{acr-acl}.
@@ -223,6 +238,7 @@ Esta información la administra el servidor central. Dependiendo del tamaño de 
 \subsubsection{\gls{acr-ssh}}
 Una de las formas que han tenido los usuarios de conectarse de forma remota con un sistema ha sido el \gls{acr-telnet}. Esta opción, aunque válida, es poco segura porque la comunicación entre la máquina y el usuario se envía sin cifrar a través de la red.\par Se desarrolló \gls{acr-ssh} para evitar esto.
 \subsection{Análisis de \gls{acr-pam}}
+Tras la investigación previa, se concluye que \gls{acr-pam} es la vía por la que se tiene que seguir. El hecho que sea compatible con varias de las distintas formas descritas previamente nos muestra su universalidad. Es una herramienta que tanto Usuarios novel como administradores de sistemas con experiencia pueden configurar. Además, es tan válido en un ambiente empresarial como en un sistema personal. Eso demuestra su amplia compatibilidad. Por estas razones, creo que la mejor opción para implementar un \gls{acr-dfa} es \gls{acr-pam}.\par
 En esta sección se describirá en detalle \gls{acr-pam}. Se describirá lo necesario para poder integrarlo en una aplicación, lo necesario para codificar un módulo que lo implemente y el papel del administrador de sistemas a la hora de unificar ambas partes.
 \subsubsection{PAM, una visión de conjunto}
 En 1995 \gls{Sun} introdujo \gls{acr-pam}. Dado que en ese momento, no existía un protocolo o diseño específico para realizar la autenticación, su uso se implementó en la mayoría de sistemas. Estos incluyen:
@@ -465,17 +481,21 @@ Los valores de retorno de esta función son:
 	\item{PAM\_SYSTEM\_ERROR: Puntero a \textit{null} pasado por parámetros}
 	\item{PAM\_CONV\_ERROR: La función de conversación proporcionada por la aplicación no obtuvo un nombre de usuario.}
 \end{itemize}
-\subsection{Módulos \gls{acr-dfa} para \gls{acr-pam}}
+\subsubsection{Módulos \gls{acr-dfa} para \gls{acr-pam}}
 Existen varios módulos que utilizan PAM para realizar el proceso de autorización del usuario. Cada uno proporciona al usuario distintas cualidades.
-\subsubsection{Google Authenticator}
-Este \footnote{\url{https://github.com/google/google-authenticator-libpam}} módulo usa \gls{acr-otp} como sistema para verificar la autenticidad del usuario.
-\subsubsection{pam\_geoip}
-Este \footnote{\url{http://ankh-morp.org/code/pam_geoip/}} módulo autentica al usuario según la zona geográfica en la que se encuentre el sistema.
-\subsubsection{pam-face-authentication}
-Este \footnote{\url{https://code.google.com/archive/p/pam-face-authentication/}} módulo autentica al usuario mediante un escaneo de sus rasgos faciales.
-\subsection{poldi}
-Este \footnote{\url{http://www.g10code.com/p-poldi.html}} módulo autentica al usuario mediante una tarjeta inteligente.
-\subsection{módulo \gls{acr-usb} para \gls{acr-pam}}
+\begin{itemize}
+	\item{Google Authenticator}\par
+	Este \footnote{\url{https://github.com/google/google-authenticator-libpam}} módulo usa \gls{acr-otp} como sistema para verificar la autenticidad del usuario.
+	\item{pam\_geoip}\par
+	Este \footnote{\url{http://ankh-morp.org/code/pam_geoip/}} módulo autentica al usuario según la zona geográfica en la que se encuentre el sistema.
+	\item{pam-face-authentication} \par
+	Este \footnote{\url{https://code.google.com/archive/p/pam-face-authentication/}} módulo autentica al usuario mediante un escaneo de sus rasgos faciales.
+	\item{poldi} \par
+	Este \footnote{\url{http://www.g10code.com/p-poldi.html}} módulo autentica al usuario mediante una tarjeta inteligente.
+\end{itemize}
+\subsubsection{Desarrollo de un \gls{acr-dfa} usando \gls{acr-pam}}
+En esta sección, se describen las partes necesarias para desarrollar y configurar todos los componentes necesarios para el uso de \gls{acr-pam}.
+\subsubsection{módulo \gls{acr-usb} para \gls{acr-pam}}
 A pesar de ser más aburrido, se decidió crear un módulo \gls{acr-usb} porque la disponibilidad de tarjetas inteligentes o aplicaciones de autenticación es inferior a la de \gls{acr-usb}s. Además, cualquier persona posee un \gls{acr-usb} hoy en día. Esto acerca más el \gls{acr-dfa} a los usuarios. \par
 Al ya existir un módulo \footnote{\url{https://github.com/ColumPaget/pam_usbkey}} \gls{acr-dfa} por \gls{acr-usb}, se decidió no reinventar la rueda y ayudar de otra forma a la comunidad. Aún así, se explicarán los pasos necesarios para la creación de dicho módulo. \par
 Antes de nada, debemos establecer el papel del \gls{acr-usb} en el módulo. El hecho de que se use un \gls{acr-usb} nos da pié a multitud de opciones. Al ser un dispositivo que el ordenador reconoce sin problemas, podemos interaccionar con el, sin necesidad de descargar e instalar programas que harían la adopción del módulo mucho más nicho.
