@@ -285,7 +285,7 @@ La figura \ref{fig:arquitecturaPAM} ilustra la relación entre las aplicaciones,
 Por defecto, el framework lee los archivos de configuración de /etc/pam.d/. Si no se encuentra el directorio, se usará el archivo /etc/pam.conf aunque este método está deprecado. Cada servicio tiene su propio archivo. Aunque varias aplicaciones puedan usar el mismo servicio, por ejemplo varias aplicaciones de bloqueo de pantalla pueden usar el servicio \textit{screenLock}, lo estándar es que cada aplicación cree un servicio propio. Estas aplicaciones se deben encargar de crear el servicio y colocarlo en el directorio.
 Estos archivos siguen la siguiente estructura:
 \begin{lstlisting}
-	interfaz_módulo	control	nombre_módulo	argumentos_módulo
+interfaz_modulo	control	nombre_modulo	argumentos_modulo
 \end{lstlisting} \par
 El campo \textit{interfaz\_módulo} puede tener cuatro tipos, cada uno de estos pertenece a un tipo de proceso de autorización distinto.
 \begin{itemize}
@@ -313,22 +313,22 @@ Se muestra un ejemplo de este documento en la figura \ref{fig:archivoServicio}.
 \end{figure}
 La primera línea es un comentario. Cualquier línea que empiece por (\#) es un comentario. Los módulos de autenticación son las líneas 2, 3 y 4. El módulo
 \begin{lstlisting}
-	auth required /lib/security/pam_securetty.so
+auth required /lib/security/pam_securetty.so
 \end{lstlisting}
 asegura que, si un usuario está intentando autenticarse como root, el \gls{tty} desde el cual se está autenticando está en el archivo /etc/securetty. Si no está el \gls{tty} ahí, cualquier intento de inicio de sesión como usuario \gls{root} fallará con un mensaje de login incorrecto. \par
 El módulo 
 \begin{lstlisting}
-	account required /lib/security/pam_pwdb.so
+account required /lib/security/pam_pwdb.so
 \end{lstlisting}
 comprueba la expiración de un usuario. Si la cuenta ha expirado o la contraseña ha expirado y el usuario no introduce la nueva, el módulo fallará. \par
 El módulo 
 \begin{lstlisting}
-	password required /lib/security/pam_pwdb.so shadow nullok use_authtok
+password required /lib/security/pam_pwdb.so shadow nullok use_authtok
 \end{lstlisting}
 Llama otra vez a \textit{pam\_pwdb} para cambiar la contraseña del usuario en caso de que la haya cambiado. Los argumentos le indican a módulo que escriba las contraseñas en \textit{shadow}, que acepte una contraseña en blanco como válida y que use la nueva contraseña, en caso de que se haya cambiado. \par
 El módulo
 \begin{lstlisting}
-	session required /lib/security/pam_pwdb.so
+session required /lib/security/pam_pwdb.so
 \end{lstlisting}
 se encarga de guardar en el log del sistema el inicio de sesión. Si la operación no se consigue realizar, el usuario no podrá iniciar sesión en el sistema.
 \subsubsection{PAM-API}
@@ -507,12 +507,29 @@ Existen varios módulos que utilizan PAM para realizar el proceso de autorizaci�
 	\item{poldi} \par
 	Este \footnote{\url{http://www.g10code.com/p-poldi.html}} módulo autentica al usuario mediante una tarjeta inteligente.
 \end{itemize}
-\subsubsection{Desarrollo de un \gls{acr-dfa} usando \gls{acr-pam}}
-En esta sección, se describen las partes necesarias para desarrollar y configurar todos los componentes necesarios para el uso de \gls{acr-pam}.
 \subsubsection{módulo \gls{acr-usb} para \gls{acr-pam}}
 A pesar de ser más aburrido, se decidió crear un módulo \gls{acr-usb} porque la disponibilidad de tarjetas inteligentes o aplicaciones de autenticación es inferior a la de \gls{acr-usb}s. Además, cualquier persona posee un \gls{acr-usb} hoy en día. Esto acerca más el \gls{acr-dfa} a los usuarios. \par
 Al ya existir un módulo \footnote{\url{https://github.com/ColumPaget/pam_usbkey}} \gls{acr-dfa} por \gls{acr-usb}, se decidió no reinventar la rueda y ayudar de otra forma a la comunidad. Aún así, se explicarán los pasos necesarios para la creación de dicho módulo. \par
-Antes de nada, debemos establecer el papel del \gls{acr-usb} en el módulo. El hecho de que se use un \gls{acr-usb} nos da pié a multitud de opciones. Al ser un dispositivo que el ordenador reconoce sin problemas, podemos interaccionar con el, sin necesidad de descargar e instalar programas que harían la adopción del módulo mucho más nicho.
+Antes de nada, debemos establecer el papel del \gls{acr-usb} en el módulo. El hecho de que se use un \gls{acr-usb} nos da pié a multitud de opciones. Al ser un dispositivo que el ordenador reconoce sin problemas, podemos interaccionar con el, sin necesidad de descargar e instalar programas que harían la adopción del módulo mucho más nicho.\par
+Antes de empezar con el módulo en sí, se debe explicar como se detectan los \gls{acr-usb}s en el sistema. Se debe entender que antes de que nosotros podamos usar el dispositivo, el sistema debe haberlo reconocido e iniciado un proceso de comunicación entre él mismo y el \gls{acr-usb}. Una vez el \gls{acr-usb} ya está detectado por el sistema, nuestro programa debería funcionar sin problemas.\par
+Los \gls{acr-usb}, como cualquier dispositivo hardware tienen grabados unos datos desde fábrica, para identificarlos de forma única. Estos datos son los que usa el módulo para diferenciar entre dispositivos y solo devolver \textit{PAM\_SUCCESS} cuando detecta el indicado.\par
+Para crear este módulo, nos aprovecharemos de la \gls{acr-spi} de \gls{acr-pam}. Como ya hemos visto anteriormente, únicamente necesitamos implementar un método, \textit{pam\_sm\_authenticate()}. Este comprueba que el dispositivo \gls{acr-usb} sea el indicado y si lo es, devuelve \textit{PAM\_SUCCESS}. 
+Para comprobar el identificador único del \gls{acr-usb} antes debemos proporcionarle al módulo la lista de identificadores que están permitidos. Estos parámetros, además de algunos otros como el usuario, la \gls{acr-tty} y los hosts remotos. Estos parámetros los introduce el administrador de sistema en el campo \textit{argumentos\_modulo} dentro del \textit{service} de la siguiente manera:
+\begin{lstlisting}
+auth required pam_usbkey.so user=* rhosts=* tty=* key=12345678910
+\end{lstlisting}
+El módulo los recibe mediante los parámetros \textit{argc} y \textit{argv} de la función \textit{pam\_sm\_authenticate()} y los trata para poder usarlos. Una vez tiene los parámetros, debe comparar de forma no excluyente los datos. En el fragmento superior, los parámetros indican que cualquier usuario, representado por el carácter (*) en cualquier \gls{acr-tty} con cualquier dirección IP puede autenticarse en el módulo si detecta que el identificador \gls{acr-usb} es 12345678910. Tras comparar los parámetros, se ejecuta el siguiente código:
+\begin{lstlisting}[xleftmargin=.15\textwidth]
+if (UserMatch && (TTYMatch || HostMatch)){
+	if (! KeyMatch) return(PAM_PERM_DENIED);
+	return(PAM_SUCCESS);
+}
+return(PAM_IGNORE);
+\end{lstlisting}
+Si el usuario coincide y coincide el \gls{acr-tty} o la dirección IP desde la que se conecta el usuario, si no coincide el identificador del \gls{acr-usb} devuelve \textit{PAM\_PERM\_DENIED}. Si el programa aún no ha devuelto nada, significa que si que coincide el identificador así que devuelve \textit{PAM\_SUCCESS}. Si no coincidía el usuario y el \gls{acr-tty} o la dirección IP, devuelve \textit{PAM\_IGNORE}.
+
+\subsubsection{Desarrollo de un \gls{acr-dfa} usando \gls{acr-pam}}
+En esta sección, se describen las partes necesarias para desarrollar y configurar todos los componentes necesarios para el uso de \gls{acr-pam}. Se hará un entorno en el que un usuario pueda desbloquear su ordenador con una llave \gls{acr-usb}.
 \clearpage
 \section{conclusiones}
 \clearpage
