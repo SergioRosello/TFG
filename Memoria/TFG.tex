@@ -193,6 +193,9 @@ Finalmente, tras investigar las ventajas e inconvenientes de varios dispositivos
 \clearpage
 \section{Investigación y resultados}
 En esta sección, se describen las distintas tecnologías de autenticación existentes, los problemas actuales de esas tecnologías, se defenderá la necesidad de una seguridad más agresiva, tanto para los usuarios normales como para las grandes empresas y se desglosarán las distintas formas de conseguir esta seguridad actualmente. Además se describirá en detalle como funciona \gls{acr-pam}, desde el punto de vista del desarrollador de aplicaciones, del administrador de sistemas y del desarrollador de módulos. Se describirán las distintas formas de autenticación probadas, desde el uso del jack de audio hasta el uso de \gls{acr-pam} con \gls{act-usb}, sus ventajas e inconvenientes.
+\subsection{Comunidad}
+Durante la investigación y desarrollo del trabajo de fin de grado, he obtenido gran parte de la información sobre las distintas tecnologías gracias a los manuales oficiales de \gls{acr-pam}. Esto, como debería ser es software disponible a cualquier persona, con una licencia GNU General Public License que garantiza tu libertad de distribuir y cambiar todas las versiones de un programa para asegurar que permanece libre para todos sus usuarios. \cite{GNU-GPL} \par
+Durante el desarrollo del proyecto, durante la búsqueda de información relacionada con \gls{acr-pam} me he encontrado con escasa información de calidad en español, por eso, y siguiendo la filosofía de libertad de documentación y software, me gustaría publicar partes de este documento para facilitar el entendimiento de \gls{acr-pam} a compañeros de habla española.
 \subsection{Análisis de sistemas de autenticación en sistemas \gls{GNU/Linux}}
 La parte de análisis es fundamental para conocer los métodos existentes actualmente para autenticar a usuarios. Sin este análisis inicial, hubiese sido mucho más complicado realizar el proyecto debido a que el desconocimiento de las distintas formas de autenticación no me hubiese llevado a poner a \gls{acr-pam} en perspectiva. \par
 La forma en la que se autentica la identidad de los usuarios de sistemas ha ido evolucionando desde que se vio que era necesaria. A continuación se exponen las formas más populares de gestión de usuarios y credenciales, tanto en el ámbito empresarial, como en el ámbito personal.
@@ -571,7 +574,59 @@ Estas dos implementaciones no van a funcionar entre si a no ser que el administr
 auth required pam_usbkey.so user=* rhosts=* tty=* key=12345678910
 \end{lstlisting}
 En este caso, se indica que la interfaz del módulo es de autenticación, que el módulo pam\_usbkey.so debe devolver una respuesta positiva. Los parámetros que se le proporciona al módulo son los cuatro de la regla.
-
+\subsection{Trabajo práctico en la búsqueda de un \gls{acr-dfa}}
+Durante el desarrollo del proyecto he implementado y probado una serie de mecanismos \gls{acr-dfa}. Este es el resumen de estos distintos proyectos, sus problemas y ventajas.
+\subsubsection{\gls{dbus}}
+El primer proyecto que intenté. \gls{dbus} esencialmente es algo muy parecido a una autopista para el sistema. A través de él se pueden comunicar todos los programas entre ellos. Esto significa que dependiendo de los métodos disponibles el cada programa, yo (Mediante un programa que esté a la escucha de una señal) podría enviar una señal al programa de bloqueo diciéndole que se apague/pare, que el usuario ya está autenticado. Bastantes programas de bloqueo en distribuciones como \gls{Ubuntu} tienen un sistema \gls{dbus} implementado así que merecía la pena probar.\par
+Las ventajas de este tipo de sistemas son:
+\begin{itemize}
+	\item{\textbf{Ligero}}\par
+		El programa que yo debía implementar simplemente estaba a la escucha de una señal/patrón constantemente. Cuando lo recibía enviaba un comando al programa de bloqueo, que bloqueaba o desbloqueaba la pantalla del sistema. 
+	\item{\textbf{Sencillo de implementar}}\par
+		En Python, estamos hablando de aproximadamente 40 líneas de programa.
+	\item{\textbf{Silencioso}}\par
+		Es perfecto para no dejar rastro en el sistema. Comprobar los logs de \gls{dbus} se como buscar una aguja en un pajar, por ese demonio pasan tantos datos que sería muy poco práctico monitorizarlo. Es perfecto para una puerta trasera en un sistema, pero ese no es mi objetivo.
+\end{itemize}
+Los inconvenientes de una implementación de este estilo son:
+\begin{itemize}
+	\item{\textbf{Específico}}\par
+		Cada distribución usa un programa de bloqueo de pantalla, esto significa cambiar la lógica del programa cada vez que quiera usarlo en un ordenador distinto al mío.
+	\item{\textbf{Ejecución constante}}\par
+		Aunque sea ligero, el programa debe estar en constante ejecución. Esto, por poco que sea, consume tiempo de procesamiento del procesador.
+	\item{\textbf{No hace uso de las herramientas proporcionadas por \gla{GNU/Linux}}\par
+		Este enfoque hacia la autenticación de usuarios no hace uso de las utilidades proporcionadas por \gls{GNU/Linux} para autenticar un usuario.
+	\item{\textbf{Difícil de configurar}}\par
+		Aunque su implementación es relativamente sencilla, al querer reducir la barrera de entrada del usuario medio a sistemas \gls{acr-dfa}, el proceso de configuración del programa era demasiado complicado. Se tiene que configurar para que se ejecute siempre que se inicia el sistema.
+\end{itemize}
+Durante una serie de iteraciones de investigación/implementación se continuaron probando programas basados en el mismo principio. Todos ellos se encontraron en \gls{GitHub}. \par
+En la primera fase de implementación se creó un script que bloqueaba el ordenador al ejecutarlo. \par
+La siguiente fase se dedicó a buscar ejemplos de implementaciones parecidas, para ver como conseguían desbloquear la pantalla mediante dbus. Se encontraron varios proyectos, entre ellos \href{https://github.com/Svenito/usblock}{usblock}. Este proyecto gestionaba el bloqueo/desbloqueo de la pantalla mediante \gls{dbus}, un buen ejemplo de implementación.\par
+Al descargar y ejecutar el programa, me encontré con que estaba usando una librería obsoleta. \gls{acr-hal}. Esta librería fue reemplazada por \gls{udev}. Al ver esto, solamente podía leer el programa, pero no podía probarlo en mi sistema.\par
+Haciendo balanza de las ventajas e inconvenientes, se decidió buscar una solución distinta.\par
+\subsubsection{\gls{acr-pam}}
+La siguiente tecnología que encontré fue \gls{acr-pam}. Esta vez, aseguré que era exactamente lo que necesitaba ya que no quería perder más tiempo probando e intentando arreglar cosas que no tenían sentido. Al investigar más a fondo los distintos tipos de autenticación existentes en \gls{GNU/Linux} y ver que muchos de ellos eran compatibles con \gls{acr-pam}, supe que debía seguir investigando esta tecnología. \par
+El primer proyecto que encontré, fue \href{https://github.com/aluzzardi/pam_usb}{PAM\_USB}. Las siguientes fases de investigación/implementación se dedicaron a investigar y entender este módulo para \gls{acr-pam}. Cabe mencionar que en este momento el desarrollo de un módulo propio para \gls{acr-pam} ya no tenía sentido, ya que aluzzardi, el creador del programa había creado un módulo muy bien documentado y programado. Cuando lo descargué para probar y configurar en el sistema, el módulo no detectaba los dispositivos \gls{acr-usb} que conectaba. Tras una investigación, se averiguó que este módulo también usaba \gls{acr-hal} para detectar los dispositivos conectados.\par
+Al ser un proyecto popular y usado por la comunidad, se pensó que seguramente existiesen pull requests por miembros de la comunidad para portar el proyecto a \gls{udev}. Efectivamente, si existían. Al descargar y probar este \footnote{\url{https://github.com/aluzzardi/pam_usb/pull/34}} me encontré con que también habían complicaciones. Se proporcionaban una serie de scripts para ayudar con la configuración del módulo. Ambos parecían estar escritos en la versión 2 de python pero ninguno parecía funcionar en mi sistema.\par Al experimentar esto, cambié de proyecto a uno menos ambicioso. Empecé a usar \href{https://github.com/ColumPaget/pam_usbkey}{pam\_usbkey}. Este módulo, esencialmente hace lo mismo que PAM\_USB pero no tiene tanto nivel de seguridad, ya que comprueba el ID del \gls{act-usb} pero no una llave firmada dentro del \gls{acr-usb}. \par
+Las ventajas de este enfoque son:
+\begin{itemize}
+	\item{\textbf{Integración absoluta con cualquier sistema que use \gls{acr-pam}}}\par
+		Al ser un módulo tan extendido, esto significa que prácticamente cualquier usuario de \gls{GNU/Linux} e incluso MacOS puede disfrutar de als ventajas del \gls{acr-dfa}
+	\item{\textbf{Ejecución bajo petición}}\par
+		El módulo se carga cuando una aplicación solicita que se use dicho módulo para proceder a verificar la identidad del usuario
+	\item{\textbf{Versatilidad}}\par
+		El programador del módulo puede usar cualquier método imaginable para autenticar al usuario, \gls{acr-pam} ofrece la posibilidad de gestionar todos los módulos por igual.
+	\item{\textbf{Configurabilidad}}\par
+		El administrador de sistemas puede intercambiar los módulos que va a usar una aplicación de forma muy sencilla.
+	\item{\textbf{Configuración centralizada}}\par
+		El administrador de sistemas tiene todos los archivos de configuración en un directorio, ordenados según \textit{service}
+	\item{\textbf{Facilidad de uso para usuarios no avanzados}}\par
+		Un usuario medio puede configurar un módulo \gls{acr-pam} sin mucho problema.
+\end{itemize}
+Los inconvenientes de \gls{acr-pam} son:
+\begin{itemize}
+	\item{\textbf{Curva de aprendizaje}}\par
+		Aunque sencilla, el programador debe aprender como funciona \gls{acr-pam} para crear un módulo.
+\end{itemize}
 \clearpage
 \section{conclusiones}
 \clearpage
