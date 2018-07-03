@@ -341,7 +341,7 @@ const char* usuario;
 const struct pam_conv* conversacion_pam;
 pam_handle_t** gestor_pam;
 
-int pam_start(nombre_servicio, usuario, conversation_pam, pamh);
+int pam_start(nombre_servicio, usuario, conversation_pam, gestor_pam);
 \end{lstlisting}
 La primera función a la que se tiene que llamar es a \textit{pam\_start()}. Esta crea el contexto PAM e inicializa la transacción PAM.\par
 \begin{itemize}
@@ -441,7 +441,26 @@ A esta función se le pasan los argumentos:
 	\item{PAM\_SUCCESS: Usuario satisfactoriamente autenticado}
 	\item{PAM\_USER\_UNKNOWN: Usuario no reconocido}
 \end{itemize}
-Existen varias funciones más en la \gls{acr-api}, que son esenciales para la gestión de las otras interfaces de módulo pero para entender PAM y el módulo \textit{auth} no son necesarias.
+Existen varias funciones más en la \gls{acr-api}, que son esenciales para la gestión de las otras interfaces de módulo pero para entender PAM y el módulo \textit{auth} no son necesarias.\par
+\textit{pam\_conv} no es una función, sino una estructura que permite al módulo y a la aplicación que le ha llamado comunicarse directamente.
+\begin{lstlisting}
+struct pam_conv{
+    int (*conversacion) (int, struct pam_mensaje **,
+          struct pam_respuesta **, void *appdata_ptr);
+    void *appdata_ptr;
+};
+\end{lstlisting}
+donde \textit{conversacion} es:
+\begin{lstlisting}
+int conversacion(int numero_mensajes, const struct pam_message **mensaje,
+		 struct pam_response **respuesta, void *appdata_ptr);
+\end{lstlisting}
+Generalmente se usa para mostrar y recibir información del usuario. Se especifica cuando se llama a \textit{pam\_start()} al iniciar el procedimiento. Esta estructura debe tener dos elementos para ser válida:
+\begin{itemize}
+	\item{Función de conversación pasada por referencia}\par Un puntero a la función de conversación. Esta función es la que gestiona la comunicación entre el módulo y la aplicación.
+	\item{\textit{void* appdata\_ptr}}\par
+		Al pasarse mediante la función de conversación al módulo y ser devuelta por el mismo, la aplicación puede usar este campo para pasar información específica de la aplicación al módulo.
+\end{itemize}
 \subsubsection{PAM-SPI}
 Igual que la \gls{acr-api}, la \gls{acr-spi} proporciona funciones para poder gestionar los cuatro pilares del módulo PAM (\textit{authentication}, \textit{account}, \textit{session} y \textit{password}) pero nosotros nos vamos a centrar en las funciones necesarias para la parte de \gls{authentication}. El proceso de verificación se gestiona con la función \textit{pam\_sm\_authenticate()}.
 \begin{lstlisting}
@@ -483,7 +502,7 @@ const char* avisoUsuario;
 
 int pam_get_user(gestor_pam, user, prompt);
 \end{lstlisting} 
-\textit{pam\_get\_uer()} se usa para obtener el usuario que está solicitando la autenticación. Devuelve el nombre del usuario especificado por \textit{pam\_start()}. Si no se especificó ningún usuario, se devuelve el valor de \textit{pam\_get\_item(pamh, PAM\_USER, ...)}. Si este valor es \textit{null}, averigua el usuario mediante \textit{pam\_conv()}.
+\textit{pam\_get\_uer()} se usa para obtener el usuario que está solicitando la autenticación. Devuelve el nombre del usuario especificado por \textit{pam\_start()}. Si no se especificó ningún usuario, se devuelve el valor de \textit{pam\_get\_item(gestor\_pam, PAM\_USER, ...)}. Si este valor es \textit{null}, averigua el usuario mediante \textit{pam\_conv()}.
 \begin{itemize}
 	\item \textit{gestor\_pam}: Estructura que identifica la operación con la \gls{acr-api} PAM.
 	\item \textit{usuario}: Se devuelve un puntero a \textit{user}. El valor del usuario no se debería liberar ni modificar.
@@ -507,7 +526,7 @@ Existen varios módulos que utilizan PAM para realizar el proceso de autorizaci�
 	\item{poldi} \par
 	Este \footnote{\url{http://www.g10code.com/p-poldi.html}} módulo autentica al usuario mediante una tarjeta inteligente.
 \end{itemize}
-\subsubsection{módulo \gls{acr-usb} para \gls{acr-pam}}
+\subsubsection{Un entorno \gls{acr-pam}, uniéndolo todo}
 A pesar de ser más aburrido, se decidió crear un módulo \gls{acr-usb} porque la disponibilidad de tarjetas inteligentes o aplicaciones de autenticación es inferior a la de \gls{acr-usb}s. Además, cualquier persona posee un \gls{acr-usb} hoy en día. Esto acerca más el \gls{acr-dfa} a los usuarios. \par
 Al ya existir un módulo \footnote{\url{https://github.com/ColumPaget/pam_usbkey}} \gls{acr-dfa} por \gls{acr-usb}, se decidió no reinventar la rueda y ayudar de otra forma a la comunidad. Aún así, se explicarán los pasos necesarios para la creación de dicho módulo. \par
 Antes de nada, debemos establecer el papel del \gls{acr-usb} en el módulo. El hecho de que se use un \gls{acr-usb} nos da pié a multitud de opciones. Al ser un dispositivo que el ordenador reconoce sin problemas, podemos interaccionar con el, sin necesidad de descargar e instalar programas que harían la adopción del módulo mucho más nicho.\par
@@ -519,17 +538,40 @@ Para comprobar el identificador único del \gls{acr-usb} antes debemos proporcio
 auth required pam_usbkey.so user=* rhosts=* tty=* key=12345678910
 \end{lstlisting}
 El módulo los recibe mediante los parámetros \textit{argc} y \textit{argv} de la función \textit{pam\_sm\_authenticate()} y los trata para poder usarlos. Una vez tiene los parámetros, debe comparar de forma no excluyente los datos. En el fragmento superior, los parámetros indican que cualquier usuario, representado por el carácter (*) en cualquier \gls{acr-tty} con cualquier dirección IP puede autenticarse en el módulo si detecta que el identificador \gls{acr-usb} es 12345678910. Tras comparar los parámetros, se ejecuta el siguiente código:
-\begin{lstlisting}[xleftmargin=.15\textwidth]
-if (UserMatch && (TTYMatch || HostMatch)){
-	if (! KeyMatch) return(PAM_PERM_DENIED);
+\begin{lstlisting}[xleftmargin=.07\textwidth]
+if (UsuarioCoincide && (TTYCoincide || HostCoincide)){
+	if (! IdentificadorCoincide) return(PAM_PERM_DENIED);
 	return(PAM_SUCCESS);
 }
 return(PAM_IGNORE);
 \end{lstlisting}
-Si el usuario coincide y coincide el \gls{acr-tty} o la dirección IP desde la que se conecta el usuario, si no coincide el identificador del \gls{acr-usb} devuelve \textit{PAM\_PERM\_DENIED}. Si el programa aún no ha devuelto nada, significa que si que coincide el identificador así que devuelve \textit{PAM\_SUCCESS}. Si no coincidía el usuario y el \gls{acr-tty} o la dirección IP, devuelve \textit{PAM\_IGNORE}.
+Si el usuario coincide y coincide el \gls{acr-tty} o la dirección IP desde la que se conecta el usuario, si no coincide el identificador del \gls{acr-usb} devuelve \textit{PAM\_PERM\_DENIED}. Si el programa aún no ha devuelto nada, significa que si que coincide el identificador así que devuelve \textit{PAM\_SUCCESS}. Si no coincidía el usuario y el \gls{acr-tty} o la dirección IP, devuelve \textit{PAM\_IGNORE}.\par
+Para crear una aplicación \textit{pam-aware} debemos usar los métodos de la \gls{acr-api}. Lo primero que debemos hacer es definir nuestra conversación. Esto permite una comunicación directa entre un módulo y una aplicación. En el código de demostración inferior, vemos como se inicializa la estructura.
+\begin{lstlisting}[xleftmargin=.1\textwidth]
+struct pam_conv conv = {funcion_conversacion, NULL};
+\end{lstlisting}
+Una vez tenemos eso, debemos inicializar el gestor, este se encarga de identificar el proceso. Esto se hace con el código a continuación.
+\begin{lstlisting}[xleftmargin=0\textwidth]
+if ((ret = pam_start("bloqueo", usuario, &conv, &gestor_pam) != PAM_SUCCESS)
+	errx(EXIT_FAILURE, "PAM: %s", pam_strerror(gestor_pam, ret));
+\end{lstlisting}
+Llama a \textit{pam\_start()} con los argumentos necesarios descritos anteriormente y controla el valor devuelto englobando la llamada en la condición del \textit{if}. De esta forma, nos aseguramos que si algo sale mal en el proceso, lo tenemos controlado y podemos gestionar el error.\par
+Una vez tenemos todo el entorno preparado, podemos hacer uso de la función \textit{pam\_authenticate()}. El resultado de llamar a esta función le dirá a la aplicación si podemos o no iniciar sesión en el sistema. Un ejemplo de implementación:
+\begin{lstlisting}[xleftmargin=.07\textwidth]
+    if (pam_authenticate(gestor_pam, 0) == PAM_SUCCESS) {
+        pam_setcred(gestor_pam, PAM_REFRESH_CRED);
+        pam_end(gestor_pam, PAM_SUCCESS);
+        ev_break(EV_DEFAULT, EVBREAK_ALL);
+        return;
+    }
+\end{lstlisting}
+Una vez entra dentro de la condición el usuario ya ha sido autenticado por \gls{acr-pam}. Lo que queda hacer es preparar todo para que el programa termine correctamente. Estos pasos son: actualizar las credenciales, terminar la comunicación con \gls{acr-pam} y salir del programa.\par
+Estas dos implementaciones no van a funcionar entre si a no ser que el administrador de sistemas las vincule en el archivo de configuración (\textit{service}) del módulo. En este archivo, el administrador de sistemas introducirá la sentencia que une ambas cosas. Como hemos visto anteriormente, un posible ejemplo es:
+\begin{lstlisting}
+auth required pam_usbkey.so user=* rhosts=* tty=* key=12345678910
+\end{lstlisting}
+En este caso, se indica que la interfaz del módulo es de autenticación, que el módulo pam\_usbkey.so debe devolver una respuesta positiva. Los parámetros que se le proporciona al módulo son los cuatro de la regla.
 
-\subsubsection{Desarrollo de un \gls{acr-dfa} usando \gls{acr-pam}}
-En esta sección, se describen las partes necesarias para desarrollar y configurar todos los componentes necesarios para el uso de \gls{acr-pam}. Se hará un entorno en el que un usuario pueda desbloquear su ordenador con una llave \gls{acr-usb}.
 \clearpage
 \section{conclusiones}
 \clearpage
