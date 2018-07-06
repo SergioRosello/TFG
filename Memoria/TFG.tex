@@ -1,4 +1,4 @@
-\documentclass[titlepage, 12pt, a4paper]{article}
+\documentclass[twoside, titlepage, 12pt, a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
 \usepackage{csquotes}
@@ -41,6 +41,10 @@ sorting=ynt]{biblatex}
 \title{Análisis y automatización de doble factor de autenticación en sistemas GNU/Linux}
 \author{Roselló Morell, Sergio\\
 \texttt{sergio.rosello@live.u-tad.com}}
+
+%Making sections load on odd pages
+\let\oldsection\section
+\def\section{\cleardoublepage\oldsection}
 
 \begin{document}
 \begin{titlepage}
@@ -131,6 +135,7 @@ A medida que ha ido evolucionando la tecnología, medidas de seguridad previamen
 A cuanto más valor, ya sea económico o emocional, más medidas de seguridad serán implementadas en proteger dicha información.\par
 En definitiva, es muy complicado tener un entorno seguro en el que poder confiar porque muchas de los vectores de ataque no dependen del usuario final, sino de terceros (tantos como distintos servicios use el usuario). Es importante tener un buen nivel de seguridad en todos los dispositivos, pero este no debe interponerse entre las tareas que un usuario tiene que hacer en su ordenador ya que de lo contrario, sería un inconveniente, no una ventaja. Cada usuario debe establecer el grado de seguridad de sus cuentas, tanto en Internet como de sistema.\par
 Para la mayoría de usuarios, una contraseña, aunque menos segura que un \gls{acr-dfa} será más conveniente porque la naturaleza de la información que tiene que proteger no es tan importante como para asegurar su confidencialidad.
+\clearpage
 \clearpage
 \section{Introducción}
 En esta sección se presenta mi experiencia con la tecnología y como ésta ha derivado en este trabajo. Además, se expone la envergadura de este documento y las competencias adquiridas en la realización del proyecto.
@@ -619,7 +624,7 @@ Estas dos implementaciones no van a funcionar entre sí a no ser que el administ
 auth required pam_usbkey.so user=* rhosts=* tty=* key=12345678910
 \end{lstlisting}
 En este caso, se indica que la interfaz del módulo es de autenticación, que el módulo pam\_usbkey.so debe devolver una respuesta positiva. Los parámetros que se le proporciona al módulo son los cuatro de la regla.
-\subsection{Trabajo práctico en la búsqueda de un \gls{acr-dfa}}
+\subsection{Pruebas \gls{dfa} desarrolladas según tecnología}
 Durante el desarrollo del proyecto he implementado y probado una serie de mecanismos \gls{acr-dfa}. Este es el resumen de estos distintos proyectos, sus problemas y ventajas.
 \subsubsection{\gls{dbus}}
 El primer proyecto que intenté, \gls{dbus}, esencialmente es algo muy parecido a una autopista para el sistema. A través de él se pueden comunicar todos los programas entre ellos. Esto significa que dependiendo de los métodos disponibles en cada programa, se  podría enviar (mediante un programa que esté a la escucha de una señal) una señal al programa de bloqueo diciéndole que se apague/pare, que el usuario ya está autenticado. Bastantes programas de bloqueo en distribuciones como \gls{Ubuntu} tienen un sistema \gls{dbus} implementado así que merecía la pena probar.\par
@@ -672,10 +677,24 @@ Los inconvenientes de \gls{acr-pam} son:
 	\item{\textbf{Curva de aprendizaje}}\par
 		Aunque sencilla, el programador debe aprender como funciona \gls{acr-pam} para crear un módulo.
 \end{itemize}
-\subsection{Creación del script}
-Este es la parte práctica, derivada de la parte teórica de este trabajo. El \gls{script} se he escrito en \gls{bash}. Un lenguaje intérprete de comandos. Esto significa que une distintos programas disponibles, como: \textit{ls, mv, cd, sed} o \textit{cat} para crear un único programa, que cumple una función específica.\par
-Se decidió usar \gls{bash} porque está disponible en todos los equipos que usan \gls{acr-pam}, me interesaba aprenderlo inicialmente y la curva de aprendizaje inicial no parecía muy complicada.\par
+\subsection{Creación del \gls{script}}
+Este es la parte práctica, derivada de la parte teórica de este trabajo. El \gls{script} se he escrito en \gls{acr-bash}. Un lenguaje intérprete de comandos. Esto significa que une distintos programas disponibles, como: \textit{ls, mv, cd, sed} o \textit{cat} para crear un único programa, que cumple una función específica.\par
+\subsubsection{Selección del lenguaje}
+Se decidió usar \gls{acr-bash} porque está disponible en todos los equipos que usan \gls{acr-pam}, me interesaba aprenderlo inicialmente y la curva de aprendizaje inicial no parecía muy complicada.\par
+\subsubsection{Aprendizaje del lenguaje}
 Antes de desarrollar el \gls{script}, debía aprender como funcionaba el lenguaje así que busqué un curso on-line para aprender. 
+Este\footnote{\url{https://guide.bash.academy/}} curso, casualmente también código abierto a la comunidad, explica los conceptos básicos y las buenas prácticas asociadas al desarrollo de \gls{script}s en \gls{acr-bash}.\par
+\subsubsection{Estilo de código}
+Durante el desarrollo del \gls{script} he usado la guía de estilos de \href{https://www.google.com}{Google}\footnote{\url{https://google.github.io/styleguide/shell.xml}}. Pienso que ceñirse a un estilo y ser consistente a la hora de programar ayuda enormemente a la comprensión del código.\par
+\subsubsection{Qué va a solventar}
+El \gls{script} está diseñado para ser de utilidad una vez se consigue instalar el módulo. Una vez hecho eso, se ejecuta el \gls{script} para gestionar la generación de la regla a insertar en el archivo indicado. Este proceso es el más complicado de toda la gestión porque al existir multitud de opciones, el usuario menos experimentado se puede ver inundado entre ellas. El \gls{script} informa en todo momento los pasos que está haciendo y explica que posibles acciones puede tomar a continuación. \par
+La finalidad del \gls{script} es facilitar la configuración de un módulo \gls{acr-pam}.
+\subsubsection{Funcionalidad}
+El \gls{script}, solo se inicia, informa al usuario que debe tener precaución, ya que una mala configuración puede resultar en el bloqueo de sesión permanente. Tras aceptar las cláusulas, se le pide que introduzca el \gls{acr-usb} que quiere usar como \gls{acr-dfa}. Tras haber introducido el \gls{acr-usb} se le presentan los dispositivos encontrados en el sistema y se le pide que seleccione uno. Al seleccionar uno, se pasa al siguiente paso. En este paso se informa al usuario de las distintas opciones que puede elegir y se le pide que seleccione una. Una vez tenemos la sentencia de configuración, se analiza el archivo en el que se va a insertar y se le muestran al usuario solamente las líneas necesarias con su número de línea. Se le pregunta en que línea quiere poner la regla y verificamos con el usuario. Si todo va bien, se le pregunta una última vez si está seguro de que quiere proceder. Si dice que si, escribimos la línea en el archivo de configuración. El \gls{script} permite usarse con parámetros para usuarios más avanzados, si no, se usa la configuración por defecto.
+\subsubsection{Problemas encontrados durante el desarrollo}
+Durante el desarrollo, se han encontrado algunos problemas leves debidos a falta de práctica con el lenguaje. Esto es normal, ya que todos los lenguajes de programación tienen su notación específica.
+\subsubsection{Ventajas de usar \gls{acr-bash}}
+Durante el desarrollo del \gls{script} ha sido más que evidente el valor que aporta \gls{acr-bash}. El hecho de poder integrar programas específicos en un programa global, permite al programador centrarse en la lógica de la aplicación deseada y delegar la gestión de partes específicas a los programas para completar la tarea.
 \clearpage
 \section{Conclusiones}
 En esta sección, se analizará el desarrollo del proyecto y describirán posibles formas de continuar con él.
