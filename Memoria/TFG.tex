@@ -178,7 +178,7 @@ La mayor parte de estas actitudes las he desarrollado en otros proyectos y ya sa
 \end{itemize}
 \subsection{Estructura del documento}
 Este documento está compuesto por varias secciones.
-\begin{itemize}
+\begin{enumerate}
 	\item{\textbf{Estado del arte}}\par
 		En este apartado se describe la evolución de los ordenadores, poniendo en contexto de esta forma la importancia de los mecanismos de autenticación en relación a los usuarios de los mismos y los tiempos modernos.
 	\item{\textbf{Introducción}}\par
@@ -191,7 +191,7 @@ Este documento está compuesto por varias secciones.
 		Esta sección consta de dos partes principales. Una de investigación y otra de Desarrollo. En la primera, se hace una investigación general de las distintas formas de autenticación disponibles tanto a usuarios como a administradores de sistemas de grandes redes de ordenadores. Tras el análisis, se explica por qué se decidió optar por \gls{acr-pam}, sus ventajas e inconvenientes relacionadas con las formas previamente analizadas y se procede a explicar en detalle dicho módulo. Una vez analizado el módulo, se explica como sería el proceso de creación de un sistema \gls{acr-pam}, se explican las distintas formas existentes de usar un módulo \gls{acr-pam} para demostrar su adaptabilidad. El segundo apartado contiene el análisis de las distintas pruebas realizadas con sistemas con la misma finalidad y finalmente el análisis, estructura y desarrollo del \gls{script} que se ha creado para ayudar a normalizar este mecanismo de autenticación.
 	\item{\textbf{Conclusiones}}\par
 		Una vez expuesto todo el contenido del proyecto, se llega a una conclusión del proyecto además de posibles formas de expandir el trabajo hacia el futuro.
-\end{itemize}
+\end{enumerate}
 \clearpage
 \section{Objetivos}
 Lista de objetivos, de generales a específicos a medida que se avanza el trabajo.
@@ -244,8 +244,26 @@ Finalmente, tras investigar las ventajas e inconvenientes de varios dispositivos
 Durante el desarrollo de esta sección se han investigado todas las técnicas de autenticación de usuarios encontradas para \gls{GNU/Linux}. Sin estos conocimientos no hubiese quedado contento ya que aunque se hubiese podido hacer un mecanismo para iniciar sesión, pero no se hubiese entendido ni la filosofía ni la comunidad detrás de \gls{GNU/Linux}. \par
 En esta sección, se describen las distintas tecnologías de autenticación existentes, los problemas actuales de esas tecnologías, se defenderá la necesidad de una seguridad más agresiva, tanto para los usuarios normales como para las grandes empresas y se desglosarán las distintas formas de conseguir esta seguridad actualmente. Además, se describirá en detalle como funciona \gls{acr-pam}, desde el punto de vista del desarrollador de aplicaciones, del administrador de sistemas y del desarrollador de módulos. Se describirán las distintas formas de autenticación probadas, desde el uso de \gls{dbus} hasta el uso de \gls{acr-pam} con \gls{act-usb} sus ventajas e inconvenientes.
 \subsection{Comunidad}
-Al saber que quiero publicar el script y las partes del trabajo que puedan resultar útiles a la comunidad, se ha hecho una investigación para averiguar donde y como se debería subir el contenido. El principal sitio donde ***Falta completar***\par
-Durante el desarrollo del proyecto, durante la búsqueda de información relacionada con \gls{acr-pam} me he encontrado con escasa información de calidad en español, por eso, y siguiendo la filosofía de libertad de documentación y software, me gustaría publicar partes de este documento para facilitar el entendimiento de \gls{acr-pam} a compañeros de habla española.
+Al saber que quiero aportar el script y las partes del trabajo que puedan resultar útiles a la comunidad, se ha hecho una investigación para averiguar donde y como se debería subir el contenido. Ahora mismo, el núcleo de la comunidad de software abierto está en \gls{GitHub} pero existen otros sistemas distribuidos de control de versiones como GitLab o BitBucket.\par
+Durante el desarrollo del proyecto, durante la búsqueda de información relacionada con \gls{acr-pam} me he encontrado con escasa información de calidad en español, por eso, y siguiendo la filosofía de libertad de documentación y software, me gustaría publicar partes de este documento para facilitar el entendimiento de \gls{acr-pam} a compañeros de habla española.\par
+\subsubsection{Publicación del \gls{script} a \gls{GitHub}}
+Para subir el \gls{script} a \gls{GitHub} se debe de tener una cuenta en la plataforma. El segundo requisito que se debe cumplir es tener un cliente git descargado en el sistema. Puede ser un cliente por consola o un cliente gráfico como GitKraken o SourceTree. Al ser un sistema de control de versiones, es preferible que todos estos pasos se realicen antes de empezar con el \gls{script}. De esta forma, además de contribuir a la comunidad, el proyecto queda controlado por versiones, ayudando al desarrollador a mantener un registro de los cambios que se han hehco en el proyecto.\par
+Una vez está todo configurado, en \gls{GitHub} se crea un proyecto, se decide cual será su nombre, licencia y demás características. Cuando el proyecto ya está creado, se selecciona la herramienta escogida para comunicarse con \gls{GitHub} y se \textit{clona} el proyecto. Esto es similar a descargar el proyecto al ordenador donde se quiere realizar el mismo. Al hacer esto, se pueden ver en la herramienta seleccionada cada uno de los archivos existentes en el directorio \textit{clonado}. A partir de ahora, todos los archivos que se incluyan dentro del directorio \textit{clonado} se controlarán y se tendrá la posibilidad de crear un \textit{commit}.\par
+Al crear un \textit{commit}, se copia el contenido del directorio y se envía a \gls{GitHub}. En este momento, los archivos en el directorio y los archivos en \gls{GitHub} son idénticos. Esta es la base de Git.\par
+\gls{Git} fomenta el trabajo en equipo porque permite que varias personas trabajen en el mismo proyecto en distintas cosas para posteriormente hacer un \textit{merge} o fusionar el trabajo de todos.\par
+Durante el desarrollo del \gls{script}, se ha usado \gls{GitHub}.
+\subsubsection{Publicación de la documentación de la memoria}
+Para publicar la memoria, se investigaron varias formas de hacerlo porque no se sabía exactamente cual sería la mejor.\par
+Las distintas formas planteadas de publicar la documentación son:
+\begin{itemize}
+	\item{\textbf{GitHub Pages}:}\par
+		Este mecanismo está directamente integrado con \gls{GitHub}. Se dedica una rama del proyecto a la documentación. El inconveniente de esto es que mi proyecto de \gls{GitHub} no guarda relación directa con la documentación. Ésta no explica como funciona el \gls{script} sino como funciona \gls{acr-pam}.
+	\item{\textbf{Blog personal}:}\par
+		Aunque es una buena opción, para que el documento tuviera visibilidad, el blog tendría que ser popular. Eso es algo de lo que no se dispone en esta instancia.
+	\item{\textbf{Medium}:}\par
+		Es una plataforma relativamente nueva dedicada a documentos de cualquier clase. Lo interesante de esta plataforma es que recomienda artículos al usuario según sus gustos e intereses. Al ser una plataforma nueva a la que cada día se registran más usuarios, el público objetivo al que pueda llegar el trabajo es superior al de las dos otras alternativas. Para subir la documentación a la plataforma, simplemente es necesario adaptarla ligeramente al modelo que propone la plataforma, ponerle un título y 5 \textit{tags} que describan el contenido del documento.
+\end{itemize}
+
 \subsection{Análisis de sistemas de autenticación en sistemas \gls{GNU/Linux}}
 La parte de análisis es fundamental para conocer los métodos existentes actualmente para autenticar a usuarios. Sin este análisis inicial, hubiese sido mucho más complicado realizar el proyecto debido a que el desconocimiento de las distintas formas de autenticación no me hubiese llevado a poner a \gls{acr-pam} en perspectiva. \par
 La forma en la que se autentica la identidad de los usuarios de sistemas ha ido evolucionando desde que se vio que era necesaria. A continuación se exponen las formas más populares de gestión de usuarios y credenciales, tanto en el ámbito empresarial, como en el ámbito personal.
