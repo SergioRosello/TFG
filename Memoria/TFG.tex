@@ -76,12 +76,12 @@ Esta oportunidad formativa no hubieses sido posible de no ser por el esfuerzo de
 Por último, dar las gracias a toda la gente que ha dedicado su tiempo en ayudarme a sacar la mejor versión de mi mismo en este trabajo. A nivel personal y profesional. Muchas gracias a todos.
 \clearpage
 \section*{Resumen}
-Este documento explica al lector la experiencia que he tenido durante el periodo de realización del trabajo de final de grado. Este trabajo trata sobre la autenticación de un usuario a un sistema \gls{GNU/Linux}, en concreto, mediante un dispositivo \gls{USB}.\par 
+Este documento explica al lector la experiencia que he tenido durante el periodo de realización del trabajo de final de grado. Este trabajo trata sobre el análisis en profundidad de los \gls{acr-dfa}, específicamente \gls{acr-pam} y la creación de un \gls{script} para ayudar a los usuarios menos técnicos a configurar un \gls{acr-dfa}.
 Durante la fase de investigación de las tecnologías existentes, encontré algunas que ofrecían usa solución elegante, mediante \gls{dbus} pero acabando la fase de investigación encontré un proyecto llamado \gls{acr-pam} que redefinió la forma en la que planteaba el trabajo ya que es la forma por defecto de autenticar a los usuarios que tienen la mayoría de sistemas \gls{GNU/Linux}.\par 
 Al iniciar el proyecto, al principio con enfoque mucho más práctico ha acabado teniendo un enfoque investigativo puesto que para implementar el módulo de autenticación, he tenido que construir una base fuerte sobre la que sentirme cómodo. Esta base es la que he tenido que esforzarme en entender puesto a que sin ella, el trabajo realizado, aunque funcionalmente completo, no me hubiese sido ni la mitad de estimulante e interesante.
 \clearpage
 \section*{Abstract}
-This document reports my experience as I work on creating a USB-centric authentication method for \gls{GNU/Linux}. \par
+This document reports my experience as i research Two Factor Authentication in \gls{GNU/Linux} and develop a script to help less téchnical users configure their own. \par
 during the research phase, i came across several elegant implementations, all of them worked with \gls{dbus}. during the final stages of this period, i discovered \gls{acr-pam} which changed my whole perspective on this project. most of \gls{gnu/linux} systems use this module to enable authentication for their users.\par
 at the start of this project i would've expected to code a lot more, but now i realise that without a solid foundation, i may have been able to do what i had proposed, but i would not have the understanding on how the \gls{acr-pam} fits into the whole equation and the many benefits it provides. this, i think is the point of this work.
 \clearpage
@@ -157,14 +157,14 @@ Previo a el \gls{script}, para configurar el módulo \gls{acr-usb}, el usuario d
 \subsection{Competencias adquiridas}
 Al acabar cualquier tarea propuesta en la vida uno siente una sensación de realización fuertemente vinculada con esta. Además de realización, si uno se para a analizar, se da cuenta de las distintas aptitudes y actitudes desarrolladas, de forma involuntaria tras la realización del proyecto. En el caso de este proyecto, siento que he reforzado y desarrollado las siguientes.
 \subsubsection{Aptitudes adquiridas o reforzadas}
-Las aptitudes que he desarrollado y su explicación son:
+A continuación presento una lista de las aptitudes que más he desarrollado durante la realización del proyecto.
 \begin{itemize}
 	\item{\textbf{\gls{acr-bash}}}\par Decidí usar este lenguaje de programación para hacer el \gls{script} porque sabía que no me iba a encontrar con complicaciones a la hora de asegurar que funcione en cualquier equipo ya que todos los programas usados en el script vienen instalados de forma predeterminada en la gran mayoría de sistemas.
-	\item{\textbf{\gls{C}}}\par El \gls{acr-pam} está escrito en \gls{C} y he tenido que leer y entender como funciona el submódulo \gls{acr-usb} para ver como se comunican ambos módulos.
+	\item{\textbf{\gls{C}}}\par \gls{acr-pam} está escrito en \gls{C} y he tenido que leer y entender como funciona el submódulo \gls{acr-usb} para ver como se comunican ambos módulos.
 	\item{\textbf{\gls{Python}}}\par En la primera implementación que hice, usé este lenguaje de programación para bloquear la pantalla del ordenador mediante \gls{dbus}.
 	\item{\textbf{\gls{Linux}}}\par Durante el transcurso del proyecto he estado investigando el funcionamiento de \gls{Linux} aunque más detalladamente en los mecanismos de autenticación de usuarios que tiene.
 \end{itemize}
-Las siguientes dos, aunque de forma indirectamente relacionadas con la realización del proyecto, directamente relacionadas con la realización de este documento.
+Las siguientes dos aptitudes, aunque indirectamente relacionadas con la realización del proyecto, han sido directamente relacionadas con la realización de este documento por tanto, las incluyo en el documento.
 \begin{itemize}
 	\item{\textbf{\gls{Vim}}}\par Este documento ha sido escrito completamente en \gls{Vim}. La extensión de este documento ha servido para aprender tanto funciones básicas como funciones avanzadas de \gls{Vim}
 	\item{\textbf{\LaTeX{}}}\par Al igual que en el caso de \gls{Vim}, la complejidad de este documento ha servido para desarrollar un mejor entendimiento de este sistema de composición tipográfica.
@@ -172,12 +172,13 @@ Las siguientes dos, aunque de forma indirectamente relacionadas con la realizaci
 \subsubsection{Actitudes adquiridas o reforzadas}
 La mayor parte de estas actitudes las he desarrollado en otros proyectos y ya sabía que era capaz de demostrarlas. La última, sin embargo me ha sorprendido reconocer que la poseo.
 \begin{itemize}
-	\item{\textbf{Resolutivo}}\par Durante la primera iteración de investigación/implementación, encontré una forma de desbloquear el equipo mediante \gls{dbus}. Esta forma, aunque funcional, no es elegante. Es más parecido a un ``hack" que a una solución elegante y segura. Si no hubiese ``dado un paso atrás", no hubiese continuado investigando/implementando otras soluciones. \par Cuando encontré PAM\_USB, me obcequé en hacer que funcionase, ya que si no funcionaba, no podía avanzar en el trabajo. De nuevo, tuve que dar un paso atrás para buscar otras implementaciones para el módulo \gls{acr-pam} con \gls{acr-usb}.
-	\item{\textbf{Persistencia}}\par Guarda una relación directa con la forma en la que he enfocado el trabajo.
+	\item{\textbf{Resolutivo}}\par Durante la primera iteración de investigación/implementación, encontré una forma de desbloquear el equipo mediante \gls{dbus}. Esta forma, aunque funcional, no es elegante. Es más parecido a un ``hack" que a una solución elegante y segura. Si no hubiese ``dado un paso atrás", no hubiese continuado investigando/implementando otras soluciones. \par Cuando encontré PAM\_USB, me obcequé en hacer que funcionase, ya que si no funcionaba, no podía avanzar en el trabajo. De nuevo, tuve que dar un paso atrás para buscar otras implementaciones para el módulo \gls{acr-pam} con \gls{acr-usb}.\par
+		Esta actitud la he tenido que trabajar mucho ya que no es raro en mi centrarme mucho en un punto y no observar las alternativas.
+	\item{\textbf{Persistencia}}\par Guarda una relación directa con la forma en la que he enfocado el trabajo. Desde su primera fase a la última, he cido constante en el desarrollo del proyecto.
 	\item{\textbf{Adaptabilidad}}\par Durante toda mi vida de estudiante, mi forma de retener la información y por consiguiente aprender, ha sido escuchando al profesor. Leer los apuntes a mi me sirve como refuerzo a la explicación del profesor. Durante este proyecto, no he seguido esa misma dinámica, ya que no he tenido un profesor a quien escuchar, he tenido que investigar y formarme a base de la lectura de las páginas de documentación y los comentarios informativos en el código.
 \end{itemize}
 \subsection{Estructura del documento}
-Este documento está compuesto por varias secciones.
+Este documento está compuesto por varias secciones. Cada una aporta una visión necesaria para proporcionar unidad al proyecto.
 \begin{enumerate}
 	\item{\textbf{Estado del arte}}\par
 		En este apartado se describe la evolución de los ordenadores, poniendo en contexto de esta forma la importancia de los mecanismos de autenticación en relación a los usuarios de los mismos y los tiempos modernos.
@@ -194,7 +195,7 @@ Este documento está compuesto por varias secciones.
 \end{enumerate}
 \clearpage
 \section{Objetivos}
-Lista de objetivos, de generales a específicos a medida que se avanza el trabajo.
+El presente punto tiene como finalidad describir tanto los objetivos generales como específicos del proyecto. Los objetivos están ordenados de generales a específicos.
 \begin{itemize}
 	\item{\textbf{Expandir mi conocimiento sobre \gls{GNU/Linux}}}\par
 		Además de ser un sistema operativo versátil y fehaciente, es una prueba viviente de que se puede hacer código libre en comunidad y de calidad.
@@ -245,16 +246,15 @@ Durante el desarrollo de esta sección se han investigado todas las técnicas de
 En esta sección, se describen las distintas tecnologías de autenticación existentes, los problemas actuales de esas tecnologías, se defenderá la necesidad de una seguridad más agresiva, tanto para los usuarios normales como para las grandes empresas y se desglosarán las distintas formas de conseguir esta seguridad actualmente. Además, se describirá en detalle como funciona \gls{acr-pam}, desde el punto de vista del desarrollador de aplicaciones, del administrador de sistemas y del desarrollador de módulos. Se describirán las distintas formas de autenticación probadas, desde el uso de \gls{dbus} hasta el uso de \gls{acr-pam} con \gls{act-usb} sus ventajas e inconvenientes.
 \subsection{Comunidad}
 Al saber que quiero aportar el script y las partes del trabajo que puedan resultar útiles a la comunidad, se ha hecho una investigación para averiguar donde y como se debería subir el contenido. Ahora mismo, el núcleo de la comunidad de software abierto está en \gls{GitHub} pero existen otros sistemas distribuidos de control de versiones como GitLab o BitBucket.\par
-Durante el desarrollo del proyecto, durante la búsqueda de información relacionada con \gls{acr-pam} me he encontrado con escasa información de calidad en español, por eso, y siguiendo la filosofía de libertad de documentación y software, me gustaría publicar partes de este documento para facilitar el entendimiento de \gls{acr-pam} a compañeros de habla española.\par
+Durante el desarrollo del proyecto, durante la búsqueda de información relacionada con \gls{acr-pam} me he encontrado con escasa información de calidad en español, por eso, y siguiendo la filosofía de libertad de documentación y software, me gustaría publicar partes de este documento para facilitar el entendimiento de \gls{acr-pam} a compañeros de habla española.
 \subsubsection{Publicación del \gls{script} a \gls{GitHub}}
 Para subir el \gls{script} a \gls{GitHub} se debe de tener una cuenta en la plataforma. El segundo requisito que se debe cumplir es tener un cliente git descargado en el sistema. Puede ser un cliente por consola o un cliente gráfico como GitKraken o SourceTree. Al ser un sistema de control de versiones, es preferible que todos estos pasos se realicen antes de empezar con el \gls{script}. De esta forma, además de contribuir a la comunidad, el proyecto queda controlado por versiones, ayudando al desarrollador a mantener un registro de los cambios que se han hehco en el proyecto.\par
 Una vez está todo configurado, en \gls{GitHub} se crea un proyecto, se decide cual será su nombre, licencia y demás características. Cuando el proyecto ya está creado, se selecciona la herramienta escogida para comunicarse con \gls{GitHub} y se \textit{clona} el proyecto. Esto es similar a descargar el proyecto al ordenador donde se quiere realizar el mismo. Al hacer esto, se pueden ver en la herramienta seleccionada cada uno de los archivos existentes en el directorio \textit{clonado}. A partir de ahora, todos los archivos que se incluyan dentro del directorio \textit{clonado} se controlarán y se tendrá la posibilidad de crear un \textit{commit}.\par
 Al crear un \textit{commit}, se copia el contenido del directorio y se envía a \gls{GitHub}. En este momento, los archivos en el directorio y los archivos en \gls{GitHub} son idénticos. Esta es la base de Git.\par
 \gls{Git} fomenta el trabajo en equipo porque permite que varias personas trabajen en el mismo proyecto en distintas cosas para posteriormente hacer un \textit{merge} o fusionar el trabajo de todos.\par
-Durante el desarrollo del \gls{script}, se ha usado \gls{GitHub}.
+Durante el desarrollo del \gls{script}, se ha usado \gls{GitHub} para controlar el desarrollo del \gls{script}\footnote{\url{https://github.com/SergioRosello/PAMHelperScript}}.
 \subsubsection{Publicación de la documentación de la memoria}
-Para publicar la memoria, se investigaron varias formas de hacerlo porque no se sabía exactamente cual sería la mejor.\par
-Las distintas formas planteadas de publicar la documentación son:
+Para publicar la memoria, se investigaron varias formas de hacerlo porque no se sabía exactamente cual sería la mejor. Estas tres formas son las más relevantes y variadas de las analizadas en la fase de investigación para publicar la documentación.
 \begin{itemize}
 	\item{\textbf{GitHub Pages}:}\par
 		Este mecanismo está directamente integrado con \gls{GitHub}. Se dedica una rama del proyecto a la documentación. El inconveniente de esto es que mi proyecto de \gls{GitHub} no guarda relación directa con la documentación. Ésta no explica como funciona el \gls{script} sino como funciona \gls{acr-pam}.
@@ -263,7 +263,6 @@ Las distintas formas planteadas de publicar la documentación son:
 	\item{\textbf{Medium}:}\par
 		Es una plataforma relativamente nueva dedicada a documentos de cualquier clase. Lo interesante de esta plataforma es que recomienda artículos al usuario según sus gustos e intereses. Al ser una plataforma nueva a la que cada día se registran más usuarios, el público objetivo al que pueda llegar el trabajo es superior al de las dos otras alternativas. Para subir la documentación a la plataforma, simplemente es necesario adaptarla ligeramente al modelo que propone la plataforma, ponerle un título y 5 \textit{tags} que describan el contenido del documento.
 \end{itemize}
-
 \subsection{Análisis de sistemas de autenticación en sistemas \gls{GNU/Linux}}
 La parte de análisis es fundamental para conocer los métodos existentes actualmente para autenticar a usuarios. Sin este análisis inicial, hubiese sido mucho más complicado realizar el proyecto debido a que el desconocimiento de las distintas formas de autenticación no me hubiese llevado a poner a \gls{acr-pam} en perspectiva. \par
 La forma en la que se autentica la identidad de los usuarios de sistemas ha ido evolucionando desde que se vio que era necesaria. A continuación se exponen las formas más populares de gestión de usuarios y credenciales, tanto en el ámbito empresarial, como en el ámbito personal.
@@ -271,7 +270,7 @@ La forma en la que se autentica la identidad de los usuarios de sistemas ha ido 
 Cada objeto tiene asociada una tabla de 9 bits, los tres primeros indican los privilegios de lectura, escritura y ejecución del usuario que posee el objeto. Los tres siguientes son para la lectura, escritura y ejecución de los usuarios pertenecientes al grupo que posee el objeto y los tres últimos son de lectura, escritura y ejecución de los usuarios que no pertenecen a ninguno de las dos primeras categorías. Esta categoría se llama \textit{others}. Además de estos 9 bits, también pueden incluir el \gls{SetUid}, \gls{SetGid} y el \gls{StickyBit}. A pesar de ser un sistema muy simple de gestionar privilegios, cumple la mayoría de escenarios posibles en sistemas UNIX e incluso a día de hoy, se sigue usando en todos los sistemas \gls{GNU/Linux} ya que proporciona una forma sencilla y eficiente de visualizar los privilegios de los objetos y modificarlos. Esta forma de gestionar los privilegios de los objetos se puede denominar \gls{acr-acl}.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{Media/ACL.jpg}
+    \includegraphics[width=0.4\textwidth]{Media/ACL.jpg}
     \caption{\gls{ACL}}
     \label{fig:ACL}
 \end{figure}
@@ -279,7 +278,7 @@ Cada objeto tiene asociada una tabla de 9 bits, los tres primeros indican los pr
 Este esquema de seguridad está diseñado para organizaciones o sistemas en los que van a interactuar distintos usuarios con una gran cantidad de datos. El sistema defiende que, en lugar de tener una tabla por cada objeto, definiendo la forma que tienen los usuarios de interactuar con él, se deberían establecer una serie de transacciones, que dependiendo del rol serán distintas. Estas transacciones, una vez definidas cambian poco porque un usuario específico va a usar unos documentos específicos, dependiendo de la responsabilidad que tenga en la organización. En la figura \ref{fig:RBAC} se puede ver claramente como dependiendo del rol se va a poder acceder a ciertos objetos.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{Media/RBAC.PNG}
+    \includegraphics[width=0.5\textwidth]{Media/RBAC.PNG}
     \caption{\gls{acr-rbac}}
     \label{fig:RBAC}
 \end{figure}
@@ -344,14 +343,14 @@ Por defecto, la configuración de las aplicaciones PAM tiene lugar en el directo
 Para que un usuario consiga autenticarse por \gls{acr-pam}, deben existir tres partes fundamentales. Se debe usar una aplicación \textit{PAM-aware}, debe existir un módulo para gestionar la o las interfaces implementadas por dicha aplicación y el administrador de sistemas debe incluir el módulo en el archivo de configuración del \textit{service} al que pertenece esa aplicación. \par
 Su diseño permite que se verifiquen varios módulos secuencialmente creando así el primer sistema de múltiple factor de autenticación conocido. \par \noindent
 \subsubsection{Arquitectura de PAM}
-Los componentes clave del framework PAM son la librería de autenticación, en forma de \gls{acr-api} (\gls{front-end}) y los módulos de autenticación en forma de \gls{acr-spi} (\gls{back-end}). Las aplicaciones usan la \gls{acr-api} mientras que los sistemas de autenticación usan la \gls{acr-spi}.
+Los componentes clave del framework PAM son la librería de autenticación, en forma de \gls{acr-api} (\gls{front-end}) y los módulos de autenticación en forma de \gls{acr-spi} (\gls{back-end}). Las aplicaciones usan la \gls{acr-api} mientras que los módulos usan la \gls{acr-spi}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{Media/PAMFramework.png}
     \caption{Arquitectura PAM}
     \label{fig:arquitecturaPAM}
 \end{figure}
-La figura \ref{fig:arquitecturaPAM} ilustra la relación entre las aplicaciones, la librería PAM y los modulos de autenticación. Cuando una aplicación llama a la \gls{acr-api} de \gls{abr-pam}, ésta carga el módulo de autenticación correspondiente (definido en el archivo de configuración del servicio). La petición inicial se envía al módulo cargado para que realice la operación deseada. Una vez realizada la operación, la capa PAM devuelve la respuesta del módulo de autenticación a la aplicación\cite{PAM}.
+La figura \ref{fig:arquitecturaPAM} ilustra la relación entre las aplicaciones, la librería \gls{acr-pam} y los módulos de autenticación, gestión de cuenta, gestión de sesión y gestión de contraseña. Cuando una aplicación llama a la \gls{acr-api} de \gls{acr-pam}, ésta carga el módulo correspondiente (definido en el archivo de configuración del servicio). La petición inicial se envía al módulo cargado para que realice la operación deseada. Una vez realizada la operación, la capa PAM devuelve la respuesta del módulo de autenticación a la aplicación\cite{PAM}.
 \subsubsection{Archivos de configuración}
 Por defecto, el framework lee los archivos de configuración de /etc/pam.d/. Si no se encuentra el directorio, se usará el archivo /etc/pam.conf aunque este método está deprecado. Cada servicio tiene su propio archivo. Aunque varias aplicaciones puedan usar el mismo servicio, por ejemplo varias aplicaciones de bloqueo de pantalla pueden usar el servicio \textit{screenLock}, lo estándar es que cada aplicación cree un servicio propio. Estas aplicaciones se deben encargar de crear el servicio y colocarlo en el directorio.
 Estos archivos siguen la siguiente estructura:
