@@ -179,13 +179,13 @@ Este documento está compuesto por varias secciones.
 	\item{\textbf{Introducción}}\par
 		Se redactan las fuerzas mayores que han desencadenado en la realización de este proyecto además de una breve descripción del proyecto y las aptitudes y actitudes desarrolladas a consecuencia de él.
 	\item{\textbf{Objetivos}}\par
-		Análisis de los objetivos generales y específicos propuestos durante el desempeño de el proyecto.
+		Análisis de los objetivos generales y específicos propuestos durante el desempeño del proyecto.
 	\item{\textbf{Métodos de trabajo}}\par
 		Observación de la forma en la que se ha trabajado. Breve explicación de la misma, ventajas e inconvenientes y esquema general de los pasos realizados durante el proyecto.
 	\item{\textbf{Investigación y resultados}}\par
 		Esta sección consta de dos partes principales. Una de investigación y otra de Desarrollo. En la primera, se hace una investigación general de las distintas formas de autenticación disponibles tanto a usuarios como a administradores de sistemas de grandes redes de ordenadores. Tras el análisis, se explica por qué se decidió optar por \gls{acr-pam}, sus ventajas e inconvenientes relacionadas con las formas previamente analizadas y se procede a explicar en detalle dicho módulo. Una vez analizado el módulo, se explica como sería el proceso de creación de un sistema \gls{acr-pam}, se explican las distintas formas existentes de usar un módulo \gls{acr-pam} para demostrar su adaptabilidad. El segundo apartado contiene el análisis de las distintas pruebas realizadas con sistemas con la misma finalidad y finalmente el análisis, estructura y desarrollo del \gls{script} que se ha creado para ayudar a normalizar este mecanismo de autenticación.
 	\item{\textbf{Conclusiones}}\par
-		Una vez expuesto todo el contenido del proyecto, Se llega a una conclusión del proyecto además de posibles formas de expandir el trabajo hacia el futuro.
+		Una vez expuesto todo el contenido del proyecto, se llega a una conclusión del proyecto además de posibles formas de expandir el trabajo hacia el futuro.
 \end{itemize}
 \clearpage
 \section{Objetivos}
@@ -193,21 +193,21 @@ Lista de objetivos, de generales a específicos a medida que se avanza el trabaj
 \begin{itemize}
 	\item{\textbf{Expandir mi conocimiento sobre \gls{GNU/Linux}}}\par
 		Además de ser un sistema operativo versátil y fehaciente, es una prueba viviente de que se puede hacer código libre en comunidad y de calidad.
-	\item{\textbf{Contribuir a la comunidad de de desarrolladores con alguna aportación}}\par
-		Durante la investigación y desarrollo del trabajo de fin de grado, he aprendido sobre las distintas tecnologías gracias a los manuales oficiales de \gls{acr-pam}. Esto, como debería ser, es software y documentación disponible a cualquier persona, con una licencia GNU General Public License que garantiza tu libertad de distribuir y cambiar todas las versiones de un programa para asegurar que permanece libre para todos sus usuarios. \cite{GNU-GPL} \par
+	\item{\textbf{Contribuir a la comunidad de desarrolladores con alguna aportación}}\par
+		Durante la investigación y desarrollo del trabajo de fin de grado, he aprendido sobre las distintas tecnologías gracias a los manuales oficiales de \gls{acr-pam}. Esto, como debería ser, es software y documentación disponible a cualquier persona, con una licencia GNU General Public License que: garantiza tu libertad de distribuir y cambiar todas las versiones de un programa para asegurar que permanece libre para todos sus usuarios. \cite{GNU-GPL} \par
 		Creo que se debería contribuir a la comunidad de desarrolladores en general, además, si puedo beneficiar a alguien con el documento o código generado durante este trabajo, quedo más que satisfecho.
 	\item{\textbf{Investigar ámbito de seguridad}}\par
 		Se decidió que la investigación debía ser en el ámbito de seguridad porque tanto a mi tutor como a mi nos interesaba la idea.
 	\item{\textbf{Investigación y análisis del \gls{acr-dfa} en \gls{GNU/Linux}}}\par
 		Se decide ahondar en el ámbito tras ver un vídeo en el que se presentaba un mecanismo para evitar la fase de autenticación en un sistema operativo basado en \gls{GNU/Linux}. La clave estaba en el uso de una herramienta pre-instalada para enviar mensajes a las aplicaciones encargadas de autenticar la identidad de los usuarios informándolas de que el usuario ya estaba autenticado. Estas herramientas no estaban monitorizadas por los administradores de sistemas debido al gran volumen de información que pasa a través de ellas.
 	\item{\textbf{Crear un sistema \gls{acr-dfa}}}\par
-		El objetivo inicial en este trabajo era crear un sistema que permitiese al usuario bloquear y desbloquear el ordenador con un \gls{acr-usb}. Cuando se empezó a investigar las distintas formas de hacer esto, primer paso lógico era centrarse en \gls{dbus} ya que existían proyectos que conseguían este objetivo. Tras el primer ciclo de investigación/implementación conseguí bloquear el sistema al enviar un comando mediante \gls{dbus} al programa que se encarga de bloquear el sistema pero debido a varios factores que se explicarán más adelante, no era una solución buena. \par 
+		El objetivo inicial en este trabajo era crear un sistema que permitiese al usuario bloquear y desbloquear el ordenador con un \gls{acr-usb}. Cuando se empezó a investigar las distintas formas de hacer esto, el primer paso lógico era centrarse en \gls{dbus} ya que existían proyectos que conseguían este objetivo. Tras el primer ciclo de investigación/implementación conseguí bloquear el sistema al enviar un comando mediante \gls{dbus} al programa que se encarga de bloquear el sistema pero debido a varios factores que se explicarán más adelante, no era una solución buena. \par 
 	\item{\textbf{Desarrollar un módulo \gls{acr-pam} para la autenticación mediante \gls{acr-usb}}\par
 		Tras una investigación inicial, se descubrió que esta librería es la forma por defecto de autenticación de usuarios en la mayoría de sistemas \gls{GNU/Linux}. Su diseño contemplaba la posibilidad de utilizar múltiples factores de autenticación. Para avanzar, ahora se debía entender como funcionaba \gls{acr-pam} y como crear un módulo de autenticación por \gls{acr-usb} que lo implementara.
 	\item{\textbf{Desarrollo de \gls{script} para facilitar adopción}}\par
-		 El cauce de este proyecto se centró en facilitar la adopción de este módulo a los usuarios, de forma que más gente no técnica pueda acceder a mejor autenticación. Esto se consigue creando un \gls{script} que al ejecutarlo se encargue de la parte más complicada del proceso de instalación de un \gls{dfa}, la configuración, ya que si se configura erróneamente, existe la posibilidad de que el usuario se queda bloqueado fuera de su ordenador.\par
+		 El cauce de este proyecto se centró en facilitar la adopción de este módulo a los usuarios, de forma que más gente no técnica pueda acceder a mejor autenticación. Esto se consigue creando un \gls{script} que al ejecutarlo se encargue de la parte más complicada del proceso de instalación de un \gls{dfa}: la configuración, ya que si se configura erróneamente, existe la posibilidad de que el usuario se queda bloqueado fuera de su ordenador.\par
 	 \item{\textbf{Elección del lenguaje para el \gls{script}}}\par
-		El siguiente objetivo fue la elección del lenguaje. Al elegir lenguaje de programación para el \gls{script} tuve en cuenta varios factores. Conocimiento actual del lenguaje, complejidad de implementación en dicho lenguaje, disponibilidad de dicho lenguaje en los posibles sistemas donde se use \gls{acr-pam} y en caso de no haber usado el lenguaje previamente, curva de aprendizaje del mismo. Finalmente, el lenguaje de programación usado ha sido \gls{acr-bash} debido a que su integración con \gls{GNU/Linux} es excelente, la curva de aprendizaje no era exagerada y la disponibilidad del mismo en los sistemas que se aprovechen del módulo.
+		El siguiente objetivo fue la elección del lenguaje. Al elegir lenguaje de programación para el \gls{script} tuve en cuenta varios factores. Conocimiento actual del lenguaje, complejidad de implementación en dicho lenguaje, disponibilidad de dicho lenguaje en los posibles sistemas donde se use \gls{acr-pam} y en caso de no haber usado el lenguaje previamente, curva de aprendizaje del mismo. Finalmente, el lenguaje de programación usado ha sido \gls{acr-bash} debido a que su integración con \gls{GNU/Linux} es excelente, la curva de aprendizaje no era exagerada y que es compatible con todos los sistemas en los que funciona el módulo.
 	\item{\textbf{Enumeración de dispositivos \gls{acr-usb} conectados al sistema}}\par
 		Una vez escogí \gls{acr-bash}. Debía averiguar como usarlo para encontrar los dispositivos \gls{acr-usb} en el sistema.\par
 \end{itemize}
@@ -237,7 +237,7 @@ Finalmente, tras investigar las ventajas e inconvenientes de varios dispositivos
 \clearpage
 \section{Investigación y resultados}
 Durante el desarrollo de esta sección se han investigado todas las técnicas de autenticación de usuarios encontradas para \gls{GNU/Linux}. Sin estos conocimientos no hubiese quedado contento ya que aunque se hubiese podido hacer un mecanismo para iniciar sesión, pero no se hubiese entendido ni la filosofía ni la comunidad detrás de \gls{GNU/Linux}. \par
-En esta sección, se describen las distintas tecnologías de autenticación existentes, los problemas actuales de esas tecnologías, se defenderá la necesidad de una seguridad más agresiva, tanto para los usuarios normales como para las grandes empresas y se desglosarán las distintas formas de conseguir esta seguridad actualmente. Además, se describirá en detalle como funciona \gls{acr-pam}, desde el punto de vista del desarrollador de aplicaciones, del administrador de sistemas y del desarrollador de módulos. Se describirán las distintas formas de autenticación probadas, desde el uso de \gls{dbus} hasta el uso de \gls{acr-pam} con \gls{act-usb}, sus ventajas e inconvenientes.
+En esta sección, se describen las distintas tecnologías de autenticación existentes, los problemas actuales de esas tecnologías, se defenderá la necesidad de una seguridad más agresiva, tanto para los usuarios normales como para las grandes empresas y se desglosarán las distintas formas de conseguir esta seguridad actualmente. Además, se describirá en detalle como funciona \gls{acr-pam}, desde el punto de vista del desarrollador de aplicaciones, del administrador de sistemas y del desarrollador de módulos. Se describirán las distintas formas de autenticación probadas, desde el uso de \gls{dbus} hasta el uso de \gls{acr-pam} con \gls{act-usb} sus ventajas e inconvenientes.
 \subsection{Comunidad}
 Al saber que quiero publicar el script y las partes del trabajo que puedan resultar útiles a la comunidad, se ha hecho una investigación para averiguar donde y como se debería subir el contenido. El principal sitio donde ***Falta completar***\par
 Durante el desarrollo del proyecto, durante la búsqueda de información relacionada con \gls{acr-pam} me he encontrado con escasa información de calidad en español, por eso, y siguiendo la filosofía de libertad de documentación y software, me gustaría publicar partes de este documento para facilitar el entendimiento de \gls{acr-pam} a compañeros de habla española.
@@ -260,7 +260,7 @@ Este esquema de seguridad está diseñado para organizaciones o sistemas en los 
     \caption{\gls{acr-rbac}}
     \label{fig:RBAC}
 \end{figure}
-Dos de las ventajas de este sistema son que cumplir el principio de de menor privilegio es relativamente sencillo, ya que se puede conseguir no proporcionándole  al usuario más transacciones de las que debe tener. Otra de las ventajas, innata, de \gls{RBAC} es la separación de deberes. Esto es: En el caso de tener que realizar un transferencia bancaria, nunca se debería de poder proporcionar al mismo individuo el control de todo el flujo, ya que se le está dando la oportunidad de cometer algún tipo de irregularidad. Con RBAC puedes asignar dos transacciones, una que permita a un usuario solicitar una transferencia y otra que permita a un usuario validar la transferencia.
+Dos de las ventajas de este sistema son que cumplir el principio de menor privilegio es relativamente sencillo, ya que se puede conseguir no proporcionándole  al usuario más transacciones de las que debe tener. La otra ventaja innata de \gls{RBAC} es la separación de deberes. Esto es: En el caso de tener que realizar una transferencia bancaria, nunca se debería de poder proporcionar al mismo individuo el control de todo el flujo, ya que se le está dando la oportunidad de cometer algún tipo de irregularidad. Con RBAC puedes asignar dos transacciones, una que permita a un usuario solicitar una transferencia y otra que permita a un usuario validar la transferencia.
 \subsubsection{\gls{LDAP}}
 Este protocolo está diseñado para permitir acceso a directorios complacientes con el estándar \gls{X500} \textit{Directory Access Protocol} a sus usuarios. Uno de varios protocolos que tiene una aplicación para autenticarse con el fin de acceder al directorio \gls{X500}\cite{LDAP}. La forma de acceder a los datos cambia según el protocolo de acceso a \gls{X500}. Por ejemplo, en esta implementación, la forma de acceder a los datos sería:
 \begin{lstlisting}
@@ -273,7 +273,7 @@ mientras que la implementación de Microsoft sería:
 Cada uno de estos protocolos define una forma de buscar en \gls{X500} información. Podemos ver que la implementación de \textit{\gls{acr-ldap}} está ordenada de derecha a izquierda, separada por el carácter (,) mientras que la implementación de Microsoft, \gls{acr-mad} está ordenada de izquierda a derecha y separada con el carácter (/).
 Aunque no sea un método de autenticación que sucede en el mismo sistema, me parece que es lo suficientemente interesante como para incluirlo ya que es un ejemplo de autenticación en red.
 \subsubsection{\gls{acr-sasl}}
-Es un protocolo que proporciona métodos de añadir autenticación a protocolos de red mediante identificación y autenticación de los usuarios conectados al servidor. Además, gestiona el nivel de seguridad que se desea establecer para las futuras interacciones entre el servidor y el usuario conectado. Si se llega a la conclusión de que si que sé requiere una capa de seguridad, esta se añade entre el propio protocolo y la conexión.\cite{rfc2222} 
+Es un protocolo que proporciona métodos de añadir autenticación a protocolos de red mediante identificación y autenticación de los usuarios conectados al servidor. Además, gestiona el nivel de seguridad que se desea establecer para las futuras interacciones entre el servidor y el usuario conectado. Si se llega a la conclusión de que si que se requiere una capa de seguridad, ésta se añade entre el propio protocolo y la conexión.\cite{rfc2222} 
 Las distintas formas de autenticarse a un servidor con este protocolo son:
 \begin{itemize}
 	\item{\textbf{Anonymous: }}Usado para autenticar a clientes a servicios anónimos. El cliente envía un token (Correo electrónico) para permanecer identificado con el servidor. Es una forma sencilla y rápida de implementar, pero no es segura.
@@ -300,7 +300,7 @@ Esta información la administra el servidor central. Dependiendo del tamaño de 
 \subsubsection{\gls{acr-ssh}}
 Una de las formas que han tenido los usuarios de conectarse de forma remota con un sistema ha sido el \gls{acr-telnet}. Esta opción, aunque válida, es poco segura porque la comunicación entre la máquina y el usuario se envía sin cifrar a través de la red.\par Se desarrolló \gls{acr-ssh} para evitar esto.
 \subsection{Análisis de \gls{acr-pam}}
-Tras la investigación previa, se concluye que \gls{acr-pam} es la vía por la que se tiene que seguir. El hecho de que sea compatible con varias de las distintas formas descritas previamente nos muestra su universalidad. Es una herramienta que tanto usuarios novel como administradores de sistemas con experiencia pueden configurar. Además, es tan válido en un ambiente empresarial como en un sistema personal. Eso demuestra su amplia compatibilidad. Por estas razones, creo que la mejor opción para implementar un \gls{acr-dfa} es \gls{acr-pam}.\par
+Tras la investigación previa, se concluye que \gls{acr-pam} es la vía por la que se tiene que seguir. El hecho de que sea compatible con varias de las distintas formas descritas previamente nos muestra su universalidad. Es una herramienta que tanto usuarios noveles como administradores de sistemas con experiencia pueden configurar. Además, es tan válido en un ambiente empresarial como en un sistema personal. Eso demuestra su amplia compatibilidad. Por estas razones, creo que la mejor opción para implementar un \gls{acr-dfa} es \gls{acr-pam}.\par
 En esta sección se describirá en detalle \gls{acr-pam}. Se describirá lo necesario para poder integrarlo en una aplicación, lo necesario para codificar un módulo que lo implemente y el papel del administrador de sistemas a la hora de unificar ambas partes.
 \subsubsection{PAM, una visión de conjunto}
 En 1995 \gls{Sun} introdujo \gls{acr-pam}. Dado que en ese momento, no existía un protocolo o diseño específico para realizar la autenticación, su uso se implementó en la mayoría de sistemas. Estos incluyen:
@@ -318,7 +318,7 @@ Finalmente se volvió un estándar y ahora la mayoría de distribuciones \gls{GN
 Hay cuatro módulos distintos definidos por el estándar PAM. Cada uno cumple una función específica pero indispensable para gestionar las cuentas de usuario en sistemas\cite{redPAM}.
 Por lo general, cada programa que usa PAM define su propio \textit{service} de forma que el programa que gestiona el login, define un \textit{service} llamado \textit{login} aunque se puede dar el caso de que dos aplicaciones usen el mismo \textit{service}. Un ejemplo sería que dos aplicaciones que gestionan el bloqueo de pantalla usan el mismo \textit{service}, \textit{lock}.
 Por defecto, la configuración de las aplicaciones PAM tiene lugar en el directorio /etc/pam.d. Cada \textit{service} tiene su propio archivo de configuración. \par
-Para que un usuario consiga autenticarse por \gls{acr-pam}, tres partes fundamentales deben existir. Se debe usar una aplicación \textit{PAM-aware}, debe existir un módulo para gestionar la o las interfaces implementadas por dicha aplicación y el administrador de sistemas debe incluir el módulo en el archivo de configuración del \textit{service} al que pertenece esa aplicación. \par
+Para que un usuario consiga autenticarse por \gls{acr-pam}, deben existir tres partes fundamentales. Se debe usar una aplicación \textit{PAM-aware}, debe existir un módulo para gestionar la o las interfaces implementadas por dicha aplicación y el administrador de sistemas debe incluir el módulo en el archivo de configuración del \textit{service} al que pertenece esa aplicación. \par
 Su diseño permite que se verifiquen varios módulos secuencialmente creando así el primer sistema de múltiple factor de autenticación conocido. \par \noindent
 \subsubsection{Arquitectura de PAM}
 Los componentes clave del framework PAM son la librería de autenticación, en forma de \gls{acr-api} (\gls{front-end}) y los módulos de autenticación en forma de \gls{acr-spi} (\gls{back-end}). Las aplicaciones usan la \gls{acr-api} mientras que los sistemas de autenticación usan la \gls{acr-spi}.
@@ -524,7 +524,7 @@ PAM_EXTERN int pam_sm_authenticate(gestor_pam, flags, argc, argv);
 Se usa \textit{PAM\_SM\_AUTH} para asegurar que los prototipos de los módulos estáticos estén bien declarados.
 Los parámetros que se le pasan a \textit{pam\_sm\_authenticate()} son: 
 \begin{itemize} 
-	\item \textit{gestor\_pam}: Estructura cue identifica la operación con la \gls{acr-api} PAM.
+	\item \textit{gestor\_pam}: Estructura que identifica la operación con la \gls{acr-api} PAM.
 	\item{\textit{flags:} Pueden ser dos:
 		\begin{itemize}
 			\item PAM\_SILENT: no registra ningún mensaje.
@@ -614,7 +614,7 @@ Una vez tenemos todo el entorno preparado, podemos hacer uso de la función \tex
     }
 \end{lstlisting}
 Una vez entra dentro de la condición el usuario ya ha sido autenticado por \gls{acr-pam}. Lo que queda hacer es preparar todo para que el programa termine correctamente. Estos pasos son: actualizar las credenciales, terminar la comunicación con \gls{acr-pam} y salir del programa.\par
-Estas dos implementaciones no van a funcionar entre si a no ser que el administrador de sistemas las vincule en el archivo de configuración (\textit{service}) del módulo. En este archivo, el administrador de sistemas introducirá la sentencia que une ambas cosas. Como hemos visto anteriormente, un posible ejemplo es:
+Estas dos implementaciones no van a funcionar entre sí a no ser que el administrador de sistemas las vincule en el archivo de configuración (\textit{service}) del módulo. En este archivo, el administrador de sistemas introducirá la sentencia que une ambas cosas. Como hemos visto anteriormente, un posible ejemplo es:
 \begin{lstlisting}
 auth required pam_usbkey.so user=* rhosts=* tty=* key=12345678910
 \end{lstlisting}
@@ -622,7 +622,7 @@ En este caso, se indica que la interfaz del módulo es de autenticación, que el
 \subsection{Trabajo práctico en la búsqueda de un \gls{acr-dfa}}
 Durante el desarrollo del proyecto he implementado y probado una serie de mecanismos \gls{acr-dfa}. Este es el resumen de estos distintos proyectos, sus problemas y ventajas.
 \subsubsection{\gls{dbus}}
-El primer proyecto que intenté. \gls{dbus} esencialmente es algo muy parecido a una autopista para el sistema. A través de él se pueden comunicar todos los programas entre ellos. Esto significa que dependiendo de los métodos disponibles en cada programa, se  podría enviar (mediante un programa que esté a la escucha de una señal) una señal al programa de bloqueo diciéndole que se apague/pare, que el usuario ya está autenticado. Bastantes programas de bloqueo en distribuciones como \gls{Ubuntu} tienen un sistema \gls{dbus} implementado así que merecía la pena probar.\par
+El primer proyecto que intenté, \gls{dbus}, esencialmente es algo muy parecido a una autopista para el sistema. A través de él se pueden comunicar todos los programas entre ellos. Esto significa que dependiendo de los métodos disponibles en cada programa, se  podría enviar (mediante un programa que esté a la escucha de una señal) una señal al programa de bloqueo diciéndole que se apague/pare, que el usuario ya está autenticado. Bastantes programas de bloqueo en distribuciones como \gls{Ubuntu} tienen un sistema \gls{dbus} implementado así que merecía la pena probar.\par
 Las ventajas de este tipo de sistemas son:
 \begin{itemize}
 	\item{\textbf{Ligero}}\par
@@ -630,7 +630,7 @@ Las ventajas de este tipo de sistemas son:
 	\item{\textbf{Sencillo de implementar}}\par
 		En Python, estamos hablando de aproximadamente 40 líneas de programa.
 	\item{\textbf{Silencioso}}\par
-		Es perfecto para no dejar rastro en el sistema. Comprobar los logs de \gls{dbus} se como buscar una aguja en un pajar, por ese demonio pasan tantos datos que sería muy poco práctico monitorizarlo. Es perfecto para una puerta trasera en un sistema, pero ese no es mi objetivo.
+		Es perfecto para no dejar rastro en el sistema. Comprobar los logs de \gls{dbus} es como buscar una aguja en un pajar, por ese demonio pasan tantos datos que sería muy poco práctico monitorizarlo. Es perfecto para una puerta trasera en un sistema, pero ese no es mi objetivo.
 \end{itemize}
 Los inconvenientes de una implementación de este estilo son:
 \begin{itemize}
@@ -673,7 +673,9 @@ Los inconvenientes de \gls{acr-pam} son:
 		Aunque sencilla, el programador debe aprender como funciona \gls{acr-pam} para crear un módulo.
 \end{itemize}
 \subsection{Creación del script}
-
+Este es la parte práctica, derivada de la parte teórica de este trabajo. El \gls{script} se he escrito en \gls{bash}. Un lenguaje intérprete de comandos. Esto significa que une distintos programas disponibles, como: \textit{ls, mv, cd, sed} o \textit{cat} para crear un único programa, que cumple una función específica.\par
+Se decidió usar \gls{bash} porque está disponible en todos los equipos que usan \gls{acr-pam}, me interesaba aprenderlo inicialmente y la curva de aprendizaje inicial no parecía muy complicada.\par
+Antes de desarrollar el \gls{script}, debía aprender como funcionaba el lenguaje así que busqué un curso on-line para aprender. 
 \clearpage
 \section{Conclusiones}
 En esta sección, se analizará el desarrollo del proyecto y describirán posibles formas de continuar con él.
