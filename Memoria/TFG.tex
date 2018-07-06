@@ -66,7 +66,10 @@ sorting=ynt]{biblatex}
 
 \end{titlepage}
 \section*{Agradecimientos}
-Debo agradecer a Eduardo Ariols, mi tutor del trabajo todo el apoyo y consejos dados. Estoy seguro de que sin su ayuda, este trabajo no hubiese llegado a su nivel actual. Durante el proceso de elección del trabajo, me ayudó a darme cuenta de lo que quería hacer exactamente y desde ese momento, no ha parado de inspirarme con distintas formas de ver las cosas. De eso, le estoy muy agradecido.\par También quiero agradecer a la universidad el buen trabajo a la hora de escoger al personal docente de mi grado, puesto que en todo momento han demostrado más que profesionalidad y compañerismo hacia mi y mis compañeros de carrera.
+Debo agradecer a Eduardo Ariols, mi tutor del trabajo todo el apoyo y consejos dados. Estoy seguro de que sin su ayuda, este trabajo no hubiese llegado a su nivel actual. Durante el proceso de elección del trabajo, me ayudó a darme cuenta de lo que quería hacer exactamente y desde ese momento, no ha parado de inspirarme con distintas formas de ver las cosas. De eso, le estoy muy agradecido. No hubiese podido imaginar un tutor mejor para mi trabajo.
+También quiero agradecer a la universidad el buen trabajo a la hora de escoger al personal docente de mi grado, puesto que en todo momento han demostrado más que profesionalidad y compañerismo hacia mi y mis compañeros de carrera.\par
+Esta oportunidad formativa no hubieses sido posible de no ser por el esfuerzo de mis padres y mis abuelos, que, sin ninguna duda y con plena confianza en mí, incitaron y asesoraron en los momentos más decisivos de mi vida. Vosotros sois la razón por la que soy quien soy. Os estoy y estaré eternamente agradecido por eso.\par
+Por último, dar las gracias a toda la gente que ha dedicado su tiempo en ayudarme a sacar la mejor versión de mi mismo en este trabajo. A nivel personal y profesional. Muchas gracias a todos.
 \clearpage
 \section*{Resumen}
 Este documento explica al lector la experiencia que he tenido durante el periodo de realización del trabajo de final de grado. Este trabajo trata sobre la autenticación de un usuario a un sistema \gls{GNU/Linux}, en concreto, mediante un dispositivo \gls{USB}.\par 
@@ -647,9 +650,9 @@ Al descargar y ejecutar el programa, me encontré con que estaba usando una libr
 Haciendo balanza de las ventajas e inconvenientes, se decidió buscar una solución distinta.\par
 \subsubsection{\gls{acr-pam}}
 La siguiente tecnología que encontré fue \gls{acr-pam}. Esta vez, aseguré que era exactamente lo que necesitaba ya que no quería perder más tiempo probando e intentando arreglar cosas que no tenían sentido. Al investigar más a fondo los distintos tipos de autenticación existentes en \gls{GNU/Linux} y ver que muchos de ellos eran compatibles con \gls{acr-pam}, supe que debía seguir investigando esta tecnología. \par
-El primer proyecto que encontré, fue \href{https://github.com/aluzzardi/pam_usb}{PAM\_USB}. Las siguientes fases de investigación/implementación se dedicaron a investigar y entender este módulo para \gls{acr-pam}. Cabe mencionar que en este momento el desarrollo de un módulo propio para \gls{acr-pam} ya no tenía sentido, ya que un usuario de \gls{GitHub} llamado aluzzardi, el creador del programa había creado un módulo muy bien documentado y programado. Cuando lo descargué para probar y configurar en el sistema, el módulo no detectaba los dispositivos \gls{acr-usb} que conectaba. Tras una investigación, se averiguó que este módulo también usaba \gls{acr-hal} para detectar los dispositivos conectados.\par
-Al ser un proyecto popular y usado por la comunidad, se pensó que seguramente existiesen pull requests por miembros de la comunidad para portar el proyecto a \gls{udev}. Efectivamente, si existían. Al descargar y probar este \footnote{\url{https://github.com/aluzzardi/pam_usb/pull/34}} me encontré con que también habían complicaciones. Se proporcionaban una serie de scripts para ayudar con la configuración del módulo. Ambos parecían estar escritos en la versión 2 de Python pero ninguno parecía funcionar en mi sistema.\par Al experimentar esto, cambié de proyecto a uno menos ambicioso. Empecé a usar \href{https://github.com/ColumPaget/pam_usbkey}{pam\_usbkey}. Este módulo, esencialmente hace lo mismo que PAM\_USB pero no tiene tanto nivel de seguridad, ya que comprueba el ID del \gls{act-usb} pero no una llave firmada dentro del \gls{acr-usb}. \par
-Las ventajas de este enfoque son:
+El primer proyecto que encontré, fue \href{https://github.com/aluzzardi/pam_usb}{PAM\_USB}\footnote{\url{https://github.com/aluzzardi/pam_usb}}. Las siguientes fases de investigación/implementación se dedicaron a investigar y entender este módulo para \gls{acr-pam}. Cabe mencionar que en este momento el desarrollo de un módulo propio para \gls{acr-pam} ya no tenía sentido, ya que un usuario de \gls{GitHub} llamado aluzzardi, el creador del programa había creado un módulo muy bien documentado y programado. Cuando lo descargué para probar y configurar en el sistema, el módulo no detectaba los dispositivos \gls{acr-usb} que conectaba. Tras una investigación, se averiguó que este módulo también usaba \gls{acr-hal} para detectar los dispositivos conectados.\par
+Al ser un proyecto popular y usado por la comunidad, se pensó que seguramente existiesen pull requests por miembros de la comunidad para portar el proyecto a \gls{udev}. Efectivamente, si existían. Al descargar y probar este \footnote{\url{https://github.com/aluzzardi/pam_usb/pull/34}} me encontré con que también habían complicaciones. Se proporcionaban una serie de scripts para ayudar con la configuración del módulo. Ambos parecían estar escritos en la versión 2 de Python pero ninguno parecía funcionar en mi sistema.\par Al experimentar esto, cambié de proyecto a uno menos ambicioso. Empecé a usar \href{https://github.com/ColumPaget/pam_usbkey}{pam\_usbkey}\footnote{\url{https://github.com/ColumPaget/pam_usbkey}}. Este módulo, esencialmente hace lo mismo que PAM\_USB pero no tiene tanto nivel de seguridad, ya que comprueba el ID del \gls{acr-usb} pero no una llave firmada dentro del \gls{acr-usb}. \par
+Las ventajas de usar módulos para \gls{acr-pam} son:
 \begin{itemize}
 	\item{\textbf{Integración absoluta con cualquier sistema que use \gls{acr-pam}}}\par
 		Al ser un módulo tan extendido, esto significa que prácticamente cualquier usuario de \gls{GNU/Linux} e incluso MacOS puede disfrutar de als ventajas del \gls{acr-dfa}
@@ -669,8 +672,28 @@ Los inconvenientes de \gls{acr-pam} son:
 	\item{\textbf{Curva de aprendizaje}}\par
 		Aunque sencilla, el programador debe aprender como funciona \gls{acr-pam} para crear un módulo.
 \end{itemize}
+\subsection{Creación del script}
+
 \clearpage
 \section{Conclusiones}
+En esta sección, se analizará el desarrollo del proyecto y describirán posibles formas de continuar con él.
+\subsection{Conclusiones del proyecto}
+Durante el desarrollo del proyecto ha habido veces en las que he sentido que me superaba, que era imposible hacer lo que tenía que hacer y que la mejor estrategia era abandonar y hacer otro trabajo el año que viene. Todas estas, son las fases naturales de un proyecto tan exigente como estimulante. Es importante identificar la parte en la que te encuentras, proceder según el plan y entender que cuando las cosas se vuelven complicadas es que se está explorando más allá de la zona de confort.
+Me ha gustado mucho investigar profundamente el funcionamiento de \gls{acr-pam} porque ha hecho que me dé cuenta de que puedo entender y construir software directamente relacionado con algo que uso día a día. Durante la carrera, hemos aprendido a diseñar y construir software, ahora he aprendido a aplicar lo aprendido a un caso de uso real.\par
+Como consecuencia del trabajo, al tener que plasmar todo lo aprendido en un lienzo, he tenido que entender perfectamente como funciona la tecnología a explicar. La mejor manera de aprender es explicando.\par
+Nunca se nos ha planteado un trabajo tan grande y este está diseñado para afianzar los conocimientos y actitudes desarrolladas durante el periodo de la carrera. En retrospectiva, entiendo y valoro la razón de un trabajo de final de grado ya que enseña a llevar un proyecto de investigación. \par
+Finalizando el proyecto, siento que me he ampliado mis conocimientos sobre las distintas formas de autenticación y convertido en un experto en \gls{acr-pam}. Esta sensación no la hubiese desarrollado de no ser por este trabajo.\par
+En relación a el análisis de los sistemas \gls{acr-dfa} puedo concluir en que \gls{acr-pam} al fin y al cabo, no es más que una herramienta para facilitar el desarrollo de buenos sistemas de autenticación. El uso que se le pueda o quiera dar más en adelante depende de cada desarrollador. \par
+Está claro que a media que avanzan los tiempos, vamos a tener que inventar nuevas formas de verificar a los usuarios. La belleza de \gls{acr-pam} es que estas nuevas formas se pueden acoplar directamente, como una pieza de lego, en el sistema.\par
+Es imposible desarrollar una forma de verificar al usuario ya que a medida que se desarrollan nuevas, se descubren formas de vulnerarlas. A pesar de las implicaciones negativas que eso conlleva, también incita a la comunidad a desarrollar nuevas y mejores técnicas día a día.
+\subsection{Trabajos futuros}
+Tras finalizar este trabajo me siento completamente capaz de contribuir a la comunidad haciendo módulos de autenticación para \gls{acr-pam} nuevos. Algunos ejemplos son:
+\begin{itemize}
+	\item Autenticación mediante huella dactilar
+	\item Autenticación mediante escaneo de retina
+\end{itemize}
+Creo que estos ejemplos serían muy útiles a gente que necesite una mayor seguridad de datos. También puede ser útil a empresas, que quieran centralizar el acceso a áreas restringidas mediante sistemas de autenticación como \gls{acr-pam}.
+Debo publicar las partes informativas de este proyecto a mi repositorio de \gls{GitHub} para asegurar que la gente se pueda beneficiar del trabajo de investigación. Debo subir también el \gls{script} creado a \gls{GitHub} y explicar detalladamente como utilizarlo para acercar más a los usuarios no técnicos esta posibilidad.
 \clearpage
 \printglossary[type=\acronymtype] %, title={Abreviaciones y tecnicismos}]
 \printglossary
