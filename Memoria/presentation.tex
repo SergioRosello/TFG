@@ -1,5 +1,6 @@
 \documentclass{beamer}
 \usepackage[utf8]{inputenc}
+\usepackage{setspace}
 
 %Información del título
 \title{Análisis y automatización de doble factor de autenticación en sistemas GNU/Linux}
@@ -16,38 +17,46 @@
 \end{frame}
 \section{Proyecto}
 \begin{frame}{Proyecto}
-\frametitle{Proyecto}
-\begin{itemize}
-	\item Investigación sobre distintas formas de autenticación en sistemas GNU/Linux
-	\item Creación de una herramienta que demuestre el potencial de PAM o que acerque el DFA a más gente
-	\item Publicación de la investigación inicial y la herramienta creada
-\end{itemize}
+	\frametitle{Proyecto}
+	\begin{itemize}
+		\item Investigación sobre distintas formas de autenticación en sistemas GNU/Linux
+		\vspace{0.7cm}
+		\item Creación de una herramienta que demuestre el potencial de PAM o que acerque el DFA a más usuarios
+		\vspace{0.7cm}
+		\item Publicación de la investigación inicial y la herramienta creada
+	\end{itemize}
 \end{frame}
 \section{Objetivos}
 \begin{frame}{Objetivos}
 	\frametitle{Objetivos}
+	{\setstretch{2.0}
 	\begin{itemize}
 		\item Aprender GNU/Linux
 		\item Contribuir a la comunidad
 		\item Investigar el funcionamiento de PAM
 		\item Facilitar el acceso al DFA
 	\end{itemize}
+	\\}
 \end{frame}
 \section{Fase de investigación}
 \begin{frame}{Investigación general}
 	\frametitle{Investigación general}
 	\begin{itemize}
 		\item Desarrollo ágil
+		\vspace{0.7cm}
 		\item Búsqueda de herramientas para realizar el DFA
 	\end{itemize}
 \end{frame}
 \begin{frame}{Investigación PAM}
 	\frametitle{Investigación PAM}
 	\begin{itemize}
-		\item Habilita la implementación de nuevas formas de autenticación a aplicaciones sin la necesidad de recompilarlas
-		\item Muy modular
-		\item Tres áreas principales (Aplicación, Módulo, Configuración)
 		\item Sistema por defecto de autenticación actual
+		\vspace{0.7cm}
+		\item Habilita la implementación de nuevas formas de autenticación a aplicaciones sin la necesidad de recompilarlas
+		\vspace{0.7cm}
+		\item Muy modular
+		\vspace{0.7cm}
+		\item Tres áreas principales (Aplicación, Módulo, Configuración)
 	\end{itemize}
 \end{frame}
 \section{Fase de desarrollo}
@@ -55,8 +64,11 @@
 	\frametitle{Desarrollo}
 	\begin{itemize}
 		\item Análisis de requisitos
+		\vspace{0.7cm}
 		\item Selección de lenguaje
+		\vspace{0.7cm}
 		\item Ventajas e inconvenientes
+		\vspace{0.7cm}
 		\item Funcionalidad y objetivos
 	\end{itemize}
 \end{frame}
@@ -65,7 +77,9 @@
 	\frametitle{Demostración}
 	\begin{itemize}
 		\item Rutas de archivos
+		\vspace{0.7cm}
 		\item Script
+		\vspace{0.7cm}
 		\item Doble Factor de Autenticación
 	\end{itemize}
 \end{frame}
@@ -74,6 +88,7 @@
 	\frametitle{Trabajo futuro}
 	\begin{itemize}
 		\item Publicación de la documentación recopilada
+		\vspace{0.7cm}
 		\item Creación de nuevos módulos para PAM
 	\end{itemize}
 \end{frame}
