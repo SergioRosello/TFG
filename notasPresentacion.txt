@@ -1,0 +1,36 @@
+Proyecto:
+	En resumen, el proyecto final se compuso de una investigación inicial para analizar las distintas tecnologías te autenticación de usuarios.
+	La parte de investigación del proyecto, al haberse observado que ya existía un módulo USB para PAM, se centró en crear un script que fecilitara al usuario medio a configurar el módulo de doble autenticación por USB. Este script es generál, de forma que no tiene porqué ser usado solamente por un usuario de pam_usbkey.
+	Al ver que la mayor parte de documentación on-line sobre PAM está en inglés, se planteó la posibilidad de contribuir a la comunidad con las partes de investigación de mi trabajo para ayudar a cualquier desarrollador de habla española.
+
+Objetivos:
+	Desde el inicio del periodo de selección de temática del TFG, sabía que quería aprender más sobre sistemas GNU/Linux, ya que cda vez me interesan más y veo que posiblemente base mi vida prodesional en ellos.
+	En estos sistemas, el código libre es una cosa bastante popular, ya que ya mayor parte de sistemas tienen repositorios públicos en los que la gente puede contribuir y ayudar. Al ver esto, me gustaría publicar la parte de documentación del TFG en Medium, una plataforma en la que cada día más se concentran artículos técnicos de muy buena calidad.
+	Para poder crear el script, es necesario saber como funciona PAM, para poder explciarlo a los usuarios durante su ejecución.
+	Me gustaría facilitar el acceso a los sistemas de doble factor de autenticación a los usuarios inexpertos, de forma que tanto ellos como usuarios más avanzados puedan configurar el sistema de una forma más segura.
+
+Investigación:
+	Durante la fase de investigación, se ha querido seguir un desarrollo ágil. Mi tutor y yo hemos estado en constante comunicación en la que se le han enseñados los últimos avances teóricos como los avances prácticos.
+	Aunque se han investigado distintas formas de autenticación, han existido dos áreas de investigación más profundas durante la búsqueda de herramientas DFA.
+	La primera surgió al ver un vídeo en el que se usa DBUS para deshabilitar la pantalla de bloqueo del sistema. Se consiguió crear un script en python que enviara un comando a la aplicación encargada de bloquear el sistema para que esta se bloqueara. Fimalmente, se vió que los inconvenientes de este sistema superaban a las ventajas. Se pasó a la segunda parte.
+	Durante la investigación de PAM, se descubrió que era en sistema por defecto de autenticación de usuarios en la mayoría de sistemas GNU/Linux. Esto ya era una enorme ventaja, porque significa que mi herramienta va a llegar a mucha más gente que por tanto va a poder disfrutar de las ventajas del doble factor de autenticación.
+	PAM permite gestionar cuatro sectores de autenticación. Auth, Account, Password y Session. Se centró la investigación en Auth porque era el que necesitábamos para conseguir el DFA.
+	Otra gran ventaja és que el diseño de PAM es muy modular, de esta forma, consigue que las aplicaciones que lo implementan, no tengan que ser recompiladas cada vez que se quiere cambiar el tipo de autenticación.
+	Esto lo consigue implementando tres áreas principales. El área de Aplicaicón, és la que los desarrolladores de las aplicaciones tienen que codificar. Módulo, Es un tipo de autenticación disponible. por ejemplo, pam_usbkey. Otro ejemplo sería pam_ssh. Configuración: El archivo "Service" que edita el administrador del sistema para unir la aplicación con el módulo.
+
+Desarrollo:
+	Durante el análisis de requisitos, se decide que lo más importante es que el cliente simplemente tenga que decidir entre varias opciones presentadas. Esto es vital para que la configuración de la autenticación sea sencilla. En cada paso se le explican las posibles opciones y se le deja elegir una.
+	Para realizar esta tarea, existen varios lenguajes de programación que podrían valer. Trás un análisis de ventajas e inconvenientes entre todos, se decide escoger bash.
+	Las ventajas de este lenguaje, entre otras, son que está disponible en todos los sitemas en los que se usa PAM, Puedo centrarme en implementar lo que quiero conseguir, en vez de centrarme en operaciones de bajo nivel como buscar cadenas de texto en un archivo, curva de aprendizaje sencilla, quería aprenderlo.
+	Los inconvenientes de este lenguaje son que está diseñado para servir de herramienta
+	El script solo cumple su objetivo si consigue hacer que la gente pueda configurar el DFA de forma más sencilla que la de por defecto.
+	Una de las ventajas de el script es que es muy complicado si no imposible crear una configuración en la que el usuario acabe encerrándose a si mismo fuera del sistema, ya que errores comunes como copiar incorrectamente el código del USB es imposible porque lo gestiona el script.
+
+Demostración:
+	Durante la siguiente parte, se enseñarán los directorios que utiliza PAM para coordinar todo.
+		La parte de Application -> /usr/bin/i3lock
+		La parte de Módulo      -> /lib/security/*
+		La parte de Service     -> /etc/pam.d/*
+	El script, por defecto funciona con el directorio /etc/pam.d/ y el archivo (Servicio) common-auth, pero usando los flags -d y -f podemos cambiar la ruta. Esta opción es para usuarios avanzados.
+	ENSEÑANDO EL SCRIPT Y SUS OPCIONES
+	Doble factor de autenticación
